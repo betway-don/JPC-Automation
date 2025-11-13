@@ -1,0 +1,47 @@
+{
+  "step1": {
+    "mobile": "999889100",
+    "password": "123456789",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test.user@example.com"
+  },
+  "step2": {
+    "passport": "12345",
+    "validSAId": "9001010001084",
+    "shortSAId": "90010100010",
+    "lettersSAId": "9001010A01084",
+    "specialSAId": "900101-001084",
+    "validPassport": "B12345678",
+    "shortPassport": "A123",
+    "specialPassport": "ABC@#$123",
+    "numericPassport": "123456789"
+  },
+  "mobileValidation": {
+    "valid": "999881234",
+    "short": "99988",
+    "long": "999887373737"
+  },
+  "passwordValidation": {
+    "mixedCase": "TestPassword",
+    "withNumbers": "Password123",
+    "withSpecial": "Password@123!",
+    "minLen": "Test123",
+    "maxLen": "TestPassword123456!@12",
+    "allTypes": "TestPass123!@#",
+    "withSpaces": "Test Pass 123!",
+    "weak": "123456"
+  },
+  "nameValidation": {
+    "validFirst": "John",
+    "validLast": "Smith",
+    "spacesFirst": "Mary Jane",
+    "spacesLast": "Van Der Berg",
+    "hyphenFirst": "Anna-Marie",
+    "hyphenLast": "Smith-Jones",
+    "numericFirst": "John123",
+    "numericLast": "Smith456",
+    "specialFirst": "John@#",
+    "specialLast": "Smith$%"
+  }
+}
