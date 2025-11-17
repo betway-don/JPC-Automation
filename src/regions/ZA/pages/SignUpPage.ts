@@ -3,8 +3,12 @@ import { Page, Locator } from '@playwright/test';
 import { loadLocatorsFromExcel } from '../../../global/utils/file-utils/excelReader'; 
 import { getLocator } from '../../../global/utils/file-utils/locatorResolver'; 
 import { SafeActions } from '../../Common-Flows/SafeActions'; 
+// import { a } from '../../../global/utils/file-utils/lo'; 
 
-const LOCATOR_URL = "https://github.com/athrvzoz/LocatorFile/raw/refs/heads/main/locators.xlsx";
+
+
+const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
+
 
 export class SignUpPage {
     readonly page: Page;
@@ -14,7 +18,7 @@ export class SignUpPage {
     constructor(page: Page, private safeActions: SafeActions) {
         this.page = page;
 
-        let configs = loadLocatorsFromExcel(LOCATOR_URL, "JackpotCitySignup");
+        let configs = loadLocatorsFromExcel(LOCATOR_URL, "signUp");
         
         // If Excel loading fails or is empty, use the mock data
         if (!configs || Object.keys(configs).length === 0) {
@@ -25,26 +29,26 @@ export class SignUpPage {
         // 2. This registry ONLY holds Level 1 (Excel) locators
         this.locators = {
             registerButton: getLocator(this.page, configs["registerButton"]),
-            loginButton: getLocator(this.page, configs["loginButton"]),
-            mobileInput: getLocator(this.page, configs["mobileInput"]),
-            passwordInput: getLocator(this.page, configs["passwordInput"]),
-            firstNameInput: getLocator(this.page, configs["firstNameInput"]),
-            lastNameInput: getLocator(this.page, configs["lastNameInput"]),
-            emailInput: getLocator(this.page, configs["emailInput"]),
-            nextButton: getLocator(this.page, configs["nextButton"]),
-            idTypeDropdown: getLocator(this.page, configs["idTypeDropdown"]),
-            passportOption: getLocator(this.page, configs["passportOption"]),
-            saIdOption: getLocator(this.page, configs["saIdOption"]),
-            passportInput: getLocator(this.page, configs["passportInput"]),
-            saIdInput: getLocator(this.page, configs["saIdInput"]),
-            dobDropdown: getLocator(this.page, configs["dobDropdown"]),
-            dobSampleDate: getLocator(this.page, configs["dobSampleDate"]),
-            sourceOfIncomeDropdown: getLocator(this.page, configs["sourceOfIncomeDropdown"]),
-            sourceOfIncomeSalary: getLocator(this.page, configs["sourceOfIncomeSalary"]),
-            promoCheckbox: getLocator(this.page, configs["promoCheckbox"]),
-            ageCheckbox: getLocator(this.page, configs["ageCheckbox"]),
-            signUpFormButton: getLocator(this.page, configs["signUpFormButton"]),
-            diallingCode: getLocator(this.page, configs["diallingCode"]),
+            // loginButton: getLocator(this.page, configs["loginButton"]),
+            // mobileInput: getLocator(this.page, configs["mobileInput"]),
+            // passwordInput: getLocator(this.page, configs["passwordInput"]),
+            // firstNameInput: getLocator(this.page, configs["firstNameInput"]),
+            // lastNameInput: getLocator(this.page, configs["lastNameInput"]),
+            // emailInput: getLocator(this.page, configs["emailInput"]),
+            // nextButton: getLocator(this.page, configs["nextButton"]),
+            // idTypeDropdown: getLocator(this.page, configs["idTypeDropdown"]),
+            // passportOption: getLocator(this.page, configs["passportOption"]),
+            // saIdOption: getLocator(this.page, configs["saIdOption"]),
+            // passportInput: getLocator(this.page, configs["passportInput"]),
+            // saIdInput: getLocator(this.page, configs["saIdInput"]),
+            // dobDropdown: getLocator(this.page, configs["dobDropdown"]),
+            // dobSampleDate: getLocator(this.page, configs["dobSampleDate"]),
+            // sourceOfIncomeDropdown: getLocator(this.page, configs["sourceOfIncomeDropdown"]),
+            // sourceOfIncomeSalary: getLocator(this.page, configs["sourceOfIncomeSalary"]),
+            // promoCheckbox: getLocator(this.page, configs["promoCheckbox"]),
+            // ageCheckbox: getLocator(this.page, configs["ageCheckbox"]),
+            // signUpFormButton: getLocator(this.page, configs["signUpFormButton"]),
+            // diallingCode: getLocator(this.page, configs["diallingCode"]),
         };
     }
 
