@@ -8,6 +8,9 @@ export function getLocator(page: Page, config: LocatorConfig): Locator {
   if (!config) {
         throw new Error("Locator config is undefined");
     }
+
+
+
   // console.log(`Getting locator for type: ${config}`);
   switch (config.type) {
     case "css":

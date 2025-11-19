@@ -43,5 +43,17 @@
     "numericLast": "Smith456",
     "specialFirst": "John@#",
     "specialLast": "Smith$%"
+  },
+  "loginValid": {
+    "mobile": "620789321",
+    "password": "Test987601"
+  },
+  "loginInvalid": {
+    "shortMobile": "12345678",
+    "longMobile": "1234567890",
+    "alphaMobile": "12345abc9",
+    "specialMobile": "!@#$$%^",
+    "shortPass": "1234",
+    "longPass": "AAAAAAAAAAAAAAAAAAAAA"
   }
 }

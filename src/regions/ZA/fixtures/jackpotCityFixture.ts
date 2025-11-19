@@ -1,9 +1,10 @@
 import { test as base, Page } from '@playwright/test';
 import path from 'path';
 import * as fs from 'fs';
-// Adjust this path to wherever your POM file is located
+// Adjust paths to wherever your files are located
 import { SignUpPage } from '../pages/SignUpPage'; 
-import { SafeActions } from '../../Common-Flows/SafeActions'; // Adjust path
+import { LoginPage } from '../pages/LoginPage'; 
+import { SafeActions } from '../../Common-Flows/SafeActions';
 
 // 1. Define the shape of your new JSON data
 export interface FullTestData {
@@ -12,10 +13,11 @@ export interface FullTestData {
   mobileValidation: { [key: string]: string };
   passwordValidation: { [key: string]: string };
   nameValidation: { [key: string]: string };
+  loginValid: { [key: string]: string };
+  loginInvalid: { [key: string]: string };
 }
 
-// 2. Read the new JSON file
-// This assumes your 'fixtures' folder is in 'src/regions/ZA'
+// 2. Read the JSON file
 const testDataPath = path.resolve(__dirname, '../json-data/JackpotCityData.json'); 
 if (!fs.existsSync(testDataPath)) {
     console.error(`[Fixture Error] Could not find JackpotCityData.json at: ${testDataPath}`);
@@ -24,9 +26,10 @@ if (!fs.existsSync(testDataPath)) {
 const testDataFile = fs.readFileSync(testDataPath, 'utf-8');
 const allTestData: FullTestData = JSON.parse(testDataFile);
 
-// 3. Define your new fixture types
+// 3. Define your fixture types
 type JackpotCityFixtures = {
   signupPage: SignUpPage;
+  loginPage: LoginPage;
   safeActions: SafeActions;
   testData: FullTestData;
   screenshotDir: string;
@@ -39,10 +42,8 @@ export const test = base.extend<JackpotCityFixtures>({
     },
 
     screenshotDir: async ({}, use) => {
-        // This assumes your 'fixtures' folder is in 'src'
         const projectRoot = path.resolve(__dirname, '..'); 
-        const screenshotDir = path.join(projectRoot, 'screenshots/module/jackpotcity-signup');
-        // Ensure the directory exists
+        const screenshotDir = path.join(projectRoot, 'screenshots/module/jackpotcity-login');
         fs.mkdirSync(screenshotDir, { recursive: true }); 
         await use(screenshotDir);
     },
@@ -52,8 +53,12 @@ export const test = base.extend<JackpotCityFixtures>({
     },
 
     signupPage: async ({ page, safeActions }, use) => {
-        // Inject the page and the safeActions healer into the POM
         const signupPage = new SignUpPage(page, safeActions);
         await use(signupPage);
+    },
+
+    loginPage: async ({ page, safeActions }, use) => {
+        const loginPage = new LoginPage(page, safeActions);
+        await use(loginPage);
     },
 });
