@@ -132,6 +132,4 @@ test.describe('Login Page Test Cases', () => {
         await loginPage.highlightPasswordValidation();
         await ScreenshotHelper(page, screenshotDir, 'T21-longPassword', testInfo);
     });
-
-
 });
