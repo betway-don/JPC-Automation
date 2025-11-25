@@ -46,7 +46,7 @@
   },
   "loginValid": {
     "mobile": "620789321",
-    "password": "Test987601"
+    "password": "12345678"
   },
   "loginInvalid": {
     "shortMobile": "12345678",

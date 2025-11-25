@@ -1,9 +1,9 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromExcel } from '../../../global/utils/file-utils/excelReader'; 
-import { getLocator } from '../../../global/utils/file-utils/locatorResolver'; 
-import { SafeActions } from '../../Common-Flows/SafeActions'; 
+import { loadLocatorsFromExcel } from '../../../global/utils/file-utils/excelReader';
+import { getLocator } from '../../../global/utils/file-utils/locatorResolver';
+import { SafeActions } from '../../Common-Flows/SafeActions';
 
-const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx"; 
+const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
 
 export class LoginPage {
     readonly page: Page;
@@ -13,7 +13,7 @@ export class LoginPage {
         this.page = page;
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "login");
-        
+
         // If Excel loading fails or is empty, use the mock data
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[LoginPage POM] Excel locators not found or empty. Using internal mock data.");
@@ -38,7 +38,7 @@ export class LoginPage {
 
     // --- Navigation ---
     async goto() {
-        await this.page.goto('https://jackpotcity.co.za/');
+        await this.page.goto('https://jackpotcity.co.za/', { waitUntil: 'domcontentloaded' });
     }
 
     // --- Actions ---
@@ -77,14 +77,14 @@ export class LoginPage {
         await this.safeActions.safeFill('usernameInput', this.locators.usernameInput, mobile);
         await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, pass);
         // Press Enter as per raw spec
-        await this.locators.passwordInput.press('Enter'); 
+        await this.locators.passwordInput.press('Enter');
         await this.page.waitForLoadState('domcontentloaded');
     }
 
     async triggerValidation(mobile: string) {
-         await this.safeActions.safeFill('usernameInput', this.locators.usernameInput, mobile);
-         // Press Tab to trigger validation
-         await this.locators.usernameInput.press('Tab');
+        await this.safeActions.safeFill('usernameInput', this.locators.usernameInput, mobile);
+        // Press Tab to trigger validation
+        await this.locators.usernameInput.press('Tab');
     }
 
     async triggerPasswordValidation(mobile: string, pass: string) {
@@ -116,11 +116,11 @@ export class LoginPage {
 
     async highlightPasswordValidation() {
         await this.safeActions.safeHighlight('passwordValidationMsg', this.locators.passwordValidationMsg);
-        await this.highlightLoginButton(); 
+        await this.highlightLoginButton();
     }
 
     async highlightUsername() {
-         await this.safeActions.safeHighlight('usernameInput', this.locators.usernameInput);
+        await this.safeActions.safeHighlight('usernameInput', this.locators.usernameInput);
     }
 
     // --- Mock Data (Matches your raw spec selectors) ---
@@ -128,7 +128,7 @@ export class LoginPage {
         return {
             "loginButton": { type: "role", value: "button", options: '{"name":"Login"}', nth: 0 },
             "hamburgerButton": { type: "role", value: "button", options: '{"name":"menu"}', nth: 0 },
-            "hamburgerLoginButton": { type: "xpath", value: "//aside[@role='complementary']//button[normalize-space()='Login']", options: '{}', nth: 0 }, 
+            "hamburgerLoginButton": { type: "xpath", value: "//aside[@role='complementary']//button[normalize-space()='Login']", options: '{}', nth: 0 },
             "registerButton": { type: "role", value: "button", options: '{"name":"Register"}', nth: 0 },
             "loginLinkInSignup": { type: "text", value: "Already have an account?", options: '{}', nth: 0 },
             "aviatorButton": { type: "role", value: "button", options: '{"name":"aviator Aviator"}', nth: 0 },

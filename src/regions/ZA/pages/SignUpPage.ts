@@ -1,8 +1,8 @@
 import { Page, Locator } from '@playwright/test';
 // Adjust these paths based on your actual file structure
-import { loadLocatorsFromExcel } from '../../../global/utils/file-utils/excelReader'; 
-import { getLocator } from '../../../global/utils/file-utils/locatorResolver'; 
-import { SafeActions } from '../../Common-Flows/SafeActions'; 
+import { loadLocatorsFromExcel } from '../../../global/utils/file-utils/excelReader';
+import { getLocator } from '../../../global/utils/file-utils/locatorResolver';
+import { SafeActions } from '../../Common-Flows/SafeActions';
 // import { a } from '../../../global/utils/file-utils/lo'; 
 
 
@@ -19,7 +19,7 @@ export class SignUpPage {
         this.page = page;
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "signUp");
-        
+
         // If Excel loading fails or is empty, use the mock data
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[SignUpPage POM] Excel locators not found or empty. Using internal mock data.");
@@ -57,17 +57,17 @@ export class SignUpPage {
     // ------------------------------------------------------------------
 
     async goto() {
-        await this.page.goto('https://www.jackpotcity.co.za/');
+        await this.page.goto('https://www.jackpotcity.co.za/', { waitUntil: 'domcontentloaded' });
     }
 
     async clickHomepageRegister() {
         await this.safeActions.safeClick('registerButton', this.locators.registerButton);
     }
-    
+
     async clickHomepageLogin() {
         await this.safeActions.safeClick('loginButton', this.locators.loginButton);
     }
-    
+
     async clickNext() {
         await this.safeActions.safeClick('nextButton', this.locators.nextButton);
     }
@@ -79,13 +79,13 @@ export class SignUpPage {
         await this.safeActions.safeFill('lastNameInput', this.locators.lastNameInput, data.lName);
         await this.safeActions.safeFill('emailInput', this.locators.emailInput, data.email);
     }
-    
+
     async testMobileValidation(mobile: string, pass: string, email: string) {
         await this.safeActions.safeFill('mobileInput', this.locators.mobileInput, mobile);
         await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, pass);
         await this.safeActions.safeFill('emailInput', this.locators.emailInput, email);
     }
-    
+
     async testNameValidation(fName: string, lName: string, mobile: string, pass: string, email: string) {
         await this.safeActions.safeFill('mobileInput', this.locators.mobileInput, mobile);
         await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, pass);
@@ -99,7 +99,7 @@ export class SignUpPage {
         await this.safeActions.safeClick('saIdOption', this.locators.saIdOption);
         await this.safeActions.safeFill('saIdInput', this.locators.saIdInput, saId);
     }
-    
+
     async fillStep2Passport(passport: string) {
         await this.safeActions.safeClick('idTypeDropdown', this.locators.idTypeDropdown);
         await this.safeActions.safeClick('passportOption', this.locators.passportOption);
@@ -127,7 +127,7 @@ export class SignUpPage {
     async highlightLoginButton() {
         await this.safeActions.safeHighlight('loginButton', this.locators.loginButton);
     }
-    
+
     async highlightStep1Form() {
         await this.safeActions.safeHighlight('mobileInput', this.locators.mobileInput);
         await this.safeActions.safeHighlight('passwordInput', this.locators.passwordInput);
@@ -138,26 +138,26 @@ export class SignUpPage {
     async highlightMobileInput() {
         await this.safeActions.safeHighlight('mobileInput', this.locators.mobileInput);
     }
-    
+
     async highlightPasswordInput() {
         await this.safeActions.safeHighlight('passwordInput', this.locators.passwordInput);
     }
-    
+
     async highlightNameInputs() {
         await this.safeActions.safeHighlight('firstNameInput', this.locators.firstNameInput);
         await this.safeActions.safeHighlight('lastNameInput', this.locators.lastNameInput);
     }
-    
+
     async highlightSAIdInput() {
         await this.safeActions.safeHighlight('saIdInput', this.locators.saIdInput);
     }
-    
+
     async highlightPassportInput() {
         await this.safeActions.safeHighlight('passportInput', this.locators.passportInput);
     }
-    
+
     async highlightDiallingCode() {
-         await this.safeActions.safeHighlight('diallingCode', this.locators.diallingCode);
+        await this.safeActions.safeHighlight('diallingCode', this.locators.diallingCode);
     }
 
     // Mock data function

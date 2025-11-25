@@ -1,5 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { highlightElements } from './HighlightElements'; // Adjust path if needed
+import { AIClient } from '../../global/utils/ai/AiClient';
 
 /**
  * Provides self-healing actions (click, fill) with a 3-level fallback.
@@ -8,8 +9,11 @@ import { highlightElements } from './HighlightElements'; // Adjust path if neede
  * 3. AI Healer (LLM call as last resort)
  */
 export class SafeActions {
+    private aiClient: AIClient;
 
-    constructor(public page: Page) {}
+    constructor(public page: Page) {
+        this.aiClient = new AIClient();
+    }
 
     /**
      * Attempts to click an element using the 3-level fallback.
@@ -22,7 +26,7 @@ export class SafeActions {
             await primaryLocator.click({ timeout: 5000 });
         } catch (e1) {
             console.warn(`[Self-Heal L2] Primary locator for '${key}' failed. Trying heuristic...`);
-            
+
             // --- Level 2: Try Heuristic Fallback ---
             const heuristicLocator = this.generateHeuristic(key);
 
@@ -40,12 +44,15 @@ export class SafeActions {
             }
 
             // --- Level 3: AI Healer ---
-            const aiLocatorString = await this.getAiSuggestion(key, primaryLocator.toString(), await this.page.content());
-            
+            // Capture current page state
+            const pageContent = await this.page.content();
+            const aiLocatorString = await this.aiClient.getSuggestedLocator(key, primaryLocator.toString(), pageContent);
+
             if (aiLocatorString) {
                 try {
+                    console.log(`[Self-Heal L3] AI suggested locator: ${aiLocatorString}`);
                     // AI provides a new string (CSS, XPath, etc.)
-                    await this.page.locator(aiLocatorString).click();
+                    await this.page.locator(aiLocatorString).click({ timeout: 5000 });
                     console.log(`[Self-Heal L3] SUCCESS: AI found new locator: ${aiLocatorString}`);
                 } catch (e3) {
                     console.error(`[Self-Heal L3] FAILED: AI-suggested locator also failed.`);
@@ -74,7 +81,7 @@ export class SafeActions {
                     return;
                 } catch (e2) {
                     // L3 (AI)
-                    console.warn(`[Self-Heal L3] Heuristic fill for '${key}' failed. Skipping AI for fills.`);
+                    console.warn(`[Self-Heal L3] Heuristic fill for '${key}' failed. Skipping AI for fills (not implemented yet).`);
                     throw e2;
                 }
             }
@@ -90,6 +97,9 @@ export class SafeActions {
         if (key === 'registerButton') {
             return this.page.getByRole('button', { name: /Register|Sign Up/i });
         }
+        if (key === 'menuButton') {
+            return this.page.getByRole('button', { name: /menu/i });
+        }
         if (key === 'loginButton') {
             return this.page.getByRole('button', { name: /Login/i });
         }
@@ -99,13 +109,13 @@ export class SafeActions {
         if (key === 'passwordInput') {
             return this.page.getByRole('textbox', { name: /Password/i });
         }
-         if (key === 'firstNameInput') {
+        if (key === 'firstNameInput') {
             return this.page.getByRole('textbox', { name: /First Name/i });
         }
-         if (key === 'lastNameInput') {
+        if (key === 'lastNameInput') {
             return this.page.getByRole('textbox', { name: /Last Name|Surname/i });
         }
-         if (key === 'emailInput') {
+        if (key === 'emailInput') {
             return this.page.getByRole('textbox', { name: /Email/i });
         }
         if (key === 'nextButton') {
@@ -114,26 +124,8 @@ export class SafeActions {
         if (key === 'signUpFormButton') {
             return this.page.getByRole('button', { name: /Sign Up|Register/i });
         }
-        
+
         return null; // No heuristic available, will go straight to AI
-    }
-
-    /**
-     * MOCK AI HEALER
-     */
-    private async getAiSuggestion(key: string, oldLocator: string, dom: string): Promise<string | null> {
-        console.log(`[AI Healer] Querying LLM with key: '${key}'...`);
-        // --- AI API Call would go here ---
-        // const prompt = `Analyze this DOM... find '${key}'...`;
-        // const response = await fetch('https://api.gemini.com/...', { body: ... });
-        // const aiResult = await response.json();
-        // return aiResult.locator;
-        // ---------------------------------
-
-        if (key === 'registerButton' && dom.includes("Create Account")) {
-            return "role: 'button', name: 'Create Account'";
-        }
-        return null; // AI couldn't find a match
     }
 
     /**
