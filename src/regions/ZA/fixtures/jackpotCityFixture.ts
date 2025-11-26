@@ -4,6 +4,7 @@ import * as fs from 'fs';
 // Adjust paths to wherever your files are located
 import { SignUpPage } from '../pages/SignUpPage';
 import { LoginPage } from '../pages/LoginPage';
+import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
 import { SafeActions } from '../../Common-Flows/SafeActions';
 
@@ -32,6 +33,7 @@ type JackpotCityFixtures = {
     signupPage: SignUpPage;
     loginPage: LoginPage;
     hamburgerMenuPage: HamburgerMenuPage;
+    headerPage: HeaderPage;
     safeActions: SafeActions;
     testData: FullTestData;
     screenshotDir: string;
@@ -67,5 +69,10 @@ export const test = base.extend<JackpotCityFixtures>({
     hamburgerMenuPage: async ({ page, safeActions }, use) => {
         const hamburgerMenuPage = new HamburgerMenuPage(page, safeActions);
         await use(hamburgerMenuPage);
+    },
+
+    headerPage: async ({ page, safeActions }, use) => {
+        const headerPage = new HeaderPage(page, safeActions);
+        await use(headerPage);
     },
 });
