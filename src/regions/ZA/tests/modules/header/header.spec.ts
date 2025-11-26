@@ -17,7 +17,9 @@ test.describe('Header Tests', () => {
         test('T2. Verify Jackpotcity logo visibility and clickability', async ({ page, headerPage, screenshotDir }, testInfo) => {
             await headerPage.highlightElement('logoLink');
             await headerPage.clickLogo();
-            // do alt + d from the keyboard and then do ctrl + c to copy the url and log it in the repot
+            const currentUrl = page.url();
+            console.log('Current URL:', currentUrl);
+            await testInfo.attach('Current URL', { body: currentUrl });
             await ScreenshotHelper(page, screenshotDir, 'header-logo', testInfo);
         });
 
