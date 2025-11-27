@@ -1,0 +1,38 @@
+skeleton.png
+size:666,320
+filter:Linear,Linear
+pma:true
+Ball
+bounds:2,7,311,306
+offsets:25,27,360,360
+rotate:90
+Body
+bounds:436,199,84,119
+offsets:903,426,1920,1080
+Head
+bounds:554,2,94,110
+offsets:901,538,1920,1080
+rotate:90
+Left arm
+bounds:413,16,80,139
+offsets:866,490,1920,1080
+rotate:90
+Left gloves
+bounds:597,186,62,60
+offsets:872,623,1920,1080
+rotate:90
+Left leg
+bounds:310,178,124,140
+offsets:815,291,1920,1080
+Right arm
+bounds:522,184,73,134
+offsets:959,496,1920,1080
+Right gloves
+bounds:597,250,59,68
+offsets:968,620,1920,1080
+Right leg
+bounds:310,26,101,150
+offsets:983,288,1920,1080
+shorts
+bounds:413,98,190,78
+offsets:841,382,1920,1080
