@@ -22,4 +22,3 @@ export async function highlightElementBorder(elementSelectors: import('@playwrig
         console.warn(`Element with selector ${elementSelectors} not found.`);
     }
 };
-

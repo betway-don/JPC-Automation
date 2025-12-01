@@ -4,6 +4,6 @@ import { runSignupTests } from '../../../../../common/tests/signup.shared';
 test.describe('Jackpot City Signup Tests', () => {
     runSignupTests(
         test,
-        'https://www.jackpotcity.co.za/'
+        'https://www.jackpotcity.co.tz/'
     );
 });

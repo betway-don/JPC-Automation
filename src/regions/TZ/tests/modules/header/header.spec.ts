@@ -4,6 +4,6 @@ import { runHeaderTests } from '../../../../../common/tests/header.shared';
 test.describe('Header Tests', () => {
     runHeaderTests(
         test,
-        'https://jackpotcity.co.za/'
+        'https://www.jackpotcity.co.tz/'
     );
 });

@@ -1,10 +1,9 @@
 import path from 'path';
-import { test } from '@playwright/test';
-import { highlightElements } from '../../../../Common-Flows/HighlightElements';
-import { ScreenshotHelper } from '../../../../Common-Flows/ScreenshotHelper';
-import { Browser, chromium, Page } from '@playwright/test';
+import { test, Browser, chromium, Page } from '@playwright/test';
+import { highlightElements } from '../../../../../common/actions/HighlightElements';
+import { ScreenshotHelper } from '../../../../../common/actions/ScreenshotHelper';
 
-const projectRoot = path.resolve(__dirname, '../../..');
+const projectRoot = path.resolve(__dirname, '../../../../..');
 const screenshotDir = path.join(projectRoot, 'screenshots/module/transactionHistory');
 
 async function login(page: Page, mobile: string, password: string) {
@@ -192,20 +191,5 @@ test.describe('Transaction History Tests', () => {
         await highlightElements(page.locator('svg:has(path[d*="8.25 4.5"])').first());
         await ScreenshotHelper(page, screenshotDir, 'T10-transactionHistory', testInfo);
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });

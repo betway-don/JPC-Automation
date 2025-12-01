@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test';
 import { SafeActions } from '../../../common/actions/SafeActions';
-import { SignUpPage as CommonSignUpPage } from '../../../common/pages/SignUpPage';
+import { LoginPage as CommonLoginPage } from '../../../common/pages/LoginPage';
 
-export class SignUpPage extends CommonSignUpPage {
+export class LoginPage extends CommonLoginPage {
     constructor(page: Page, safeActions: SafeActions) {
         super(page, safeActions);
     }

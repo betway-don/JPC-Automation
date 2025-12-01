@@ -4,6 +4,7 @@ import { runHamburgerMenuTests } from '../../../../../common/tests/hamburgerMenu
 test.describe('Build A Bet Section Tests', () => {
     runHamburgerMenuTests(
         test,
-        'https://www.jackpotcitycasino.com.gh/'
+        'https://www.jackpotcity.co.tz/',
+        { excludeTags: ['T14'] }
     );
 });

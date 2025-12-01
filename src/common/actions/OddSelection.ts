@@ -116,5 +116,3 @@ export async function OddsSelectionAbove(numberOflegs: number, minOdd: number, p
         await page.waitForTimeout(1000);
     }
 }
-
-

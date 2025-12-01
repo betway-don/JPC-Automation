@@ -1,9 +1,8 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
 import { runHeaderTests } from '../../../../../common/tests/header.shared';
 
-test.describe('Header Tests', () => {
-    runHeaderTests(
-        test,
-        'https://jackpotcity.co.za/'
-    );
+const GH_URL = 'https://www.jackpotcity.com.gh/';
+
+test.describe('GH Header Tests', () => {
+    runHeaderTests(test, GH_URL);
 });
