@@ -187,9 +187,52 @@ test.describe('Transaction History Tests', () => {
         await page.getByRole('button', { name: 'menu' }).click();
         await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
         await page.waitForTimeout(2000);
-        await page.locator('svg:has(path[d*="8.25 4.5"])').first().click();
-        await highlightElements(page.locator('svg:has(path[d*="8.25 4.5"])').first());
+        await page.locator('.border-l > .w-6').click();
         await ScreenshotHelper(page, screenshotDir, 'T10-transactionHistory', testInfo);
     });
+
+    test('T11. Verify Page Number Functionality', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await highlightElements(page.locator('.pagination'));
+        await ScreenshotHelper(page, screenshotDir, 'T11-transactionHistory', testInfo);
+    });
+
+    test('T12. Verify Go to Page Functionality', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByText('...').click();
+        await page.locator('#goToInput').click();
+        await page.getByRole('button', { name: 'go' }).click();
+        await page.waitForTimeout(2000);
+        await ScreenshotHelper(page, screenshotDir, 'T12-transactionHistory', testInfo);
+    });
+
+    test('T13. Verify Previous Page Button', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.locator('.w-6.dark\\:text-white > path').click();
+        await ScreenshotHelper(page, screenshotDir, 'T13-transactionHistory', testInfo);
+    });
+
+    // filter feature
+
+
+     test('T14. Verify Filter Button', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await ScreenshotHelper(page, screenshotDir, 'T14-transactionHistory', testInfo);
+    });
+
+
 
 });
