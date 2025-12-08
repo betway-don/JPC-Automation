@@ -426,7 +426,7 @@ test.describe('Transaction History Tests', () => {
         await ScreenshotHelper(page, screenshotDir, 'T28-transactionHistory', testInfo);
     });
 
-    test('T29. Verify Manual Date Change Functionality, end date should be same', async ({  }, testInfo) => {
+    test('T29. Verify Manual Date Change Functionality, end date should be same', async ({ }, testInfo) => {
         await login(page, '640987655', '12345678');
         await page.getByRole('button', { name: 'menu' }).click();
         await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
@@ -488,8 +488,734 @@ test.describe('Transaction History Tests', () => {
     });
 
 
-    
+    test('T31. Verify Calendar Date Selection Persistence', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
 
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // compute dates (today & today - 28 days)
+        // -----------------------
+        const today = new Date();
+
+        const formatDate = (d: Date) => {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        };
+
+        const todayFormatted = formatDate(today);
+
+        // Start date = today - 28 days
+        const startDateObj = new Date(today);
+        startDateObj.setDate(today.getDate() - 28);
+        const startFormatted = formatDate(startDateObj);
+
+        // ------------------------------------------------
+        // 1) Pick Start Date (today – 28 days)
+        // ------------------------------------------------
+        await page.getByRole('combobox', { name: 'Start Date' }).click();
+
+        // If the start date is in the previous month, click Previous Month button
+        if (startDateObj.getMonth() !== today.getMonth()) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        // Click exact start date if enabled
+        await page
+            .locator(`span[title="${startFormatted}"]:not([aria-disabled="true"])`)
+            .click();
+
+        // ------------------------------------------------
+        // 2) Pick End Date (today)
+        // ------------------------------------------------
+        await page.getByRole('combobox', { name: 'End Date' }).click();
+        await page
+            .locator(`span[title="${todayFormatted}"]:not([aria-disabled="true"])`)
+            .click();
+
+        // ------------------------------------------------
+        // 3) Assertions BEFORE Continue (filter popup)
+        // ------------------------------------------------
+        await expect(
+            page.getByRole('combobox', { name: 'Start Date' })
+        ).toHaveValue(startFormatted);
+
+        await expect(
+            page.getByRole('combobox', { name: 'End Date' })
+        ).toHaveValue(todayFormatted);
+
+        await page.waitForTimeout(2000);
+        await ScreenshotHelper(page, screenshotDir, 'T29-transactionHistory-filter', testInfo);
+
+        // ------------------------------------------------
+        // 4) Click Continue and verify table data
+        // ------------------------------------------------
+        await page.getByRole('button', { name: 'Continue' }).click();
+
+
+
+        await page.waitForTimeout(2000);
+
+
+        // ------------------------------------------------
+        // 5) Reopen filter and verify the same range persists
+        // ------------------------------------------------
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // Auto-wait will handle popup opening
+        await expect(
+            page.getByRole('combobox', { name: 'Start Date' })
+        ).toHaveValue(startFormatted);
+
+        await expect(
+            page.getByRole('combobox', { name: 'End Date' })
+        ).toHaveValue(todayFormatted);
+
+        await ScreenshotHelper(page, screenshotDir, 'T29-transactionHistory-filter-reopen', testInfo);
+    });
+
+
+    test('T32. Verify Calendar Default State', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
+
+        await page.waitForTimeout(2000);
+
+        // ------------------------------------------------
+        // Open Filter and verify default (no date selected)
+        // ------------------------------------------------
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        const startDateInput = page.getByRole('combobox', { name: 'Start Date' });
+        const endDateInput = page.getByRole('combobox', { name: 'End Date' });
+        await highlightElements(startDateInput);
+        await highlightElements(endDateInput);
+
+        // assuming default is empty value when no date selected
+        await expect(startDateInput).toHaveValue('');
+        await expect(endDateInput).toHaveValue('');
+
+        await ScreenshotHelper(page, screenshotDir, 'T32-transactionHistory-filter-default', testInfo);
+    });
+
+
+
+
+    test('T34. Verify Calendar Date Selection Reset', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
+
+        await page.waitForTimeout(2000);
+
+        // Open Filter
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // compute dates (today & today - 28 days)
+        // -----------------------
+        const today = new Date();
+
+        const formatDate = (d: Date) => {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        };
+
+        const todayFormatted = formatDate(today);
+
+        const startDateObj = new Date(today);
+        startDateObj.setDate(today.getDate() - 28);
+        const startFormatted = formatDate(startDateObj);
+
+        // ------------------------------------------------
+        // Select Start Date
+        // ------------------------------------------------
+        await page.getByRole('combobox', { name: 'Start Date' }).click();
+
+        if (startDateObj.getMonth() !== today.getMonth()) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        await page
+            .locator(`span[title="${startFormatted}"]:not([aria-disabled="true"])`)
+            .click();
+
+        // ------------------------------------------------
+        // Select End Date
+        // ------------------------------------------------
+        await page.getByRole('combobox', { name: 'End Date' }).click();
+        await page
+            .locator(`span[title="${todayFormatted}"]:not([aria-disabled="true"])`)
+            .click();
+
+        // ------------------------------------------------
+        // Screenshot before reset
+        // ------------------------------------------------
+        await page.waitForTimeout(1000);
+        await ScreenshotHelper(page, screenshotDir, 'T34-before-reset', testInfo);
+
+        // ------------------------------------------------
+        // Click Reset
+        // ------------------------------------------------
+        await page.getByRole('button', { name: 'Reset' }).click();
+
+        // Wait a bit for UI update
+        await page.waitForTimeout(500);
+
+        // ------------------------------------------------
+        // VERIFY Start/End inputs are empty
+        // ------------------------------------------------
+        const startInput = page.getByRole('combobox', { name: 'Start Date' });
+        const endInput = page.getByRole('combobox', { name: 'End Date' });
+
+        await expect(startInput).toHaveValue('');
+        await expect(endInput).toHaveValue('');
+
+        // Screenshot after reset
+        await ScreenshotHelper(page, screenshotDir, 'T34-after-reset', testInfo);
+    });
+
+
+
+    test('T35. Verify Calendar Date Range with No Transactions', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // Helpers
+        // -----------------------
+        const formatDate = (d: Date) => {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        };
+
+        const getLastSunday = (from: Date) => {
+            const d = new Date(from);
+            // 0 = Sunday
+            while (d.getDay() !== 0) {
+                d.setDate(d.getDate() - 1);
+            }
+            return d;
+        };
+
+        // -----------------------
+        // Compute last Sunday
+        // -----------------------
+        const today = new Date();
+        const sundayDate = getLastSunday(today);
+        const sundayFormatted = formatDate(sundayDate);
+
+        const startInput = page.getByRole('combobox', { name: 'Start Date' });
+        const endInput = page.getByRole('combobox', { name: 'End Date' });
+
+        // -----------------------
+        // Select Sunday as Start Date
+        // -----------------------
+        await startInput.click();
+
+        // If Sunday is in a different month/year than the initially visible month, go to Previous Month
+        if (
+            sundayDate.getMonth() !== today.getMonth() ||
+            sundayDate.getFullYear() !== today.getFullYear()
+        ) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        await page
+            .locator(`span[title="${sundayFormatted}"][aria-disabled="false"]`)
+            .first() // avoid strict mode violation
+            .click();
+
+        // -----------------------
+        // Select same Sunday as End Date
+        // -----------------------
+        await endInput.click();
+
+        if (
+            sundayDate.getMonth() !== today.getMonth() ||
+            sundayDate.getFullYear() !== today.getFullYear()
+        ) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        await page
+            .locator(`span[title="${sundayFormatted}"][aria-disabled="false"][aria-selected="false"]`)
+            .first() // choose the not-yet-selected instance
+            .click();
+
+        // -----------------------
+        // Assertions on filter inputs
+        // -----------------------
+        await expect(startInput).toHaveValue(sundayFormatted);
+        await expect(endInput).toHaveValue(sundayFormatted);
+
+        await page.waitForTimeout(2000);
+
+        // -----------------------
+        // Apply filter
+        // -----------------------
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+
+        await highlightElements(page.getByText('No results'));
+
+        await ScreenshotHelper(page, screenshotDir, 'TXX-sunday-filter-after-continue', testInfo);
+    });
+
+
+    test('T36. Verify Calendar Date Selection with Filters', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // 1) Select Date Range (today - 28 days to today)
+        // -----------------------
+        const today = new Date();
+
+        const formatDate = (d: Date) => {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        };
+
+        const todayFormatted = formatDate(today);
+
+        const startDateObj = new Date(today);
+        startDateObj.setDate(today.getDate() - 28);
+        const startFormatted = formatDate(startDateObj);
+
+        const startInput = page.getByRole('combobox', { name: 'Start Date' });
+        const endInput = page.getByRole('combobox', { name: 'End Date' });
+
+        // ---- Start Date (only go backwards if needed) ----
+        await startInput.click();
+
+        if (
+            startDateObj.getMonth() !== today.getMonth() ||
+            startDateObj.getFullYear() !== today.getFullYear()
+        ) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        await page
+            .locator(`span[title="${startFormatted}"][aria-disabled="false"]`)
+            .first()
+            .click();
+
+        // ---- End Date (today, current month) ----
+        await endInput.click();
+
+        await page
+            .locator(`span[title="${todayFormatted}"][aria-disabled="false"]`)
+            .first()
+            .click();
+
+        await expect(startInput).toHaveValue(startFormatted);
+        await expect(endInput).toHaveValue(todayFormatted);
+
+        // =================================================
+        // 2) FIRST RUN: Payout only → all rows Payout & positive
+        // =================================================
+
+        // Open type filter (generic labelcontainer, text can be All/Payout/Wager etc.)
+        await page.locator('div[data-pc-section="labelcontainer"]').first().click();
+
+        // Select Payout only (assuming option text contains "Payout")
+        await page.getByRole('option', { name: /payout/i }).first().click();
+
+        await page.getByText('Filter By Type').click();
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+
+        let rows = page.locator('tbody tr.rowData');
+        let rowCount = await rows.count();
+
+        for (let i = 0; i < rowCount; i++) {
+            const row = rows.nth(i);
+            const typeCell = row.locator('td').nth(3);  // Transaction Type
+            const amountCell = row.locator('td').nth(4); // Amount column
+
+            const typeText = (await typeCell.textContent()) || '';
+
+            // This span exists ONLY for negative amounts ("- R ")
+            const minusSpanCount = await amountCell
+                .locator('span.gold-gradient-text.font-bold')
+                .count();
+
+            // Assert: type contains Payout & amount is positive (no minus span)
+            if (/payout/i.test(typeText) && minusSpanCount === 0) {
+                await highlightElements(amountCell);
+            } else {
+                throw new Error(`Row ${i} is not a valid POSITIVE Payout. Type="${typeText}", minusSpanCount=${minusSpanCount}`);
+            }
+        }
+
+        await ScreenshotHelper(page, screenshotDir, 'T18-transactionHistory-payout-only', testInfo);
+
+        // =================================================
+        // 3) SECOND RUN: Wager only → all rows Wager & negative
+        // =================================================
+
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // Open type filter again (same generic locator)
+        await page.locator('div[data-pc-section="labelcontainer"]').first().click();
+
+        // Select Wager only and unselect payout (assuming option text contains "Wager")
+        await page.getByRole('option', { name: /payout/i }).first().click();
+        await page.getByRole('option', { name: /wager/i }).first().click();
+
+        await page.getByText('Filter By Type').click();
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+
+        rows = page.locator('tbody tr.rowData');
+        rowCount = await rows.count();
+
+        for (let i = 0; i < rowCount; i++) {
+            const row = rows.nth(i);
+            const typeCell = row.locator('td').nth(3);  // Transaction Type
+            const amountCell = row.locator('td').nth(4); // Amount column
+
+            const typeText = (await typeCell.textContent()) || '';
+
+            const minusSpanCount = await amountCell
+                .locator('span.gold-gradient-text.font-bold')
+                .count();
+
+            // Assert: type contains Wager & amount is negative (minus span present)
+            if (/wager/i.test(typeText) && minusSpanCount > 0) {
+                await highlightElements(amountCell);
+            } else {
+                throw new Error(`Row ${i} is not a valid NEGATIVE Wager. Type="${typeText}", minusSpanCount=${minusSpanCount}`);
+            }
+        }
+        await ScreenshotHelper(page, screenshotDir, 'T36-transactionHistory-wager-payout-filter', testInfo);
+    });
+
+    test('T37. Verify Calendar Date Selection with Multiple Filters', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // 1) Select Date Range (today - 28 days to today)
+        // -----------------------
+        const today = new Date();
+
+        const formatDate = (d: Date) => {
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        };
+
+        const todayFormatted = formatDate(today);
+
+        const startDateObj = new Date(today);
+        startDateObj.setDate(today.getDate() - 28);
+        const startFormatted = formatDate(startDateObj);
+
+        const startInput = page.getByRole('combobox', { name: 'Start Date' });
+        const endInput = page.getByRole('combobox', { name: 'End Date' });
+
+        // ---- Start Date (only go backwards if needed) ----
+        await startInput.click();
+
+        if (
+            startDateObj.getMonth() !== today.getMonth() ||
+            startDateObj.getFullYear() !== today.getFullYear()
+        ) {
+            await page.getByRole('button', { name: 'Previous Month' }).click();
+        }
+
+        await page
+            .locator(`span[title="${startFormatted}"][aria-disabled="false"]`)
+            .first()
+            .click();
+
+        // ---- End Date (today, current month) ----
+        await endInput.click();
+
+        await page
+            .locator(`span[title="${todayFormatted}"][aria-disabled="false"]`)
+            .first()
+            .click();
+
+        await expect(startInput).toHaveValue(startFormatted);
+        await expect(endInput).toHaveValue(todayFormatted);
+
+        // =================================================
+        // 2) Select BOTH Payout & Wager in Type filter
+        // =================================================
+
+        // Generic open of multiselect label (works even when text changes from "All")
+        await page.locator('div[data-pc-section="labelcontainer"]').first().click();
+
+        // Select Payout
+        await page.getByRole('option', { name: /payout/i }).first().click();
+
+        // Select Wager
+        await page.getByRole('option', { name: /wager/i }).first().click();
+
+        // Close the filter dropdown
+        await page.getByText('Filter By Type').click();
+
+        // Apply filter
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+
+        // =================================================
+        // 3) Verify: only Payout/Wager rows, and amount formatting per type
+        // =================================================
+
+        const rows = page.locator('tbody tr.rowData');
+        const rowCount = await rows.count();
+
+        for (let i = 0; i < rowCount; i++) {
+            const row = rows.nth(i);
+            const typeCell = row.locator('td').nth(3);   // Transaction Type
+            const amountCell = row.locator('td').nth(4); // Amount column
+
+            const typeText = (await typeCell.textContent()) || '';
+
+            // This span exists ONLY for negative amounts ("- R ")
+            const minusSpanCount = await amountCell
+                .locator('span.gold-gradient-text.font-bold')
+                .count();
+
+            if (/payout/i.test(typeText)) {
+                // Payout should be POSITIVE (no minus span)
+                if (minusSpanCount === 0) {
+                    await highlightElements(amountCell);
+                } else {
+                    throw new Error(
+                        `Row ${i}: Payout row has NEGATIVE formatting. minusSpanCount=${minusSpanCount}`
+                    );
+                }
+            } else if (/wager/i.test(typeText)) {
+                // Wager should be NEGATIVE (minus span present)
+                if (minusSpanCount > 0) {
+                    await highlightElements(amountCell);
+                } else {
+                    throw new Error(
+                        `Row ${i}: Wager row has POSITIVE formatting. minusSpanCount=${minusSpanCount}`
+                    );
+                }
+            } else {
+                // Neither payout nor wager → invalid according to filter
+                throw new Error(
+                    `Row ${i}: Unexpected Transaction Type. Got type="${typeText}"`
+                );
+            }
+        }
+
+        await ScreenshotHelper(page, screenshotDir, 'T37-transactionHistory-payout-and-wager', testInfo);
+    });
+
+    test('T38. Verify Show Only Payout Toggle Activation', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+
+        const toggleContainer = page.getByText('Show Payout Only').locator('xpath=..');
+        const payoutToggle = toggleContainer.locator('input[role="switch"]');
+
+        // Assert initial state = OFF
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        // Turn ON the toggle
+        await payoutToggle.click();
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'true');
+
+        await highlightElements(payoutToggle);
+        await ScreenshotHelper(page, screenshotDir, 'T38-transactionHistory-payout-only', testInfo);
+
+        // Apply filter
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+
+        // =================================================
+        // 3) Verify: only Payout rows, and amount formatting per type
+        // =================================================
+
+        const rows = page.locator('tbody tr.rowData');
+        const rowCount = await rows.count();
+
+        for (let i = 0; i < rowCount; i++) {
+            const row = rows.nth(i);
+            const typeCell = row.locator('td').nth(3);   // Transaction Type
+            const amountCell = row.locator('td').nth(4); // Amount column
+
+            const typeText = (await typeCell.textContent()) || '';
+
+            // This span exists ONLY for negative amounts ("- R ")
+            const minusSpanCount = await amountCell
+                .locator('span.gold-gradient-text.font-bold')
+                .count();
+
+            if (/payout/i.test(typeText)) {
+                // Payout should be POSITIVE (no minus span)
+                if (minusSpanCount === 0) {
+                    await highlightElements(amountCell);
+                } else {
+                    throw new Error(
+                        `Row ${i}: Payout row has NEGATIVE formatting. minusSpanCount=${minusSpanCount}`
+                    );
+                }
+            } else {
+                // Wager → invalid according to filter
+                throw new Error(
+                    `Row ${i}: Unexpected Transaction Type. Got type="${typeText}"`
+                );
+            }
+        }
+
+        await ScreenshotHelper(page, screenshotDir, 'T38-transactionHistory-payout-only', testInfo);
+    });
+
+    test('T39. Verify Show Only Payout Toggle Deactivation', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
+        await page.waitForTimeout(2000);
+
+        // Open Filter
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // 1) Locate the "Show Payout Only" toggle
+        // -----------------------
+        const toggleContainer = page.getByText('Show Payout Only').locator('xpath=..');
+        const payoutToggle = toggleContainer.locator('input[role="switch"]');
+
+        // Assert initial state = OFF
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        // Turn ON the toggle
+        await payoutToggle.click();
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'true');
+
+        // -----------------------
+        // 2) Open type multiselect and select "Wager"
+        // -----------------------
+        // Generic label container for type multiselect (works even when text changes from "All")
+        const typeDropdown = page.locator('div[data-pc-section="labelcontainer"]').first();
+        await typeDropdown.click();
+
+        // Pick Wager from the options
+        await page.getByRole('option', { name: /wager/i }).first().click();
+
+        // Close the dropdown (same pattern used earlier)
+        await page.getByText('Filter By Type').click();
+
+        // -----------------------
+        // 3) Verify the toggle got reset (turned OFF)
+        // -----------------------
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        // (Optional) Apply the filter & take screenshot
+        // await page.getByRole('button', { name: 'Continue' }).click();
+        await highlightElements(payoutToggle);
+        await page.waitForTimeout(2000);
+        await ScreenshotHelper(page, screenshotDir, 'T39-transactionHistory-payout-toggle-reset', testInfo);
+    });
+
+    test('T40. Verify Show Only Payout Toggle State After Deselecting Other Types', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page
+            .locator('.hamburger-account-options:has-text("Transaction Summary")')
+            .first()
+            .click();
+        await page.waitForTimeout(2000);
+
+        // Open Filter
+        await page.getByRole('button', { name: 'Filter' }).click();
+
+        // -----------------------
+        // Locate payout toggle
+        // -----------------------
+        const toggleContainer = page.getByText('Show Payout Only').locator('xpath=..');
+        const payoutToggle = toggleContainer.locator('input[role="switch"]');
+
+        // Ensure toggle starts OFF
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        // -----------------------
+        // 1) Open Type filter and select Payout + Wager
+        // -----------------------
+        const typeDropdown = page.locator('div[data-pc-section="labelcontainer"]').first();
+        await typeDropdown.click();
+
+        // Select Payout
+        await page.getByRole('option', { name: /payout/i }).first().click();
+        // Select Wager
+        await page.getByRole('option', { name: /wager/i }).first().click();
+
+        // Close type dropdown
+        await page.getByText('Filter By Type').click();
+
+        // Toggle should still be OFF
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        // -----------------------
+        // 2) Now deselect Wager
+        // -----------------------
+        await typeDropdown.click();
+
+        // Unselect Wager
+        await page.getByRole('option', { name: /wager/i }).first().click();
+
+        // Close dropdown
+        await page.getByText('Filter By Type').click();
+
+        // -----------------------
+        // 3) ASSERTION: Payout toggle MUST REMAIN OFF
+        // -----------------------
+        await expect(payoutToggle).toHaveAttribute('aria-checked', 'false');
+
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(1500);
+        await ScreenshotHelper(page, screenshotDir, 'T40-transactionHistory-payout-toggle-reset', testInfo);
+    });
 
 
 
