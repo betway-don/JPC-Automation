@@ -7,6 +7,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
 import { LimitsPage } from '../pages/LimitsPage';
+import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
 import { SafeActions } from '../../../common/actions/SafeActions';
 
 // 1. Define the shape of your new JSON data
@@ -36,6 +37,7 @@ type JackpotCityFixtures = {
     hamburgerMenuPage: HamburgerMenuPage;
     headerPage: HeaderPage;
     limitsPage: LimitsPage;
+    transactionHistoryPage: TransactionHistoryPage;
     safeActions: SafeActions;
     testData: FullTestData;
     screenshotDir: string;
@@ -81,5 +83,10 @@ export const test = base.extend<JackpotCityFixtures>({
     limitsPage: async ({ page, safeActions }, use) => {
         const limitsPage = new LimitsPage(page, safeActions);
         await use(limitsPage);
+    },
+
+    transactionHistoryPage: async ({ page, safeActions }, use) => {
+        const transactionHistoryPage = new TransactionHistoryPage(page, safeActions);
+        await use(transactionHistoryPage);
     },
 });

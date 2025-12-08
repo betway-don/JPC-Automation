@@ -38,7 +38,7 @@ export class LoginPage {
 
     // --- Navigation ---
     async goto(url?: string) {
-        await this.page.goto(url || 'https://jackpotcity.co.za/', { waitUntil: 'domcontentloaded' });
+        await this.page.goto(url || '/', { waitUntil: 'domcontentloaded' });
     }
 
     // --- Actions ---

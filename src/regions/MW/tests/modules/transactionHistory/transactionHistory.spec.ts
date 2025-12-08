@@ -1,10 +1,10 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
 import { runTransactionHistoryTests } from '../../../../../common/tests/transactionHistory.shared';
 
-const USER_MOBILE = '620789321';
-const USER_PASSWORD = '12345678';
+const USER_MOBILE = '866224461';
+const USER_PASSWORD = 'Jackpot@1234';
 
-test.describe('ZA Transaction History Tests', () => {
+test.describe('MW Transaction History Tests', () => {
     runTransactionHistoryTests(
         test,
         USER_MOBILE,

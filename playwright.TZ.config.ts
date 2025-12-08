@@ -11,7 +11,7 @@ export default defineConfig({
     ['allure-playwright', { outputFolder: 'src/regions/TZ/reports/allure-results' }]
   ],
   use: {
-    // baseURL: 'http://tz.example.com',
+    baseURL: 'https://www.jackpotcitycasino.co.tz/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

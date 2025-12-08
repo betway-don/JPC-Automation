@@ -4,7 +4,7 @@ import { runTransactionHistoryTests } from '../../../../../common/tests/transact
 const USER_MOBILE = '620789321';
 const USER_PASSWORD = '12345678';
 
-test.describe('ZA Transaction History Tests', () => {
+test.describe('TZ Transaction History Tests', () => {
     runTransactionHistoryTests(
         test,
         USER_MOBILE,

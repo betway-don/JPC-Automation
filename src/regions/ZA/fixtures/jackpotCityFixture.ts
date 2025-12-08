@@ -6,6 +6,7 @@ import { SignUpPage } from '../pages/SignUpPage';
 import { LoginPage } from '../pages/LoginPage';
 import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
+import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
 import { LimitsPage } from '../pages/LimitsPage';
 import { SafeActions } from '../../../common/actions/SafeActions';
 
@@ -35,6 +36,7 @@ type JackpotCityFixtures = {
     loginPage: LoginPage;
     hamburgerMenuPage: HamburgerMenuPage;
     headerPage: HeaderPage;
+    transactionHistoryPage: TransactionHistoryPage;
     limitsPage: LimitsPage;
     safeActions: SafeActions;
     testData: FullTestData;
@@ -76,6 +78,11 @@ export const test = base.extend<JackpotCityFixtures>({
     headerPage: async ({ page, safeActions }, use) => {
         const headerPage = new HeaderPage(page, safeActions);
         await use(headerPage);
+    },
+
+    transactionHistoryPage: async ({ page, safeActions }, use) => {
+        const transactionHistoryPage = new TransactionHistoryPage(page, safeActions);
+        await use(transactionHistoryPage);
     },
 
     limitsPage: async ({ page, safeActions }, use) => {

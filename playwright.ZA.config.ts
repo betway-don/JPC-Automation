@@ -1,18 +1,18 @@
 import { defineConfig, devices } from '@playwright/test';
- 
+
 export default defineConfig({
   testDir: './src/regions/ZA/tests',
   fullyParallel: true,
-  timeout: 200000,  
+  timeout: 200000,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : 1,
   reporter: [
-    ['html', { outputFolder: 'src/regions/ZA/reports/html-report',open: 'never' }],
+    ['html', { outputFolder: 'src/regions/ZA/reports/html-report', open: 'never' }],
     ['allure-playwright', { outputFolder: 'src/regions/ZA/reports/allure-results' }]
   ],
   use: {
-    baseURL: 'https://new.betway.co.za/',
+    baseURL: 'https://www.jackpotcity.co.za/',
     viewport: null,                        // <- This disables the fixed viewport size, so browser window controls actual size
     launchOptions: {
       args: ['--start-maximized'],
@@ -20,7 +20,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
- 
+
   projects: [
     {
       name: 'ZA Region',
