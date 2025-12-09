@@ -9,19 +9,18 @@ type LimitsTestFixtures = {
     limitsPage: LimitsPage;
     loginPage: LoginPage;
     screenshotDir: string;
+    testData: any;
 };
 
 export async function runLimitsTests(
-    test: TestType<LimitsTestFixtures, any>,
-    userMobile: string,
-    userPassword: string
+    test: TestType<LimitsTestFixtures, any>
 ) {
 
-    test.beforeEach(async ({ page, loginPage }) => {
+    test.beforeEach(async ({ page, loginPage, testData }) => {
         await loginPage.goto();
         await loginPage.clickLogin();
         await page.waitForTimeout(2000);
-        await loginPage.performLogin(userMobile, userPassword);
+        await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
         await page.waitForTimeout(2000);
     });
 

@@ -9,19 +9,18 @@ type TransactionHistoryFixtures = {
     transactionHistoryPage: TransactionHistoryPage;
     loginPage: LoginPage;
     screenshotDir: string;
+    testData: any;
 };
 
 export async function runTransactionHistoryTests(
-    test: TestType<TransactionHistoryFixtures, any>,
-    userMobile: string,
-    userPassword: string
+    test: TestType<TransactionHistoryFixtures, any>
 ) {
 
-    test.beforeEach(async ({ page, loginPage }) => {
+    test.beforeEach(async ({ page, loginPage, testData }) => {
         await loginPage.goto();
         await loginPage.clickLogin();
         await page.waitForTimeout(2000);
-        await loginPage.performLogin(userMobile, userPassword);
+        await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
         // Wait for login to settle
         await page.waitForTimeout(2000);
     });
