@@ -52,8 +52,8 @@ export const test = base.extend<JackpotCityFixtures>({
     },
 
     screenshotDir: async ({ }, use) => {
-        const projectRoot = path.resolve(__dirname, '..');
-        const screenshotDir = path.join(projectRoot, 'screenshots/module/jackpotcity-login');
+        const projectRoot = path.resolve(__dirname, '../../../../');
+        const screenshotDir = path.join(projectRoot, 'screenshots/regions/TZ/jackpotcity-tests');
         fs.mkdirSync(screenshotDir, { recursive: true });
         await use(screenshotDir);
     },
