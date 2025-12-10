@@ -7,7 +7,12 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx playwright test",
+    "exec": "node runner.js",
+    "test:gh": "npx playwright test --config=playwright.GH.config.ts --project=\"GH Region\"",
+    "test:mw": "npx playwright test --config=playwright.MW.config.ts --project=\"MW Region\"",
+    "test:tz": "npx playwright test --config=playwright.TZ.config.ts --project=\"TZ Region\"",
+    "test:za": "npx playwright test --config=playwright.ZA.config.ts --project=\"ZA Region\""
   },
   "repository": {
     "type": "git",

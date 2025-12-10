@@ -76,6 +76,16 @@ d:\JPC-Automation
 │       │   └── ...
 │       └── TZ/               # Tanzania Region (Structure mirrors ZA)
 │           └── ...
+### 2.3. Mobile Execution & Cross-Platform Support
+The repository natively supports executing scripts on physical Android devices connected via ADB.
+-   **Fixture Level Support**: Standard fixtures (`jackpotCityFixture.ts`) automatically detect the `ANDROID_DEVICE` environment variable.
+-   **Dynamic Timeouts**: `SafeActions` and context launchers automatically adjust timeouts (30s action / 60s navigation) when running on mobile to account for device latency.
+-   **Shared Utils**: `src/common/utils/androidUtils.ts` manages the connection and browser launch on the device.
+
+```text
+d:\JPC-Automation
+├── runner.js                 # Unified execution runner script
+├── playwright.ZA.config.ts   # ...
 ```
 
 ---
@@ -101,6 +111,12 @@ Locators are decoupled from the code and stored in external files (Excel/JSON).
 ### 3.4. Dependency Injection (Fixtures)
 Playwright Fixtures (e.g., `jackpotCityFixture.ts`) are used to instantiate and inject Page Objects into tests.
 -   **Benefit**: Eliminates boilerplate setup code in tests and ensures fresh page instances for every test.
+
+### 3.5. Unified Execution Runner
+A custom `runner.js` script abstracts the complexity of Playwright CLI flags.
+-   **Command**: `npm run exec -- [args]`
+-   **Parameters**: `--region=<region>`, `--mode=<android|desktop>`, `--grep=<pattern>`, plus any standard Playwright flags (e.g., `--headed`, `--debug`).
+-   **Benefit**: Provides a consistent, user-friendly interface for running tests across different platforms and regions without remembering verbose config paths.
 
 ---
 
@@ -131,7 +147,7 @@ Tests are designed to consume data from JSON/Excel files (`src/regions/{Region}/
 2.  **Maintainability**: The separation of concerns (Global vs. Common vs. Region) makes it easy to locate and fix issues.
 3.  **Flexibility**: Region-specific overrides allow the framework to adapt to local variations without breaking the core logic.
 4.  **Stability**: The `SafeActions` layer and robust fixture management contribute to a stable and reliable test suite.
-5.  **Ease of Use**: Externalized locators and data allow manual testers or business analysts to contribute to automation maintenance.
+5.  **Ease of Use**: Externalized locators and the **Unified Runner** allow manual testers or business analysts to run complex scenarios with simple commands.
 6.  **Comprehensive Reporting**: Integrated Allure and HTML reporting provide detailed insights into test execution.
 
 ---
