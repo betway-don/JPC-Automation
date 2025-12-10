@@ -39,7 +39,7 @@ export class HeaderPage {
     }
 
     async navigateTo(url?: string) {
-        await this.page.goto(url || 'https://jackpotcity.co.za/', { waitUntil: 'domcontentloaded' });
+        await this.page.goto(url || '/', { waitUntil: 'domcontentloaded' });
     }
 
     async clickMenu() {

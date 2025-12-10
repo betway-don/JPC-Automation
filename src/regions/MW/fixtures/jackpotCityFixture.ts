@@ -6,6 +6,9 @@ import { SignUpPage } from '../pages/SignUpPage';
 import { LoginPage } from '../pages/LoginPage';
 import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
+import { LimitsPage } from '../pages/LimitsPage';
+import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
+import { UpdatePasswordPage } from '../pages/UpdatePasswordPage';
 import { SafeActions } from '../../../common/actions/SafeActions';
 
 // 1. Define the shape of your new JSON data
@@ -34,6 +37,9 @@ type JackpotCityFixtures = {
     loginPage: LoginPage;
     hamburgerMenuPage: HamburgerMenuPage;
     headerPage: HeaderPage;
+    limitsPage: LimitsPage;
+    transactionHistoryPage: TransactionHistoryPage;
+    updatePasswordPage: UpdatePasswordPage;
     safeActions: SafeActions;
     testData: FullTestData;
     screenshotDir: string;
@@ -46,8 +52,8 @@ export const test = base.extend<JackpotCityFixtures>({
     },
 
     screenshotDir: async ({ }, use) => {
-        const projectRoot = path.resolve(__dirname, '..');
-        const screenshotDir = path.join(projectRoot, 'screenshots/module/jackpotcity-login');
+        const projectRoot = path.resolve(__dirname, '../../../../');
+        const screenshotDir = path.join(projectRoot, 'screenshots/regions/MW/jackpotcity-tests');
         fs.mkdirSync(screenshotDir, { recursive: true });
         await use(screenshotDir);
     },
@@ -74,5 +80,20 @@ export const test = base.extend<JackpotCityFixtures>({
     headerPage: async ({ page, safeActions }, use) => {
         const headerPage = new HeaderPage(page, safeActions);
         await use(headerPage);
+    },
+
+    limitsPage: async ({ page, safeActions }, use) => {
+        const limitsPage = new LimitsPage(page, safeActions);
+        await use(limitsPage);
+    },
+
+    transactionHistoryPage: async ({ page, safeActions }, use) => {
+        const transactionHistoryPage = new TransactionHistoryPage(page, safeActions);
+        await use(transactionHistoryPage);
+    },
+
+    updatePasswordPage: async ({ page, safeActions }: { page: Page, safeActions: SafeActions }, use: (r: UpdatePasswordPage) => Promise<void>) => {
+        const updatePasswordPage = new UpdatePasswordPage(page, safeActions);
+        await use(updatePasswordPage);
     },
 });
