@@ -1,5 +1,5 @@
 import path from 'path';
-import { test, Browser, chromium, Page } from '@playwright/test';
+import { test, Browser, chromium, Page, expect } from '@playwright/test';
 import { highlightElements } from '../../../../../common/actions/HighlightElements';
 import { ScreenshotHelper } from '../../../../../common/actions/ScreenshotHelper';
 
@@ -224,7 +224,7 @@ test.describe('Transaction History Tests', () => {
     // filter feature
 
 
-     test('T14. Verify Filter Button', async ({ }, testInfo) => {
+    test('T14. Verify Filter Button', async ({ }, testInfo) => {
         await login(page, '640987655', '12345678');
         await page.getByRole('button', { name: 'menu' }).click();
         await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
@@ -232,6 +232,131 @@ test.describe('Transaction History Tests', () => {
         await page.getByRole('button', { name: 'Filter' }).click();
         await ScreenshotHelper(page, screenshotDir, 'T14-transactionHistory', testInfo);
     });
+
+
+    test('T15. Verify Filter Persistence', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await page.getByRole('button', { name: 'Last Week' }).click();
+        await ScreenshotHelper(page, screenshotDir, 'T15-transactionHistory', testInfo);
+        await page.getByRole('button', { name: 'Continue' }).click();
+
+        await page.waitForTimeout(2000);
+
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await expect(page.getByRole('button', { name: 'Last Week' })).toHaveClass(/bg-primary-blue-gradient/);
+        await ScreenshotHelper(page, screenshotDir, 'T15-transactionHistory', testInfo);
+    });
+
+    test('T18. Verify Applied Filter Transaction List.', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await page.getByText('All', { exact: true }).click();
+        const options = page.getByRole('option');
+        await options.nth(0).click();
+        await options.nth(1).click();
+        await options.nth(2).click();
+        await page.getByText('Filter By Type').click();
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await page.waitForTimeout(2000);
+        await ScreenshotHelper(page, screenshotDir, 'T18-transactionHistory', testInfo);
+    });
+
+    test('T20. Verify Reset Button on Filter Prompt', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await page.getByText('All', { exact: true }).click();
+        const options = page.getByRole('option');
+        await options.nth(0).click();
+        await options.nth(1).click();
+        await options.nth(2).click();
+        await page.getByText('Filter By Type').click();
+        await ScreenshotHelper(page, screenshotDir, 'T20-transactionHistory', testInfo);
+        await page.getByRole('button', { name: 'Reset' }).click();
+        await page.waitForTimeout(2000);
+        await ScreenshotHelper(page, screenshotDir, 'T20-transactionHistory', testInfo);
+    });
+
+    test('T21. Verify Close Button on Filter Prompt', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        await highlightElements(page.locator('[element-name="close-modal"]').first());
+        await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory', testInfo);
+        await page.locator('[element-name="close-modal"]').first().click();
+        await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory', testInfo);
+    });
+
+    test('T22. Verify No Results Message', async ({ }, testInfo) => {
+        await login(page, '640987655', '12345678');
+        await page.getByRole('button', { name: 'menu' }).click();
+        await page.locator('.hamburger-account-options:has-text("Transaction Summary")').nth(0).click();
+        await page.waitForTimeout(2000);
+        await page.getByRole('button', { name: 'Filter' }).click();
+        const options = page.getByRole('option');
+        await options.nth(5).click();
+        await page.getByText('Filter By Type').click();
+        await page.getByRole('button', { name: 'Continue' }).click();
+        await highlightElements(page.getByText('No results'));
+        await ScreenshotHelper(page, screenshotDir, 'T22-transactionHistory', testInfo);
+    });
+
+
+//    test('T23. Verify Calendar Date Selection Accessibility', async ({  }, testInfo) => {
+//   await login(page, '640987655', '12345678');
+//   await page.getByRole('button', { name: 'menu' }).click();
+//   await page.locator('.hamburger-account-options:has-text("Transaction Summary")').first().click();
+//   await page.waitForTimeout(2000);
+//   await page.getByRole('button', { name: 'Filter' }).click();
+
+//   // open Start Date picker
+//   await page.getByRole('combobox', { name: 'Start Date' }).click();
+//   await page.getByRole('button', { name: 'Previous Month' }).click();
+
+//   await ScreenshotHelper(page, 'screenshots', 'T22-transactionHistory', testInfo);
+
+//   // ----------------------------------------------------
+//   // 1) Dynamic cutoff date = today - 30 days
+//   // ----------------------------------------------------
+//   const today = new Date();
+//   const cutoff = new Date(today);
+//   cutoff.setDate(cutoff.getDate() - 30);
+
+//   const dd = String(cutoff.getDate()).padStart(2, '0');
+//   const mm = String(cutoff.getMonth() + 1).padStart(2, '0');
+//   const yyyy = cutoff.getFullYear();
+//   const cutoffTitle = `${dd}/${mm}/${yyyy}`;
+
+//   // ----------------------------------------------------
+//   // 2) Assert cutoff date is disabled
+//   // ----------------------------------------------------
+//   await expect(page.locator(`span[title="${cutoffTitle}"]`))
+//     .toHaveAttribute('aria-disabled', 'true');
+
+//   // ----------------------------------------------------
+//   // 3) Click a known clickable date — e.g., 7th
+//   // ----------------------------------------------------
+//   const date7 = page.locator('td[aria-label="7"] span[aria-disabled="false"]');
+
+//   await date7.click();
+// });
+
+
+
+
+
+
 
 
 
