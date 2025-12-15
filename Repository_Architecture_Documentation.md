@@ -76,6 +76,8 @@ d:\JPC-Automation
 │       │   └── ...
 │       └── TZ/               # Tanzania Region (Structure mirrors ZA)
 │           └── ...
+```
+
 ### 2.3. Mobile Execution & Cross-Platform Support
 The repository natively supports executing scripts on physical Android devices connected via ADB.
 -   **Fixture Level Support**: Standard fixtures (`jackpotCityFixture.ts`) automatically detect the `ANDROID_DEVICE` environment variable.
