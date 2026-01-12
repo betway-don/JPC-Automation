@@ -22,6 +22,12 @@ export function getLocator(page: Page, config: LocatorConfig): Locator {
     case "text":
       locator = page.getByText(config.value, config.options || {});
       break;
+    // --- ADDED THIS CASE ---
+    case "id":
+      // Playwright uses CSS selectors for IDs, so we prepend '#'
+      locator = page.locator(`#${config.value}`);
+      break;
+    // -----------------------
     case "xpath":
       locator = page.locator(`xpath=${config.value}`);
       break;
