@@ -12,7 +12,9 @@
     "test:gh": "npx playwright test --config=playwright.GH.config.ts --project=\"GH Region\"",
     "test:mw": "npx playwright test --config=playwright.MW.config.ts --project=\"MW Region\"",
     "test:tz": "npx playwright test --config=playwright.TZ.config.ts --project=\"TZ Region\"",
-    "test:za": "npx playwright test --config=playwright.ZA.config.ts --project=\"ZA Region\""
+    "test:za": "npx playwright test --config=playwright.ZA.config.ts --project=\"ZA Region\"",
+    "dashboard": "cd Automation-Dashboard/server && node server.js",
+    "dashboard:setup": "cd Automation-Dashboard/server && npm install && cd ../client2 && npm install && npm run build"
   },
   "repository": {
     "type": "git",
