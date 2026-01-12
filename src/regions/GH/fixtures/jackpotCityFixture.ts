@@ -1,5 +1,6 @@
 import { test as base, Page } from '@playwright/test';
 import path from 'path';
+import { launchAndroidBrowser } from '../../../common/utils/androidUtils';
 import * as fs from 'fs';
 // Adjust paths to wherever your files are located
 import { SignUpPage } from '../pages/SignUpPage';
@@ -46,7 +47,7 @@ type JackpotCityFixtures = {
 };
 
 // 4. Extend the base test
-export const test = base.extend<JackpotCityFixtures>({
+const testBase = base.extend<JackpotCityFixtures>({
     testData: async ({ }, use) => {
         await use(allTestData);
     },
@@ -97,3 +98,20 @@ export const test = base.extend<JackpotCityFixtures>({
         await use(updatePasswordPage);
     },
 });
+
+export const test = process.env.ANDROID_DEVICE
+    ? testBase.extend({
+        page: async ({ baseURL }, use) => {
+            // Increase timeout for Android
+            testBase.setTimeout(120000);
+
+            const { page, context, device } = await launchAndroidBrowser(baseURL);
+
+            await use(page);
+
+            await page.close();
+            await context.close();
+            await device.close();
+        }
+    })
+    : testBase;

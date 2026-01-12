@@ -11,8 +11,11 @@ import { AIClient } from '../../global/utils/ai/AiClient';
 export class SafeActions {
     private aiClient: AIClient;
 
+    private defaultTimeout: number;
+
     constructor(public page: Page) {
         this.aiClient = new AIClient();
+        this.defaultTimeout = process.env.ANDROID_DEVICE ? 30000 : 5000;
     }
 
     /**
@@ -23,7 +26,7 @@ export class SafeActions {
     async safeClick(key: string, primaryLocator: Locator) {
         try {
             // --- Level 1: Try Primary Locator (from Excel) ---
-            await primaryLocator.click({ timeout: 5000 });
+            await primaryLocator.click({ timeout: this.defaultTimeout });
         } catch (e1) {
             console.warn(`[Self-Heal L2] Primary locator for '${key}' failed. Trying heuristic...`);
 
@@ -32,7 +35,7 @@ export class SafeActions {
 
             if (heuristicLocator) {
                 try {
-                    await heuristicLocator.click({ timeout: 3000 });
+                    await heuristicLocator.click({ timeout: this.defaultTimeout });
                     console.log(`[Self-Heal L2] SUCCESS: Heuristic click worked for '${key}'.`);
                     return; // Success!
                 } catch (e2) {
@@ -52,7 +55,7 @@ export class SafeActions {
                 try {
                     console.log(`[Self-Heal L3] AI suggested locator: ${aiLocatorString}`);
                     // AI provides a new string (CSS, XPath, etc.)
-                    await this.page.locator(aiLocatorString).click({ timeout: 5000 });
+                    await this.page.locator(aiLocatorString).click({ timeout: this.defaultTimeout });
                     console.log(`[Self-Heal L3] SUCCESS: AI found new locator: ${aiLocatorString}`);
                 } catch (e3) {
                     console.error(`[Self-Heal L3] FAILED: AI-suggested locator also failed.`);
@@ -71,13 +74,13 @@ export class SafeActions {
     async safeFill(key: string, primaryLocator: Locator, text: string) {
         try {
             // L1
-            await primaryLocator.fill(text, { timeout: 3000 });
+            await primaryLocator.fill(text, { timeout: this.defaultTimeout });
         } catch (e1) {
             // L2
             const heuristic = this.generateHeuristic(key);
             if (heuristic) {
                 try {
-                    await heuristic.fill(text, { timeout: 3000 });
+                    await heuristic.fill(text, { timeout: this.defaultTimeout });
                     return;
                 } catch (e2) {
                     // L3 (AI)
