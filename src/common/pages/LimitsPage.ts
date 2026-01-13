@@ -57,26 +57,26 @@ export class LimitsPage {
     // --- Navigation ---
     async navigateToLimits() {
         if (!await this.locators.limitsTab.isVisible()) {
-             await this.safeActions.safeClick('depositButton', this.locators.depositButton);
-             await this.safeActions.safeClick('responsibleGamingButton', this.locators.responsibleGamingButton);
+            await this.safeActions.safeClick('depositButton', this.locators.depositButton, { timeout: 60000 });
+            await this.safeActions.safeClick('responsibleGamingButton', this.locators.responsibleGamingButton, { timeout: 60000 });
         }
-        await this.safeActions.safeClick('limitsTab', this.locators.limitsTab);
+        await this.safeActions.safeClick('limitsTab', this.locators.limitsTab, { timeout: 60000 });
         // Wait for the daily input to be visible to ensure page load
-        await this.locators.dailyLimitInput.waitFor({ state: 'visible' });
+        await this.locators.dailyLimitInput.waitFor({ state: 'visible', timeout: 60000 });
     }
 
     // --- Actions ---
 
     async clickDeposit() {
-        await this.safeActions.safeClick('depositButton', this.locators.depositButton);
+        await this.safeActions.safeClick('depositButton', this.locators.depositButton, { timeout: 60000 });
     }
 
     async clickResponsibleGaming() {
-        await this.safeActions.safeClick('responsibleGamingButton', this.locators.responsibleGamingButton);
+        await this.safeActions.safeClick('responsibleGamingButton', this.locators.responsibleGamingButton, { timeout: 60000 });
     }
 
     async clickLimitsTab() {
-        await this.safeActions.safeClick('limitsTab', this.locators.limitsTab);
+        await this.safeActions.safeClick('limitsTab', this.locators.limitsTab, { timeout: 60000 });
     }
 
     async getCurrentLimitValue(locator: Locator, fallback: number = 0): Promise<number> {
@@ -84,7 +84,7 @@ export class LimitsPage {
         // Try getting value from input value attribute first (often more accurate for inputs)
         const inputValue = await locator.inputValue();
         if (inputValue) {
-             return parseInt(inputValue, 10);
+            return parseInt(inputValue, 10);
         }
 
         const rawText = await locator.getAttribute('aria-valuenow');
@@ -114,24 +114,24 @@ export class LimitsPage {
 
     async setDailyLimit(amount: string) {
         await this.clearAndType(this.locators.dailyLimitInput, amount);
-        await this.safeActions.safeClick('dailyLimitSetButton', this.locators.dailyLimitSetButton);
+        await this.safeActions.safeClick('dailyLimitSetButton', this.locators.dailyLimitSetButton, { timeout: 60000 });
     }
 
     async setWeeklyLimit(amount: string) {
         await this.clearAndType(this.locators.weeklyLimitInput, amount);
-        await this.safeActions.safeClick('weeklyLimitSetButton', this.locators.weeklyLimitSetButton);
+        await this.safeActions.safeClick('weeklyLimitSetButton', this.locators.weeklyLimitSetButton, { timeout: 60000 });
     }
 
     async setMonthlyLimit(amount: string) {
         await this.clearAndType(this.locators.monthlyLimitInput, amount);
-        await this.safeActions.safeClick('monthlyLimitSetButton', this.locators.monthlyLimitSetButton);
+        await this.safeActions.safeClick('monthlyLimitSetButton', this.locators.monthlyLimitSetButton, { timeout: 60000 });
     }
 
     async setSessionLimit(minutes: string) {
         await this.locators.sessionSection.scrollIntoViewIfNeeded();
-        await this.locators.timeDropdown.click();
-        await this.page.getByRole('option', { name: minutes }).click();
-        await this.safeActions.safeClick('submitButton', this.locators.submitButton);
+        await this.locators.timeDropdown.click({ timeout: 60000 });
+        await this.page.getByRole('option', { name: minutes }).click({ timeout: 60000 });
+        await this.safeActions.safeClick('submitButton', this.locators.submitButton, { timeout: 60000 });
     }
 
     // --- Highlights ---

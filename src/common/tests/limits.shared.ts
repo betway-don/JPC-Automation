@@ -28,19 +28,24 @@ export async function runLimitsTests(
     test('T1. Verify Limit Tab Presence', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.clickDeposit();
         await limitsPage.clickResponsibleGaming();
+        await page.waitForTimeout(4000);
         await limitsPage.locators.limitsTab.waitFor({ state: 'visible' });
         await highlightElements(limitsPage.locators.limitsTab);
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T1-limits', testInfo);
     });
 
     test('T2. Verify Limit options Visibility', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(3000);
         await limitsPage.highlightLimitsOption();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T2-limits', testInfo);
     });
 
     test('T3. Verify Daily Limit Set', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const currentLimit = await limitsPage.getCurrentLimitValue(limitsPage.locators.dailyLimitInput, 200);
         const newLimitValue = currentLimit - 1;
@@ -48,11 +53,13 @@ export async function runLimitsTests(
 
         await limitsPage.setDailyLimit(newLimitValue.toString());
         await limitsPage.highlightDailyLimitInput();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T3-limits', testInfo);
     });
 
     test('T6. Verify Weekly Limit Set', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const currentLimit = await limitsPage.getCurrentLimitValue(limitsPage.locators.weeklyLimitInput, 2000);
         const newLimitValue = currentLimit - 1;
@@ -60,12 +67,14 @@ export async function runLimitsTests(
 
         await limitsPage.setWeeklyLimit(newLimitValue.toString());
         await limitsPage.highlightWeeklyLimitInput();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T6-limits', testInfo);
     });
 
     // --- IMPROVED LOGIC HERE ---
     test('T7. Verify Weekly limit is lesser than Monthly limit', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const weeklyVal = await limitsPage.getCurrentLimitValue(limitsPage.locators.weeklyLimitInput);
         const monthlyVal = await limitsPage.getCurrentLimitValue(limitsPage.locators.monthlyLimitInput);
@@ -79,11 +88,13 @@ export async function runLimitsTests(
         await limitsPage.highlightWeeklySection();
         await limitsPage.locators.monthlyLimitSection.scrollIntoViewIfNeeded();
         await limitsPage.highlightMonthlySection();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T7-limits-comparison', testInfo);
     });
 
     test('T8. Verify Weekly limit is greater than Daily limit', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const dailyVal = await limitsPage.getCurrentLimitValue(limitsPage.locators.dailyLimitInput);
         const weeklyVal = await limitsPage.getCurrentLimitValue(limitsPage.locators.weeklyLimitInput);
@@ -95,11 +106,13 @@ export async function runLimitsTests(
 
         await limitsPage.highlightDailySection();
         await limitsPage.highlightWeeklySection();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T8-limits-comparison', testInfo);
     });
 
     test('T10. Verify Monthly Limit Set', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const currentLimit = await limitsPage.getCurrentLimitValue(limitsPage.locators.monthlyLimitInput, 20000);
         const newLimitValue = currentLimit - 1;
@@ -107,11 +120,13 @@ export async function runLimitsTests(
 
         await limitsPage.setMonthlyLimit(newLimitValue.toString());
         await limitsPage.highlightMonthlyLimitInput();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T10-limits', testInfo);
     });
 
     test('T13. Verify Customization of Limits', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(3000);
 
         // 1. Set Monthly
         const monthLimit = await limitsPage.getCurrentLimitValue(limitsPage.locators.monthlyLimitInput, 20000);
@@ -133,20 +148,25 @@ export async function runLimitsTests(
 
     test('T14. Verify Set Your Limit Button Activation', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
 
         const currentLimit = await limitsPage.getCurrentLimitValue(limitsPage.locators.monthlyLimitInput, 20000);
         // We type but DO NOT click save, to see if the button becomes enabled/active
         await limitsPage.clearAndType(limitsPage.locators.monthlyLimitInput, (currentLimit - 1).toString());
-        
+
         await page.waitForTimeout(1000); // Wait for button state change
         await limitsPage.highlightSetLimitButtons();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T14-limits', testInfo);
     });
 
     test('T20. Verify Session Limit Duration Setting', async ({ page, limitsPage, screenshotDir }, testInfo) => {
         await limitsPage.navigateToLimits();
+        await page.waitForTimeout(4000);
+
         await limitsPage.setSessionLimit('15');
         await limitsPage.highlightSuccessPopup();
+        await page.waitForTimeout(2000);
         await ScreenshotHelper(page, screenshotDir, 'T20-limits', testInfo);
     });
 }

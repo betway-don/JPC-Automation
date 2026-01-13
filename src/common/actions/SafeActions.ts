@@ -22,11 +22,12 @@ export class SafeActions {
      * Attempts to click an element using the 3-level fallback.
      * @param key The locator key (e.g., 'registerButton') for context.
      * @param primaryLocator The L1 locator (from Excel).
+     * @param options Optional Playwright click options (e.g., timeout).
      */
-    async safeClick(key: string, primaryLocator: Locator) {
+    async safeClick(key: string, primaryLocator: Locator, options?: { timeout?: number }) {
         try {
             // --- Level 1: Try Primary Locator (from Excel) ---
-            await primaryLocator.click({ timeout: this.defaultTimeout });
+            await primaryLocator.click({ timeout: options?.timeout || this.defaultTimeout });
         } catch (e1) {
             console.warn(`[Self-Heal L2] Primary locator for '${key}' failed. Trying heuristic...`);
 
@@ -35,7 +36,7 @@ export class SafeActions {
 
             if (heuristicLocator) {
                 try {
-                    await heuristicLocator.click({ timeout: this.defaultTimeout });
+                    await heuristicLocator.click({ timeout: options?.timeout || this.defaultTimeout });
                     console.log(`[Self-Heal L2] SUCCESS: Heuristic click worked for '${key}'.`);
                     return; // Success!
                 } catch (e2) {
@@ -55,7 +56,7 @@ export class SafeActions {
                 try {
                     console.log(`[Self-Heal L3] AI suggested locator: ${aiLocatorString}`);
                     // AI provides a new string (CSS, XPath, etc.)
-                    await this.page.locator(aiLocatorString).click({ timeout: this.defaultTimeout });
+                    await this.page.locator(aiLocatorString).click({ timeout: options?.timeout || this.defaultTimeout });
                     console.log(`[Self-Heal L3] SUCCESS: AI found new locator: ${aiLocatorString}`);
                 } catch (e3) {
                     console.error(`[Self-Heal L3] FAILED: AI-suggested locator also failed.`);

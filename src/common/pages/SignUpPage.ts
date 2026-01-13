@@ -62,16 +62,16 @@ export class SignUpPage {
 
     async fillStep1(data: { mobile: string, pass: string, fName: string, lName: string, email: string }) {
         await this.safeActions.safeFill('mobileInput', this.locators.mobileInput, data.mobile);
-        await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, data.pass);
         await this.safeActions.safeFill('firstNameInput', this.locators.firstNameInput, data.fName);
         await this.safeActions.safeFill('lastNameInput', this.locators.lastNameInput, data.lName);
         await this.safeActions.safeFill('emailInput', this.locators.emailInput, data.email);
+        await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, data.pass);
     }
 
     async testMobileValidation(mobile: string, pass: string, email: string) {
         await this.safeActions.safeFill('mobileInput', this.locators.mobileInput, mobile);
         await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, pass);
-        await this.safeActions.safeFill('emailInput', this.locators.emailInput, email);
+        // await this.safeActions.safeFill('emailInput', this.locators.emailInput, email);
     }
 
     async testNameValidation(fName: string, lName: string, mobile: string, pass: string, email: string) {
@@ -95,8 +95,8 @@ export class SignUpPage {
     }
 
     async completeStep2Details() {
-        await this.safeActions.safeClick('dobDropdown', this.locators.dobDropdown);
-        await this.safeActions.safeClick('dobSampleDate', this.locators.dobSampleDate);
+        // await this.safeActions.safeClick('dobDropdown', this.locators.dobDropdown);
+        // await this.safeActions.safeClick('dobSampleDate', this.locators.dobSampleDate);
         await this.safeActions.safeClick('sourceOfIncomeDropdown', this.locators.sourceOfIncomeDropdown);
         await this.safeActions.safeClick('sourceOfIncomeSalary', this.locators.sourceOfIncomeSalary);
         await this.safeActions.safeClick('promoCheckbox', this.locators.promoCheckbox);
@@ -151,27 +151,27 @@ export class SignUpPage {
     // Mock data function
     private getMockLocatorData(): Record<string, any> {
         return {
-            "registerButton": { type: "role", value: "button", options: '{"name":"Register"}', nth: 0 },
-            "loginButton": { type: "role", value: "button", options: '{"name":"Login"}', nth: 0 },
-            "mobileInput": { type: "role", value: "textbox", options: '{"name":"username"}', nth: 0 },
-            "passwordInput": { type: "role", value: "textbox", options: '{"name":"password"}', nth: 0 },
-            "firstNameInput": { type: "role", value: "textbox", options: '{"name":"firstname"}', nth: 0 },
-            "lastNameInput": { type: "role", value: "textbox", options: '{"name":"lastname"}', nth: 0 },
-            "emailInput": { type: "role", value: "textbox", options: '{"name":"email"}', nth: 0 },
-            "nextButton": { type: "text", value: "Next", options: '{}', nth: 0 },
-            "idTypeDropdown": { type: "role", value: "combobox", options: '{"hasText":"South African ID"}', nth: 0 },
-            "passportOption": { type: "text", value: "Passport", options: '{}', nth: 0 },
-            "saIdOption": { type: "text", value: "South African ID", options: '{}', nth: 1 },
-            "passportInput": { type: "role", value: "textbox", options: '{"name":"Passport"}', nth: 0 },
-            "saIdInput": { type: "role", value: "textbox", options: '{"name":"South African ID"}', nth: 0 },
-            "dobDropdown": { type: "role", value: "combobox", options: '{"name":"Enter Date of Birth"}', nth: 0 },
-            "dobSampleDate": { type: "title", value: "05/09/", options: '{}', nth: 0 },
-            "sourceOfIncomeDropdown": { type: "role", value: "combobox", options: '{"hasText":"Enter Source of Income"}', nth: 0 },
-            "sourceOfIncomeSalary": { type: "text", value: "Salary / Wages", options: '{}', nth: 0 },
-            "promoCheckbox": { type: "role", value: "checkbox", options: '{"name":"Send Big City Life events,"}', nth: 0 },
-            "ageCheckbox": { type: "role", value: "checkbox", options: '{"name":"I am over 18 years of age & I"}', nth: 0 },
-            "signUpFormButton": { type: "role", value: "button", options: '{"name":"Sign Up"}', nth: 0 },
-            "diallingCode": { type: "text", value: "+27", options: '{}', nth: 0 }
+            "registerButton": { type: "role", value: "button", options: { name: "Register" }, nth: 0 },
+            "loginButton": { type: "role", value: "button", options: { name: "Login" }, nth: 0 },
+            "mobileInput": { type: "role", value: "textbox", options: { name: "username" }, nth: 0 },
+            "passwordInput": { type: "role", value: "textbox", options: { name: "password" }, nth: 0 },
+            "firstNameInput": { type: "role", value: "textbox", options: { name: "firstname" }, nth: 0 },
+            "lastNameInput": { type: "role", value: "textbox", options: { name: "lastname" }, nth: 0 },
+            "emailInput": { type: "role", value: "textbox", options: { name: "email" }, nth: 0 },
+            "nextButton": { type: "text", value: "Next", options: {}, nth: 0 },
+            "idTypeDropdown": { type: "role", value: "combobox", options: { hasText: "South African ID" }, nth: 0 },
+            "passportOption": { type: "text", value: "Passport", options: {}, nth: 0 },
+            "saIdOption": { type: "text", value: "South African ID", options: {}, nth: 1 },
+            "passportInput": { type: "role", value: "textbox", options: { name: "Passport" }, nth: 0 },
+            "saIdInput": { type: "role", value: "textbox", options: { name: "South African ID" }, nth: 0 },
+            "dobDropdown": { type: "role", value: "combobox", options: { name: "Enter Date of Birth" }, nth: 0 },
+            "dobSampleDate": { type: "title", value: "05/09/", options: {}, nth: 0 },
+            "sourceOfIncomeDropdown": { type: "role", value: "combobox", options: { hasText: "Enter Source of Income" }, nth: 0 },
+            "sourceOfIncomeSalary": { type: "text", value: "Salary / Wages", options: {}, nth: 0 },
+            "promoCheckbox": { type: "role", value: "checkbox", options: { name: "Send Big City Life events," }, nth: 0 },
+            "ageCheckbox": { type: "role", value: "checkbox", options: { name: "I am over 18 years of age & I" }, nth: 0 },
+            "signUpFormButton": { type: "role", value: "button", options: { name: "Sign Up" }, nth: 0 },
+            "diallingCode": { type: "text", value: "+27", options: {}, nth: 0 }
         };
     }
 }

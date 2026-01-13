@@ -188,6 +188,7 @@ export async function runSignupTests(
                     lName: testData.step1.lastName,
                     email: testData.step1.email
                 });
+                await page.waitForTimeout(10000);
                 await signupPage.clickNext();
                 await page.waitForTimeout(1000); // Wait for step 2 to load
             });
