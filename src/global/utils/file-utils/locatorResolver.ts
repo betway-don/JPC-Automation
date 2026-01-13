@@ -33,7 +33,9 @@ export function getLocator(page: Page, config: LocatorConfig): Locator {
     case "title":
       locator = page.getByTitle(config.value, config.options || {});
       break;
-      
+    case "locator":
+      locator = page.getByTitle(config.value, config.options || {});
+      break; 
     // 👇 ADDED THIS BLOCK TO FIX YOUR ERROR 👇
     case "placeholder":
       locator = page.getByPlaceholder(config.value, config.options || {});

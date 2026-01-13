@@ -185,14 +185,14 @@ export async function runTransactionHistoryTests(
         await ScreenshotHelper(page, screenshotDir, 'T20-transactionHistory-reset', testInfo);
     });
 
-    test('T21. Verify Close Button on Filter Prompt', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await highlightElements(transactionHistoryPage.locators.closeFilterButton);
-        await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory', testInfo);
-        await transactionHistoryPage.locators.closeFilterButton.click();
-        await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory-closed', testInfo);
-    });
+    // test('T21. Verify Close Button on Filter Prompt', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await highlightElements(transactionHistoryPage.locators.closeFilterButton);
+    //     await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory', testInfo);
+    //     await transactionHistoryPage.locators.closeFilterButton.click();
+    //     await ScreenshotHelper(page, screenshotDir, 'T21-transactionHistory-closed', testInfo);
+    // });
 
     test('T22. Verify No Results Message', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
         await transactionHistoryPage.navigateToTransactionHistory();

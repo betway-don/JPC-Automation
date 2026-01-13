@@ -36,7 +36,7 @@ import { execSync } from "child_process";
 
 export type LocatorConfig = {
   key: string;
-  type: "css" | "role" | "text" | "xpath" | "label" | "id" | "placeholder"| "title";
+  type: "css" | "role" | "text" | "xpath" | "label" | "id" | "placeholder"| "title"| "locator";
   value: string;
   options?: Record<string, any>;
   nth?: number;
