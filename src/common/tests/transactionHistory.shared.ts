@@ -136,6 +136,8 @@ export async function runTransactionHistoryTests(
 
     test('T13. Verify Previous Page Button', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
         await transactionHistoryPage.navigateToTransactionHistory();
+        await transactionHistoryPage.locators.nextPageBtn.click();
+        await page.waitForTimeout(2000);
         await transactionHistoryPage.locators.prevPageBtn.click();
         await ScreenshotHelper(page, screenshotDir, 'T13-transactionHistory', testInfo);
     });
