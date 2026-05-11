@@ -14,9 +14,12 @@ export class SignUpPage {
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "signUp");
 
+        const mockData = this.getMockLocatorData();
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[SignUpPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = this.getMockLocatorData();
+            configs = mockData;
+        } else {
+            configs = { ...mockData, ...configs };
         }
 
         this.locators = {

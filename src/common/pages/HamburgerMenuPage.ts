@@ -14,9 +14,12 @@ export class HamburgerMenuPage {
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "hamBurgerMenu");
 
+        const mockData = this.getMockLocatorData();
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[HamburgerMenuPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = this.getMockLocatorData();
+            configs = mockData;
+        } else {
+            configs = { ...mockData, ...configs };
         }
 
         this.locators = {
@@ -57,7 +60,7 @@ export class HamburgerMenuPage {
             bonusWalletCTA: getLocator(this.page, configs["bonusWalletCTA"]),
             personalDetailsCTA: getLocator(this.page, configs["personalDetailsCTA"]),
             accountSettingsCTA: getLocator(this.page, configs["accountSettingsCTA"]),
-            updatePasswordCTA: getLocator(this.page, configs["updatePasswordCTA"]),
+            cityRewardsCTA: getLocator(this.page, configs["cityRewardsCTA"]),
             responsibleGamingCTA: getLocator(this.page, configs["responsibleGamingCTA"]),
             documentVerificationCTA: getLocator(this.page, configs["documentVerificationCTA"]),
             logOutCTA: getLocator(this.page, configs["logOutCTA"]),
@@ -123,8 +126,8 @@ export class HamburgerMenuPage {
         await this.safeActions.safeClick('accountSettingsCTA', this.locators.accountSettingsCTA);
     }
 
-    async clickUpdatePassword() {
-        await this.safeActions.safeClick('updatePasswordCTA', this.locators.updatePasswordCTA);
+    async clickCityRewards() {
+        await this.safeActions.safeClick('cityRewardsCTA', this.locators.cityRewardsCTA);
     }
 
     async clickResponsibleGaming() {
@@ -204,7 +207,7 @@ export class HamburgerMenuPage {
             "bonusWalletCTA": { type: "role", value: "button", options: '{"name":"Bonus Wallet"}', nth: 0 },
             "personalDetailsCTA": { type: "role", value: "button", options: '{"name":"Personal Details"}', nth: 0 },
             "accountSettingsCTA": { type: "role", value: "button", options: '{"name":"Account Settings"}', nth: 0 },
-            "updatePasswordCTA": { type: "role", value: "button", options: '{"name":"Update Password"}', nth: 0 },
+            "cityRewardsCTA": { type: "role", value: "button", options: '{"name":"City Rewards"}', nth: 0 },
             "responsibleGamingCTA": { type: "role", value: "button", options: '{"name":"Responsible Gaming"}', nth: 0 },
             "documentVerificationCTA": { type: "role", value: "button", options: '{"name":"Document Verification"}', nth: 0 },
             "logOutCTA": { type: "role", value: "button", options: '{"name":"Log Out"}', nth: 0 },

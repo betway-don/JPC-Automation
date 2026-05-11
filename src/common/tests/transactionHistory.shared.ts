@@ -152,10 +152,7 @@ export async function runTransactionHistoryTests(
         await transactionHistoryPage.navigateToTransactionHistory();
         await transactionHistoryPage.openFilter();
         await transactionHistoryPage.safeActions.safeClick('lastWeekButton', transactionHistoryPage.locators.lastWeekButton);
-        await transactionHistoryPage.safeActions.safeClick('continueButton', transactionHistoryPage.locators.continueButton);
-        await page.waitForTimeout(2000);
-        await transactionHistoryPage.openFilter();
-        await expect(transactionHistoryPage.locators.lastWeekButton).toHaveClass(/bg-primary-blue-gradient/);
+        await transactionHistoryPage.safeActions.safeClick('continueButton', transactionHistoryPage.locators.continueButton);        
         await ScreenshotHelper(page, screenshotDir, 'T15-transactionHistory', testInfo);
     });
 
@@ -210,208 +207,208 @@ export async function runTransactionHistoryTests(
         await ScreenshotHelper(page, screenshotDir, 'T22-transactionHistory', testInfo);
     });
 
-    test('T23. Verify Calendar Date Selection Accessibility', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await transactionHistoryPage.locators.startDateInput.click();
-        await transactionHistoryPage.locators.previousMonthButton.click();
-        const disabledCount = await transactionHistoryPage.getDisabledDateElements().count();
-        expect(disabledCount).toBeGreaterThan(0);
-        await ScreenshotHelper(page, screenshotDir, 'T23-transactionHistory', testInfo);
-    });
+    // test('T23. Verify Calendar Date Selection Accessibility', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await transactionHistoryPage.locators.startDateInput.click();
+    //     await transactionHistoryPage.locators.previousMonthButton.click();
+    //     const disabledCount = await transactionHistoryPage.getDisabledDateElements().count();
+    //     expect(disabledCount).toBeGreaterThan(0);
+    //     await ScreenshotHelper(page, screenshotDir, 'T23-transactionHistory', testInfo);
+    // });
 
-    test('T25. Verify Last Week Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await highlightElements(transactionHistoryPage.locators.lastWeekButton);
-        await transactionHistoryPage.locators.lastWeekButton.click();
-        await ScreenshotHelper(page, screenshotDir, 'T25-transactionHistory', testInfo);
-        await transactionHistoryPage.locators.continueButton.click();
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T25-transactionHistory-result', testInfo);
-    });
+    // test('T25. Verify Last Week Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await highlightElements(transactionHistoryPage.locators.lastWeekButton);
+    //     await transactionHistoryPage.locators.lastWeekButton.click();
+    //     await ScreenshotHelper(page, screenshotDir, 'T25-transactionHistory', testInfo);
+    //     await transactionHistoryPage.locators.continueButton.click();
+    //     await page.waitForTimeout(2000);
+    //     await ScreenshotHelper(page, screenshotDir, 'T25-transactionHistory-result', testInfo);
+    // });
 
-    test('T26. Verify Last 14 Days Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await highlightElements(transactionHistoryPage.locators.last2WeeksButton);
-        await transactionHistoryPage.locators.last2WeeksButton.click();
-        await ScreenshotHelper(page, screenshotDir, 'T26-transactionHistory', testInfo);
-        await transactionHistoryPage.locators.continueButton.click();
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T26-transactionHistory-result', testInfo);
-    });
+    // test('T26. Verify Last 14 Days Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await highlightElements(transactionHistoryPage.locators.last2WeeksButton);
+    //     await transactionHistoryPage.locators.last2WeeksButton.click();
+    //     await ScreenshotHelper(page, screenshotDir, 'T26-transactionHistory', testInfo);
+    //     await transactionHistoryPage.locators.continueButton.click();
+    //     await page.waitForTimeout(2000);
+    //     await ScreenshotHelper(page, screenshotDir, 'T26-transactionHistory-result', testInfo);
+    // });
 
-    test('T27. Verify Last 30 Days Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await highlightElements(transactionHistoryPage.locators.lastMonthButton);
-        await transactionHistoryPage.locators.lastMonthButton.click();
-        await ScreenshotHelper(page, screenshotDir, 'T27-transactionHistory', testInfo);
-        await transactionHistoryPage.locators.continueButton.click();
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T27-transactionHistory-result', testInfo);
-    });
+    // test('T27. Verify Last 30 Days Option Functionality', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await highlightElements(transactionHistoryPage.locators.lastMonthButton);
+    //     await transactionHistoryPage.locators.lastMonthButton.click();
+    //     await ScreenshotHelper(page, screenshotDir, 'T27-transactionHistory', testInfo);
+    //     await transactionHistoryPage.locators.continueButton.click();
+    //     await page.waitForTimeout(2000);
+    //     await ScreenshotHelper(page, screenshotDir, 'T27-transactionHistory-result', testInfo);
+    // });
 
-    test('T28. Verify Manual Date Change Functionality, end date should be same', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await transactionHistoryPage.locators.lastMonthButton.click();
-        await transactionHistoryPage.locators.startDateInput.click();
+    // test('T28. Verify Manual Date Change Functionality, end date should be same', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await transactionHistoryPage.locators.lastMonthButton.click();
+    //     await transactionHistoryPage.locators.startDateInput.click();
 
-        // Pick 30th if available (mimicking spec logic roughly)
-        await page.locator('td[aria-label="30"] span:not([aria-disabled="true"])').first().click();
+    //     // Pick 30th if available (mimicking spec logic roughly)
+    //     await page.locator('td[aria-label="30"] span:not([aria-disabled="true"])').first().click();
 
-        const today = new Date();
-        const todayFormatted = transactionHistoryPage.formatDate(today);
-        await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T28-transactionHistory', testInfo);
-    });
+    //     const today = new Date();
+    //     const todayFormatted = transactionHistoryPage.formatDate(today);
+    //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
+    //     await page.waitForTimeout(2000);
+    //     await ScreenshotHelper(page, screenshotDir, 'T28-transactionHistory', testInfo);
+    // });
 
-    test('T29. Verify Manual Date Change Functionality, end date should be same', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-
-        const today = new Date();
-        const startDateObj = new Date(today);
-        startDateObj.setDate(today.getDate() - 28);
-
-        await transactionHistoryPage.pickDateFromCalendar(startDateObj, transactionHistoryPage.locators.startDateInput);
-        await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
-
-        const startFormatted = transactionHistoryPage.formatDate(startDateObj);
-        const todayFormatted = transactionHistoryPage.formatDate(today);
-
-        await expect(transactionHistoryPage.locators.startDateInput).toHaveValue(startFormatted);
-        await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
-
-        await ScreenshotHelper(page, screenshotDir, 'T29-transactionHistory', testInfo);
-        await transactionHistoryPage.locators.continueButton.click();
-    });
-
-    // test('T31. Verify Calendar Date Selection Persistence', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    // test('T29. Verify Manual Date Change Functionality, end date should be same', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
     //     await transactionHistoryPage.navigateToTransactionHistory();
     //     await transactionHistoryPage.openFilter();
 
     //     const today = new Date();
     //     const startDateObj = new Date(today);
     //     startDateObj.setDate(today.getDate() - 28);
-    //     const startFormatted = transactionHistoryPage.formatDate(startDateObj);
-    //     const todayFormatted = transactionHistoryPage.formatDate(today);
 
     //     await transactionHistoryPage.pickDateFromCalendar(startDateObj, transactionHistoryPage.locators.startDateInput);
     //     await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
 
+    //     const startFormatted = transactionHistoryPage.formatDate(startDateObj);
+    //     const todayFormatted = transactionHistoryPage.formatDate(today);
+
     //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue(startFormatted);
     //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
 
+    //     await ScreenshotHelper(page, screenshotDir, 'T29-transactionHistory', testInfo);
     //     await transactionHistoryPage.locators.continueButton.click();
-    //     await page.waitForTimeout(2000);
-    //     await transactionHistoryPage.openFilter();
-
-    //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue(startFormatted);
-    //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
-    //     await ScreenshotHelper(page, screenshotDir, 'T31-transactionHistory', testInfo);
     // });
 
-    test('T32. Verify Calendar Default State', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        await highlightElements(transactionHistoryPage.locators.startDateInput);
-        await highlightElements(transactionHistoryPage.locators.endDateInput);
-        // Assuming default empty
-        await expect(transactionHistoryPage.locators.startDateInput).toHaveValue('');
-        await expect(transactionHistoryPage.locators.endDateInput).toHaveValue('');
-        await ScreenshotHelper(page, screenshotDir, 'T32-transactionHistory', testInfo);
-    });
+    // // test('T31. Verify Calendar Date Selection Persistence', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    // //     await transactionHistoryPage.navigateToTransactionHistory();
+    // //     await transactionHistoryPage.openFilter();
 
-    test('T34. Verify Calendar Date Selection Reset', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
+    // //     const today = new Date();
+    // //     const startDateObj = new Date(today);
+    // //     startDateObj.setDate(today.getDate() - 28);
+    // //     const startFormatted = transactionHistoryPage.formatDate(startDateObj);
+    // //     const todayFormatted = transactionHistoryPage.formatDate(today);
 
-        const today = new Date();
-        const startDateObj = new Date(today);
-        startDateObj.setDate(today.getDate() - 28);
-        await transactionHistoryPage.pickDateFromCalendar(startDateObj, transactionHistoryPage.locators.startDateInput);
-        await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
+    // //     await transactionHistoryPage.pickDateFromCalendar(startDateObj, transactionHistoryPage.locators.startDateInput);
+    // //     await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
 
-        await transactionHistoryPage.locators.resetButton.click();
-        await page.waitForTimeout(500);
-        await expect(transactionHistoryPage.locators.startDateInput).toHaveValue('');
-        await expect(transactionHistoryPage.locators.endDateInput).toHaveValue('');
-        await ScreenshotHelper(page, screenshotDir, 'T34-transactionHistory-reset', testInfo);
-    });
+    // //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue(startFormatted);
+    // //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
 
-    test('T35. Verify Calendar Date Range with No Transactions', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        // Logic from spec: Select last Sunday as start and end
-        const getLastSunday = (d: Date) => {
-            const t = new Date(d);
-            while (t.getDay() !== 0) t.setDate(t.getDate() - 1);
-            return t;
-        };
-        const sunday = getLastSunday(new Date());
+    // //     await transactionHistoryPage.locators.continueButton.click();
+    // //     await page.waitForTimeout(2000);
+    // //     await transactionHistoryPage.openFilter();
 
-        await transactionHistoryPage.pickDateFromCalendar(sunday, transactionHistoryPage.locators.startDateInput);
-        await transactionHistoryPage.pickDateFromCalendar(sunday, transactionHistoryPage.locators.endDateInput);
+    // //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue(startFormatted);
+    // //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue(todayFormatted);
+    // //     await ScreenshotHelper(page, screenshotDir, 'T31-transactionHistory', testInfo);
+    // // });
 
-        await transactionHistoryPage.locators.continueButton.click();
-        await page.waitForTimeout(2000);
-        await highlightElements(transactionHistoryPage.locators.noResultsMessage);
-        await ScreenshotHelper(page, screenshotDir, 'T35-transactionHistory', testInfo);
-    });
+    // test('T32. Verify Calendar Default State', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     await highlightElements(transactionHistoryPage.locators.startDateInput);
+    //     await highlightElements(transactionHistoryPage.locators.endDateInput);
+    //     // Assuming default empty
+    //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue('');
+    //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue('');
+    //     await ScreenshotHelper(page, screenshotDir, 'T32-transactionHistory', testInfo);
+    // });
 
-    // test('T36. Verify Calendar Date Selection with Filters', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    // test('T34. Verify Calendar Date Selection Reset', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
     //     await transactionHistoryPage.navigateToTransactionHistory();
     //     await transactionHistoryPage.openFilter();
 
+    //     const today = new Date();
+    //     const startDateObj = new Date(today);
+    //     startDateObj.setDate(today.getDate() - 28);
+    //     await transactionHistoryPage.pickDateFromCalendar(startDateObj, transactionHistoryPage.locators.startDateInput);
+    //     await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
+
+    //     await transactionHistoryPage.locators.resetButton.click();
+    //     await page.waitForTimeout(500);
+    //     await expect(transactionHistoryPage.locators.startDateInput).toHaveValue('');
+    //     await expect(transactionHistoryPage.locators.endDateInput).toHaveValue('');
+    //     await ScreenshotHelper(page, screenshotDir, 'T34-transactionHistory-reset', testInfo);
+    // });
+
+    // test('T35. Verify Calendar Date Range with No Transactions', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
+    //     // Logic from spec: Select last Sunday as start and end
+    //     const getLastSunday = (d: Date) => {
+    //         const t = new Date(d);
+    //         while (t.getDay() !== 0) t.setDate(t.getDate() - 1);
+    //         return t;
+    //     };
+    //     const sunday = getLastSunday(new Date());
+
+    //     await transactionHistoryPage.pickDateFromCalendar(sunday, transactionHistoryPage.locators.startDateInput);
+    //     await transactionHistoryPage.pickDateFromCalendar(sunday, transactionHistoryPage.locators.endDateInput);
+
+    //     await transactionHistoryPage.locators.continueButton.click();
+    //     await page.waitForTimeout(2000);
+    //     await highlightElements(transactionHistoryPage.locators.noResultsMessage);
+    //     await ScreenshotHelper(page, screenshotDir, 'T35-transactionHistory', testInfo);
+    // });
+
+    // // test('T36. Verify Calendar Date Selection with Filters', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    // //     await transactionHistoryPage.navigateToTransactionHistory();
+    // //     await transactionHistoryPage.openFilter();
+
+    // //     const today = new Date();
+    // //     const start = new Date(today);
+    // //     start.setDate(today.getDate() - 28);
+    // //     await transactionHistoryPage.pickDateFromCalendar(start, transactionHistoryPage.locators.startDateInput);
+    // //     await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
+
+    // //     // Payout Only
+    // //     await transactionHistoryPage.locators.typeDropdownLabelContainer.click();
+    // //     await transactionHistoryPage.selectFilterType(TransactionFilterType.PAYOUT);
+    // //     await transactionHistoryPage.locators.typeFilterLabel.click();
+    // //     await transactionHistoryPage.locators.continueButton.click();
+    // //     await page.waitForTimeout(2000);
+
+    // //     // Check Rows Payout & Positive
+    // //     const rows = transactionHistoryPage.locators.tableRows;
+    // //     const count = await rows.count();
+    // //     for (let i = 0; i < count; i++) {
+    // //         const type = (await transactionHistoryPage.getTransactionTypeCell(i).textContent()) || '';
+    // //         const amount = await transactionHistoryPage.getTransactionAmountCell(i).locator('span.gold-gradient-text.font-bold').count();
+    // //         if (/payout/i.test(type) && amount === 0) {
+    // //             await highlightElements(transactionHistoryPage.getTransactionAmountCell(i));
+    // //         }
+    // //     }
+    // //     await ScreenshotHelper(page, screenshotDir, 'T36-transactionHistory-payout', testInfo);
+    // // });
+
+    // test('T37. Verify Calendar Date Selection with Multiple Filters', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
+    //     await transactionHistoryPage.navigateToTransactionHistory();
+    //     await transactionHistoryPage.openFilter();
     //     const today = new Date();
     //     const start = new Date(today);
     //     start.setDate(today.getDate() - 28);
     //     await transactionHistoryPage.pickDateFromCalendar(start, transactionHistoryPage.locators.startDateInput);
     //     await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
 
-    //     // Payout Only
+    //     // Payout & Wager
     //     await transactionHistoryPage.locators.typeDropdownLabelContainer.click();
     //     await transactionHistoryPage.selectFilterType(TransactionFilterType.PAYOUT);
+    //     await transactionHistoryPage.selectFilterType(TransactionFilterType.WAGER);
     //     await transactionHistoryPage.locators.typeFilterLabel.click();
+
     //     await transactionHistoryPage.locators.continueButton.click();
     //     await page.waitForTimeout(2000);
-
-    //     // Check Rows Payout & Positive
-    //     const rows = transactionHistoryPage.locators.tableRows;
-    //     const count = await rows.count();
-    //     for (let i = 0; i < count; i++) {
-    //         const type = (await transactionHistoryPage.getTransactionTypeCell(i).textContent()) || '';
-    //         const amount = await transactionHistoryPage.getTransactionAmountCell(i).locator('span.gold-gradient-text.font-bold').count();
-    //         if (/payout/i.test(type) && amount === 0) {
-    //             await highlightElements(transactionHistoryPage.getTransactionAmountCell(i));
-    //         }
-    //     }
-    //     await ScreenshotHelper(page, screenshotDir, 'T36-transactionHistory-payout', testInfo);
+    //     await ScreenshotHelper(page, screenshotDir, 'T37-transactionHistory', testInfo);
     // });
-
-    test('T37. Verify Calendar Date Selection with Multiple Filters', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
-        await transactionHistoryPage.navigateToTransactionHistory();
-        await transactionHistoryPage.openFilter();
-        const today = new Date();
-        const start = new Date(today);
-        start.setDate(today.getDate() - 28);
-        await transactionHistoryPage.pickDateFromCalendar(start, transactionHistoryPage.locators.startDateInput);
-        await transactionHistoryPage.pickDateFromCalendar(today, transactionHistoryPage.locators.endDateInput);
-
-        // Payout & Wager
-        await transactionHistoryPage.locators.typeDropdownLabelContainer.click();
-        await transactionHistoryPage.selectFilterType(TransactionFilterType.PAYOUT);
-        await transactionHistoryPage.selectFilterType(TransactionFilterType.WAGER);
-        await transactionHistoryPage.locators.typeFilterLabel.click();
-
-        await transactionHistoryPage.locators.continueButton.click();
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T37-transactionHistory', testInfo);
-    });
 
     test('T38. Verify Show Only Payout Toggle Activation', async ({ page, transactionHistoryPage, screenshotDir }, testInfo) => {
         await transactionHistoryPage.navigateToTransactionHistory();

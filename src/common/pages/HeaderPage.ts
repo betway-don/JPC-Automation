@@ -14,9 +14,12 @@ export class HeaderPage {
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "header");
 
+        const mockData = this.getMockLocatorData();
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[HeaderPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = this.getMockLocatorData();
+            configs = mockData;
+        } else {
+            configs = { ...mockData, ...configs };
         }
 
         this.locators = {
@@ -24,6 +27,7 @@ export class HeaderPage {
             logoLink: getLocator(this.page, configs["logoLink"]),
             searchButton: getLocator(this.page, configs["searchButton"]),
             searchInput: getLocator(this.page, configs["searchInput"]),
+            actualSearchInput: getLocator(this.page, configs["actualSearchInput"]),
             loginCTA: getLocator(this.page, configs["loginCTA"]),
             registerCTA: getLocator(this.page, configs["registerCTA"]),
             liveChatIcon: getLocator(this.page, configs["liveChatIcon"]),
@@ -52,8 +56,8 @@ export class HeaderPage {
 
     async searchFor(term: string) {
         await this.safeActions.safeClick('searchButton', this.locators.searchButton);
-        await this.safeActions.safeFill('searchInput', this.locators.searchInput, term);
-        await this.locators.searchInput.press('Enter');
+        await this.safeActions.safeFill('actualSearchInput', this.locators.actualSearchInput, term);
+        await this.locators.actualSearchInput.press('Enter');
     }
 
     async clickLoginCTA() {
@@ -106,6 +110,7 @@ export class HeaderPage {
             "logoLink": { type: "role", value: "link", options: '{"name":"Jackpotcity", "exact":true}', nth: 0 },
             "searchButton": { type: "text", value: "Search games", options: '{}', nth: 0 },
             "searchInput": { type: "role", value: "textbox", options: '{"name":"Search games"}', nth: 0 },
+            "actualSearchInput": { type: "css", value: "#search", options: '{}', nth: 0 },
             "loginCTA": { type: "role", value: "button", options: '{"name":"Login"}', nth: 0 },
             "registerCTA": { type: "role", value: "button", options: '{"name":"Register"}', nth: 0 },
             "liveChatIcon": { type: "role", value: "button", options: '{"name":"Live Chat"}', nth: 0 },

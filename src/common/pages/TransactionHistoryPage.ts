@@ -22,8 +22,11 @@ export class TransactionHistoryPage {
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "transactionHistory");
 
+        const mockData = this.getMockLocatorData();
         if (!configs || Object.keys(configs).length === 0) {
-            configs = this.getMockLocatorData();
+            configs = mockData;
+        } else {
+            configs = { ...mockData, ...configs };
         }
 
         this.locators = {

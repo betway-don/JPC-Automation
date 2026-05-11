@@ -57,12 +57,14 @@ export async function runHamburgerMenuTests(
         await ScreenshotHelper(page, screenshotDir, 'T11-providersCTA', testInfo);
     });
 
-    test('T13. Verify Winners CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.highlightElement('winnersCTA');
-        await ScreenshotHelper(page, screenshotDir, 'T11-winnersCTA', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T13')) {
+        test('T13. Verify Winners CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.highlightElement('winnersCTA');
+            await ScreenshotHelper(page, screenshotDir, 'T11-winnersCTA', testInfo);
+        });
+    }
 
     if (!options?.excludeTags?.includes('T14')) {
         test('T14. Verify Blog CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
@@ -126,30 +128,36 @@ export async function runHamburgerMenuTests(
         await ScreenshotHelper(page, screenshotDir, 'T13-responsibleGambling', testInfo);
     });
 
-    test('T22. Verify Get the App CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.clickQuickLinks();
-        await hamburgerMenuPage.highlightElement('getTheAppCTA');
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T13-responsibleGambling', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T22')) {
+        test('T22. Verify Get the App CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.clickQuickLinks();
+            await hamburgerMenuPage.highlightElement('getTheAppCTA');
+            await page.waitForTimeout(2000);
+            await ScreenshotHelper(page, screenshotDir, 'T13-responsibleGambling', testInfo);
+        });
+    }
 
-    test('T23. Verify Slot Game Categories expand/collapse', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.clickSlotGamesCategory();
-        await hamburgerMenuPage.highlightElement('slotGamesCategory');
-        await ScreenshotHelper(page, screenshotDir, 'T23-slotGameCategories', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T23')) {
+        test('T23. Verify Slot Game Categories expand/collapse', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.clickSlotGamesCategory();
+            await hamburgerMenuPage.highlightElement('slotGamesCategory');
+            await ScreenshotHelper(page, screenshotDir, 'T23-slotGameCategories', testInfo);
+        });
+    }
 
-    test('T24. Verify Live Game Categories expand/collapsee', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.clickLiveGamesCategory();
-        await hamburgerMenuPage.highlightElement('liveGamesCategory');
-        await ScreenshotHelper(page, screenshotDir, 'T24-liveGameCategories', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T24')) {
+        test('T24. Verify Live Game Categories expand/collapsee', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.clickLiveGamesCategory();
+            await hamburgerMenuPage.highlightElement('liveGamesCategory');
+            await ScreenshotHelper(page, screenshotDir, 'T24-liveGameCategories', testInfo);
+        });
+    }
 
     test('T25. Verify clicking on Aviator CTA in logged-out state prompts login', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
         await hamburgerMenuPage.openMenu();
@@ -158,26 +166,32 @@ export async function runHamburgerMenuTests(
         await ScreenshotHelper(page, screenshotDir, 'T25-aviator', testInfo);
     });
 
-    test('T26. Verify Apple Store download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.highlightElement('appleAppButton');
-        await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T26')) {
+        test('T26. Verify Apple Store download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.highlightElement('appleAppButton');
+            await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
+        });
+    }
 
-    test('T27. Verify Android app download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.highlightElement('androidAppButton');
-        await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T27')) {
+        test('T27. Verify Android app download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.highlightElement('androidAppButton');
+            await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
+        });
+    }
 
-    test('T28. Verify App Gallery download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-        await hamburgerMenuPage.openMenu();
-        await page.waitForTimeout(2000);
-        await hamburgerMenuPage.highlightElement('huaweiAppButton');
-        await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
-    });
+    if (!options?.excludeTags?.includes('T28')) {
+        test('T28. Verify App Gallery download button', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+            await hamburgerMenuPage.openMenu();
+            await page.waitForTimeout(2000);
+            await hamburgerMenuPage.highlightElement('huaweiAppButton');
+            await ScreenshotHelper(page, screenshotDir, 'T26-jackpotCityAppCTA', testInfo);
+        });
+    }
 
     test.describe('Logged In Tests', () => {
         test.beforeEach(async ({ page, loginPage, testData }: { page: Page, loginPage: any, testData: any }) => {
@@ -194,15 +208,17 @@ export async function runHamburgerMenuTests(
             await ScreenshotHelper(page, screenshotDir, 'T29-profileIcon', testInfo);
         });
 
-        test('T30. Verify Balance widget appears', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.highlightElement('balanceContainer');
-            await hamburgerMenuPage.highlightElement('cashBalance');
-            await hamburgerMenuPage.highlightElement('bonusBalance');
-            await hamburgerMenuPage.highlightElement('depositButton');
-            await ScreenshotHelper(page, screenshotDir, 'T30-balanceDetails', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T30')) {
+            test('T30. Verify Balance widget appears', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.highlightElement('balanceContainer');
+                await hamburgerMenuPage.highlightElement('cashBalance');
+                await hamburgerMenuPage.highlightElement('bonusBalance');
+                await hamburgerMenuPage.highlightElement('depositButton');
+                await ScreenshotHelper(page, screenshotDir, 'T30-balanceDetails', testInfo);
+            });
+        }
 
         test('T31. Verify name and account no. is displayed on the hamburger menu', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
@@ -211,19 +227,23 @@ export async function runHamburgerMenuTests(
             await ScreenshotHelper(page, screenshotDir, 'T31-accountNumber', testInfo);
         });
 
-        test('T32. Verify eye toggle is visible beside balance', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.highlightElement('eyeToggle');
-            await ScreenshotHelper(page, screenshotDir, 'T32-eyeToggle', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T32')) {
+            test('T32. Verify eye toggle is visible beside balance', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.highlightElement('eyeToggle');
+                await ScreenshotHelper(page, screenshotDir, 'T32-eyeToggle', testInfo);
+            });
+        }
 
-        test('T33. Verify eye toggle hides balance', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickEyeToggle();
-            await ScreenshotHelper(page, screenshotDir, 'T33-eyeToggleHidden', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T33')) {
+            test('T33. Verify eye toggle hides balance', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickEyeToggle();
+                await ScreenshotHelper(page, screenshotDir, 'T33-eyeToggleHidden', testInfo);
+            });
+        }
 
         test('T34. Verify Withdrawal CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
@@ -265,13 +285,15 @@ export async function runHamburgerMenuTests(
             await ScreenshotHelper(page, screenshotDir, 'T36-transactionSummary', testInfo);
         });
 
-        test('T37. Verify Bonus Wallet CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickMyAccount();
-            await hamburgerMenuPage.clickBonusWallet();
-            await ScreenshotHelper(page, screenshotDir, 'T37-bonusWallet', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T37')) {
+            test('T37. Verify Bonus Wallet CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickMyAccount();
+                await hamburgerMenuPage.clickBonusWallet();
+                await ScreenshotHelper(page, screenshotDir, 'T37-bonusWallet', testInfo);
+            });
+        }
 
         test('T38. Verify Personal Details CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
@@ -281,21 +303,25 @@ export async function runHamburgerMenuTests(
             await ScreenshotHelper(page, screenshotDir, 'T38-personalDetails', testInfo);
         });
 
-        test('T39. Verify Account Settings CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickMyAccount();
-            await hamburgerMenuPage.clickAccountSettings();
-            await ScreenshotHelper(page, screenshotDir, 'T39-accountSettings', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T39')) {
+            test('T39. Verify Account Settings CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickMyAccount();
+                await hamburgerMenuPage.clickAccountSettings();
+                await ScreenshotHelper(page, screenshotDir, 'T39-accountSettings', testInfo);
+            });
+        }
 
-        test('T40. Verify Update Password CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickMyAccount();
-            await hamburgerMenuPage.clickUpdatePassword();
-            await ScreenshotHelper(page, screenshotDir, 'T40-updatePassword', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T40')) {
+            test('T40. Verify City Rewards CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickMyAccount();
+                await hamburgerMenuPage.clickCityRewards();
+                await ScreenshotHelper(page, screenshotDir, 'T40-cityRewards', testInfo);
+            });
+        }
 
         test('T40_1. Verify Responsible Gaming CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
@@ -369,56 +395,70 @@ export async function runHamburgerMenuTests(
             await ScreenshotHelper(page, screenshotDir, 'T48-responsibleGambling', testInfo);
         });
 
-        test('T49. Verify Get the App CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickQuickLinks();
-            await hamburgerMenuPage.highlightElement('getTheAppCTA');
-            await ScreenshotHelper(page, screenshotDir, 'T49-getTheApp', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T49')) {
+            test('T49. Verify Get the App CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickQuickLinks();
+                await hamburgerMenuPage.highlightElement('getTheAppCTA');
+                await ScreenshotHelper(page, screenshotDir, 'T49-getTheApp', testInfo);
+            });
+        }
 
-        test('T50. Verify Slot Game Categories expand/collapse', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickSlotGamesCategory();
-            await hamburgerMenuPage.highlightElement('slotGamesCategory');
-            await ScreenshotHelper(page, screenshotDir, 'T50-slotGameCategories', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T50')) {
+            test('T50. Verify Slot Game Categories expand/collapse', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickSlotGamesCategory();
+                await hamburgerMenuPage.highlightElement('slotGamesCategory');
+                await ScreenshotHelper(page, screenshotDir, 'T50-slotGameCategories', testInfo);
+            });
+        }
 
-        test('T51. Verify Live Game Categories expand/collapsee', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickLiveGamesCategory();
-            await hamburgerMenuPage.highlightElement('liveGamesCategory');
-            await ScreenshotHelper(page, screenshotDir, 'T51-liveGameCategories', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T51')) {
+            test('T51. Verify Live Game Categories expand/collapsee', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickLiveGamesCategory();
+                await hamburgerMenuPage.highlightElement('liveGamesCategory');
+                await ScreenshotHelper(page, screenshotDir, 'T51-liveGameCategories', testInfo);
+            });
+        }
 
-        test('T52. Verify clicking on Aviator CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickAviatorCTA();
-            await ScreenshotHelper(page, screenshotDir, 'T52-aviator', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T52')) {
+            test('T52. Verify clicking on Aviator CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickAviatorCTA();
+                await ScreenshotHelper(page, screenshotDir, 'T52-aviator', testInfo);
+            });
+        }
 
-        test('T53. Verify clicking on Slot Games CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickSlotGamesCTA();
-            await ScreenshotHelper(page, screenshotDir, 'T53-slotGames', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T53')) {
+            test('T53. Verify clicking on Slot Games CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickSlotGamesCTA();
+                await ScreenshotHelper(page, screenshotDir, 'T53-slotGames', testInfo);
+            });
+        }
 
-        test('T54. Verify clicking on Betgames CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickBetGamesCTA();
-            await ScreenshotHelper(page, screenshotDir, 'T54-betGames', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T54')) {
+            test('T54. Verify clicking on Betgames CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickBetGamesCTA();
+                await ScreenshotHelper(page, screenshotDir, 'T54-betGames', testInfo);
+            });
+        }
 
-        test('T55. Verify clicking on Quick Games CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
-            await hamburgerMenuPage.openMenu();
-            await page.waitForTimeout(1000);
-            await hamburgerMenuPage.clickQuickGamesCTA();
-            await ScreenshotHelper(page, screenshotDir, 'T55-quickGames', testInfo);
-        });
+        if (!options?.excludeTags?.includes('T55')) {
+            test('T55. Verify clicking on Quick Games CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuTestFixtures, testInfo: TestInfo) => {
+                await hamburgerMenuPage.openMenu();
+                await page.waitForTimeout(1000);
+                await hamburgerMenuPage.clickQuickGamesCTA();
+                await ScreenshotHelper(page, screenshotDir, 'T55-quickGames', testInfo);
+            });
+        }
     });
 }

@@ -14,10 +14,13 @@ export class LoginPage {
 
         let configs = loadLocatorsFromExcel(LOCATOR_URL, "login");
 
+        const mockData = this.getMockLocatorData();
         // If Excel loading fails or is empty, use the mock data
         if (!configs || Object.keys(configs).length === 0) {
             console.warn("[LoginPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = this.getMockLocatorData();
+            configs = mockData;
+        } else {
+            configs = { ...mockData, ...configs };
         }
 
         this.locators = {

@@ -15,8 +15,11 @@ export class UpdatePasswordPage {
         try {
             let configs = loadLocatorsFromExcel(LOCATOR_URL, "updatePassword");
 
+            const mockData = this.getMockLocatorData();
             if (!configs || Object.keys(configs).length === 0) {
-                configs = this.getMockLocatorData();
+                configs = mockData;
+            } else {
+                configs = { ...mockData, ...configs };
             }
             this.locators = this.initializeLocators(configs);
         } catch (error) {
