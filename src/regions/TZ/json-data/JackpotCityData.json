@@ -1,10 +1,11 @@
 {
     "step1": {
         "mobile": "999889100",
-        "password": "123456789",
+        "password": "Test@1234",
         "firstName": "Test",
         "lastName": "User",
-        "email": "test.user@example.com"
+        "email": "test.user@example.com",
+        "referralCode": "TZREF01"
     },
     "step2": {
         "passport": "12345",
@@ -18,15 +19,15 @@
         "numericPassport": "123456789"
     },
     "mobileValidation": {
-        "valid": "999881234",
-        "short": "99988",
-        "long": "999887373737"
+        "valid": "712345678",
+        "short": "71234",
+        "long": "7123456789012"
     },
     "passwordValidation": {
         "mixedCase": "TestPassword",
         "withNumbers": "Password123",
         "withSpecial": "Password@123!",
-        "minLen": "Test123",
+        "minLen": "123",
         "maxLen": "TestPassword123456!@12",
         "allTypes": "TestPass123!@#",
         "withSpaces": "Test Pass 123!",
@@ -53,7 +54,7 @@
         "longMobile": "1234567890",
         "alphaMobile": "12345abc9",
         "specialMobile": "!@#$$%^",
-        "shortPass": "1234",
+        "shortPass": "123",
         "longPass": "AAAAAAAAAAAAAAAAAAAAA"
     }
 }

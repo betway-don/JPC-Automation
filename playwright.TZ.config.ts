@@ -11,14 +11,14 @@ export default defineConfig({
     ['allure-playwright', { outputFolder: 'src/regions/TZ/reports/allure-results' }]
   ],
   use: {
-    baseURL: 'https://www.jackpotcitycasino.co.tz/',
+    baseURL: 'https://en.jackpotcitycasino.co.tz',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'TZ Region',
       use: { ...devices['Desktop Chrome'] },
     },
     {

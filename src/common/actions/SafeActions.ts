@@ -99,7 +99,8 @@ export class SafeActions {
     private generateHeuristic(key: string): Locator | null {
         // --- Build your "dictionary" of heuristics here ---
         if (key === 'registerButton') {
-            return this.page.getByRole('button', { name: /Register|Sign Up/i });
+            // Header register button is NOT disabled; the in-form Sign Up button always starts disabled
+            return this.page.locator("button[element-name='jpc-register']:not([disabled])");
         }
         if (key === 'menuButton') {
             return this.page.getByRole('button', { name: /menu/i });
@@ -108,10 +109,12 @@ export class SafeActions {
             return this.page.getByRole('button', { name: /Login/i });
         }
         if (key === 'mobileInput') {
-            return this.page.getByRole('textbox', { name: /Mobile/i });
+            // The mobile input uses aria-label="username" (tel input), not "Mobile"
+            return this.page.locator('#username');
         }
         if (key === 'passwordInput') {
-            return this.page.getByRole('textbox', { name: /Password/i });
+            // Use ID to avoid matching passwordConfirmation (both have name~=/Password/i in GH)
+            return this.page.locator('#password');
         }
         if (key === 'firstNameInput') {
             return this.page.getByRole('textbox', { name: /First Name/i });
@@ -137,11 +140,13 @@ export class SafeActions {
      */
     async safeHighlight(key: string, primary: Locator) {
         try {
+            await primary.waitFor({ state: 'attached', timeout: 2000 });
             await highlightElements(primary);
         } catch (e) {
             const heuristic = this.generateHeuristic(key);
             if (heuristic) {
                 try {
+                    await heuristic.waitFor({ state: 'attached', timeout: 2000 });
                     await highlightElements(heuristic);
                 } catch (e2) { /* ignore */ }
             }
