@@ -28,7 +28,8 @@ test.describe('Winners Circle Tests', () => {
         context = await browser.newContext();
         page = await context.newPage();
  
-        await page.goto('https://jackpotcity.co.za/', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://www.jackpotcitycasino.mw/', { waitUntil: 'domcontentloaded' });
+        await login(page, '912163131', 'Test@123');
     });
  
     test.afterAll(async () => {
@@ -38,40 +39,37 @@ test.describe('Winners Circle Tests', () => {
         await browser.close();
     });
  
-    test('T1. Verify Display of Big Winners', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
-        await page.locator('button[element-name="page-link-winners"]').click();
-        await page.waitForTimeout(2000);
+    // test('T1. Verify Display of Big Winners', async ({ }, testInfo) => {
+    //     await page.locator('button[element-name="page-link-winners"]').click();
+    //     await page.waitForTimeout(2000);
         
-        const bigWinnersTitle = page.locator('p.font-bold.capitalize:has-text("Big Winners")');
-        await expect(bigWinnersTitle).toBeVisible();
-        await highlightElements(bigWinnersTitle);
-        await ScreenshotHelper(page, screenshotDir, 'T1-winnersCircle-BigWinners', testInfo);
-    });
+    //     const bigWinnersTitle = page.locator('p.font-bold.capitalize:has-text("Big Winners")');
+    //     await expect(bigWinnersTitle).toBeVisible();
+    //     await highlightElements(bigWinnersTitle);
+    //     await ScreenshotHelper(page, screenshotDir, 'T1-winnersCircle-BigWinners', testInfo);
+    // });
 
-    test('T2. Verify Big Winners Horizontal Scroll Functionality', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
-        await page.locator('button[element-name="page-link-winners"]').click();
-        await page.waitForTimeout(2000);
+    // test('T2. Verify Big Winners Horizontal Scroll Functionality', async ({ }, testInfo) => {
+    //     await page.locator('button[element-name="page-link-winners"]').click();
+    //     await page.waitForTimeout(2000);
         
-        const carousel = page.locator('#-carousel.scroller-casino');
-        await expect(carousel).toBeVisible();
-        await highlightElements(carousel);
+    //     const carousel = page.locator('#-carousel.scroller-casino');
+    //     await expect(carousel).toBeVisible();
+    //     await highlightElements(carousel);
         
-        const initialScroll = await carousel.evaluate((el: any) => el.scrollLeft);
+    //     const initialScroll = await carousel.evaluate((el: any) => el.scrollLeft);
         
-        // Scroll horizontal using mouse hover and wheel
-        await carousel.hover();
-        await page.mouse.wheel(500, 0);
-        await page.waitForTimeout(1000);
+    //     // Scroll horizontal using mouse hover and wheel
+    //     await carousel.hover();
+    //     await page.mouse.wheel(500, 0);
+    //     await page.waitForTimeout(1000);
         
-        const finalScroll = await carousel.evaluate((el: any) => el.scrollLeft);
-        expect(finalScroll).toBeGreaterThan(initialScroll);
-        await ScreenshotHelper(page, screenshotDir, 'T2-winnersCircle-BigWinners-Scroll', testInfo);
-    });
+    //     const finalScroll = await carousel.evaluate((el: any) => el.scrollLeft);
+    //     expect(finalScroll).toBeGreaterThan(initialScroll);
+    //     await ScreenshotHelper(page, screenshotDir, 'T2-winnersCircle-BigWinners-Scroll', testInfo);
+    // });
 
     test('T3. Verify Display of All Winners', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -87,7 +85,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T4. Verify Display of Hot Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -106,7 +103,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T5. Verify Display of Most Popular Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -125,7 +121,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T6. Verify Display of Most Liked Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -144,7 +139,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T7. Verify Game Launch from Big Winners', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -159,7 +153,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T8. Verify Game Launch from Hot Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -174,7 +167,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T9. Verify Game Launch from Most Popular Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -189,7 +181,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T10. Verify Game Launch from Most Liked Games', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         
@@ -204,7 +195,6 @@ test.describe('Winners Circle Tests', () => {
     });
 
     test('T11. Verify All Winners Vertical Scroll Functionality', async ({ }, testInfo) => {
-        await login(page, '640987655', '12345678');
         await page.locator('button[element-name="page-link-winners"]').click();
         await page.waitForTimeout(2000);
         

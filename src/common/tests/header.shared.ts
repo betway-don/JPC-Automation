@@ -12,61 +12,63 @@ type HeaderTestFixtures = {
 export async function runHeaderTests(
     test: TestType<HeaderTestFixtures, any>,
     url: string,
-    options?: { excludeTags?: string[] }
+    options?: { excludeTags?: string[]; onlyLoggedIn?: boolean }
 ) {
 
     test.beforeEach(async ({ headerPage }: { headerPage: HeaderPage }) => {
         await headerPage.navigateTo(url);
     });
 
-    test.describe('Logged Out Tests', () => {
-        test('T1. Verify Hamburger menu visibility and clickability', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('menuButton');
-            await headerPage.clickMenu();
-            await ScreenshotHelper(page, screenshotDir, 'header-menu', testInfo);
-        });
+    if (!options?.onlyLoggedIn) {
+        test.describe('Logged Out Tests', () => {
+            test('T1. Verify Hamburger menu visibility and clickability', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('menuButton');
+                await headerPage.clickMenu();
+                await ScreenshotHelper(page, screenshotDir, 'header-menu', testInfo);
+            });
 
-        test('T2. Verify Jackpotcity logo visibility and clickability', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('logoLink');
-            await headerPage.clickLogo();
-            const currentUrl = page.url();
-            console.log('Current URL:', currentUrl);
-            await testInfo.attach('Current URL', { body: currentUrl });
-            await ScreenshotHelper(page, screenshotDir, 'header-logo', testInfo);
-        });
+            test('T2. Verify Jackpotcity logo visibility and clickability', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('logoLink');
+                await headerPage.clickLogo();
+                const currentUrl = page.url();
+                console.log('Current URL:', currentUrl);
+                await testInfo.attach('Current URL', { body: currentUrl });
+                await ScreenshotHelper(page, screenshotDir, 'header-logo', testInfo);
+            });
 
-        test('T3. Verify Search bar input functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.searchFor('dimond');
-            await page.waitForTimeout(2000);
-            await ScreenshotHelper(page, screenshotDir, 'header-search', testInfo);
-        });
+            test('T3. Verify Search bar input functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.searchFor('dimond');
+                await page.waitForTimeout(2000);
+                await ScreenshotHelper(page, screenshotDir, 'header-search', testInfo);
+            });
 
-        test('T4. Verify Login CTA visibility and navigation', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('loginCTA');
-            await headerPage.clickLoginCTA();
-            await ScreenshotHelper(page, screenshotDir, 'header-login-cta', testInfo);
-        });
+            test('T4. Verify Login CTA visibility and navigation', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('loginCTA');
+                await headerPage.clickLoginCTA();
+                await ScreenshotHelper(page, screenshotDir, 'header-login-cta', testInfo);
+            });
 
-        test('T5. Verify Register CTA visibility and navigation', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('registerCTA');
-            await headerPage.clickRegisterCTA();
-            await ScreenshotHelper(page, screenshotDir, 'header-register-cta', testInfo);
-        });
+            test('T5. Verify Register CTA visibility and navigation', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('registerCTA');
+                await headerPage.clickRegisterCTA();
+                await ScreenshotHelper(page, screenshotDir, 'header-register-cta', testInfo);
+            });
 
-        test('T6. Verify Live Chat icon functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('liveChatIcon');
-            await headerPage.clickLiveChat();
-            await page.waitForTimeout(4000);
-            await ScreenshotHelper(page, screenshotDir, 'header-live-chat', testInfo);
-        });
+            test('T6. Verify Live Chat icon functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('liveChatIcon');
+                await headerPage.clickLiveChat();
+                await page.waitForTimeout(4000);
+                await ScreenshotHelper(page, screenshotDir, 'header-live-chat', testInfo);
+            });
 
-        test('T7. Verify Theme Change icon toggles theme', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('themeToggle');
-            await headerPage.toggleTheme();
-            await page.waitForTimeout(4000);
-            await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle', testInfo);
+            test('T7. Verify Theme Change icon toggles theme', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+                await headerPage.highlightElement('themeToggle');
+                await headerPage.toggleTheme();
+                await page.waitForTimeout(4000);
+                await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle', testInfo);
+            });
         });
-    });
+    }
 
     test.describe('Logged In Tests', () => {
         test.beforeEach(async ({ headerPage, testData }: { headerPage: HeaderPage, testData: any }) => {

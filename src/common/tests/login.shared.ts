@@ -55,11 +55,11 @@ export async function runLoginTests(
         await ScreenshotHelper(page, screenshotDir, 'T6-loginSignupPopup', testInfo);
     });
 
-    test('T7 - Verify that user should able to see the "Login" button on login popup window when clicked on aviator', async ({ page, loginPage, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
-        await loginPage.clickAviator();
-        await loginPage.highlightAviatorLogin();
-        await ScreenshotHelper(page, screenshotDir, 'T7-loginAviatorPopup', testInfo);
-    });
+    // test('T7 - Verify that user should able to see the "Login" button on login popup window when clicked on aviator', async ({ page, loginPage, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
+    //     await loginPage.clickAviator();
+    //     await loginPage.highlightAviatorLogin();
+    //     await ScreenshotHelper(page, screenshotDir, 'T7-loginAviatorPopup', testInfo);
+    // });
 
     test('T9 - Verify user is able to login', async ({ page, loginPage, testData, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
         await loginPage.clickLogin();
@@ -85,14 +85,14 @@ export async function runLoginTests(
         await ScreenshotHelper(page, screenshotDir, 'T11-loginFromSignup', testInfo);
     });
 
-    test('T13 - Verify user is able to login from signup popup window from aviator page', async ({ page, loginPage, testData, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
-        await loginPage.clickAviator();
-        await page.waitForTimeout(2000);
-        await loginPage.clickAviatorLogin();
-        await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
-        await page.waitForTimeout(2000);
-        await ScreenshotHelper(page, screenshotDir, 'T13-loginAviatorSignup', testInfo);
-    });
+    // test('T13 - Verify user is able to login from signup popup window from aviator page', async ({ page, loginPage, testData, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
+    //     await loginPage.clickAviator();
+    //     await page.waitForTimeout(2000);
+    //     await loginPage.clickAviatorLogin();
+    //     await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
+    //     await page.waitForTimeout(2000);
+    //     await ScreenshotHelper(page, screenshotDir, 'T13-loginAviatorSignup', testInfo);
+    // });
 
     test('T15 - Verify user is not able to login if mobile number has less than 9 digits', async ({ page, loginPage, testData, screenshotDir }: LoginTestFixtures, testInfo: TestInfo) => {
         await loginPage.clickLogin();

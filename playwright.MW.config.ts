@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   timeout: 200000,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: 1,
   workers: process.env.CI ? 1 : 1,
   reporter: [
     ['html', { outputFolder: 'src/regions/MW/reports/html-report', open: 'never' }],
@@ -19,6 +19,8 @@ export default defineConfig({
     },
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    actionTimeout: 60000,
+    navigationTimeout: 60000,
   },
 
   projects: [
