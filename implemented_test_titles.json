@@ -1,0 +1,794 @@
+[
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T1. Verify hamburger menu opens correctly"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T4. Verify switching from dark theme to light theme and vice-versa"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T10. Verify Search field is accessible"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T11. Verify Promotions CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T12. Verify Providers CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T13. Verify Winners CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T14. Verify Blog CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T15. Verify Quick Links dropdown expand/collapse"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T16. Verify Privacy Policy CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T17. Verify Contact Us CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T18. Verify Terms & Conditions CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T19. Verify FAQ’s CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T21. Verify Responsible Gambling CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T22. Verify Get the App CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T23. Verify Slot Game Categories expand/collapse"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T24. Verify Live Game Categories expand/collapsee"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T25. Verify clicking on Aviator CTA in logged-out state prompts login"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T26. Verify Apple Store download button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T27. Verify Android app download button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T28. Verify App Gallery download button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T29. Verify the Profile icon on header"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T30. Verify Balance widget appears"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T31. Verify name and account no. is displayed on the hamburger menu"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T32. Verify eye toggle is visible beside balance"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T33. Verify eye toggle hides balance"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T34. Verify Withdrawal CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T35. Verify My Account dropdown expansion"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T36. Verify Deposit CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T36_1. Verify Withdrawal CTA (My Account)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T36_2. Verify Transaction Summary CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T37. Verify Bonus Wallet CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T38. Verify Personal Details CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T39. Verify Account Settings CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T40. Verify City Rewards CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T40_1. Verify Responsible Gaming CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T41. Verify Document Verification CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T42. Verify Log Out CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T43. Verify Quick Links dropdown expand/collapse"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T44. Verify Privacy Policy CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T45. Verify Contact Us CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T46. Verify Terms & Conditions CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T47. Verify FAQ’s CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T48. Verify Responsible Gambling CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T49. Verify Get the App CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T50. Verify Slot Game Categories expand/collapse"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T51. Verify Live Game Categories expand/collapsee"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T52. Verify clicking on Aviator CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T53. Verify clicking on Slot Games CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T54. Verify clicking on Betgames CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\hamburgerMenu.shared.ts",
+    "title": "T55. Verify clicking on Quick Games CTA"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T1. Verify Hamburger menu visibility and clickability"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T2. Verify Jackpotcity logo visibility and clickability"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T3. Verify Search bar input functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T4. Verify Login CTA visibility and navigation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T5. Verify Register CTA visibility and navigation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T6. Verify Live Chat icon functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T7. Verify Theme Change icon toggles theme"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T8. Verify Hamburger menu visibility and clickability"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T9. Verify Jackpotcity logo visibility and clickability (Logged In)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T10. Verify Search bar input functionality (Logged In)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T11. Verify Login CTA visibility and navigation (Logged In - Should not be visible?)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T12. Verify Register CTA visibility and navigation (Logged In)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T13. Verify Live Chat icon functionality (Logged In)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T14. Verify Theme Change icon toggles theme (Logged In)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T15. Verify Profile icon functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T16. Verify Notification icon functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\header.shared.ts",
+    "title": "T17. Verify Deposit CTA popup"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\homePage.spec.ts",
+    "title": "T1. Verify horizontal scrollability of banners"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\homePage.spec.ts",
+    "title": "T2. Verify autoscrolling of Big Winners carousel"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\homePage.spec.ts",
+    "title": "T3. Verify game launch from Big Winners carousel"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\homePage.spec.ts",
+    "title": "T4. Mark game as favorite"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\homePage.spec.ts",
+    "title": "T5. Unmark favorite game"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T1. Verify Limit Tab Presence"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T2. Verify Limit options Visibility"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T3. Verify Daily Limit Set"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T6. Verify Weekly Limit Set"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T7. Verify Weekly limit is lesser than Monthly limit"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T8. Verify Weekly limit is greater than Daily limit"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T10. Verify Monthly Limit Set"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T13. Verify Customization of Limits"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T14. Verify Set Your Limit Button Activation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\limits.shared.ts",
+    "title": "T20. Verify Session Limit Duration Setting"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T1-Verify login Button is visible on Homepage."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T2-Verify that user should able to click on "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T3 - Verify that user should able to see the "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T4 - Verify that user should able to click on "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T5 - Verify that user should able to see the "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T6 - Verify that user should able to click on "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T7 - Verify that user should able to see the "
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T9 - Verify user is able to login"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T10 - Verify user is able to login from hamburger menu"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T11 - Verify user is able to login from signup popup"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T13 - Verify user is able to login from signup popup window from aviator page"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T15 - Verify user is not able to login if mobile number has less than 9 digits"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T16 - Verify user is not able to login if mobile number has more than 9 digits"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T17 - Verify user is not able to login if mobile number contains alphanumeric characters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T18 - Verify user is not able to enter special characters in mobile number field"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T19 - Verify that user is not able to login if password field is empty"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T20 - Verify that user is not able to login if password field has less than 5 characters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\login.shared.ts",
+    "title": "T21 - Verify that user is not able to login if password field has more than 20 characters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T1-Verify Sign-Up Button is visible on Homepage."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T2-Verify Login Button is visible on Homepage."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T3-Click Register Button on Homepage."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T4-Verify Sign Up Form is visible."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T8-Dialling Code."
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T9-Valid Mobile Number Format"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T10-Short Mobile Number Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T11-Long Mobile Number Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T14-Empty Mobile Number Field"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T15-Strong Password with Mixed Case"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T16-Password with Numeric Characters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T17-Password with Special Characters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T18-Password Minimum Length"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T19-Password Maximum Length"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T20-Password with All Character Types"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T21-Password with Spaces"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T22-Weak Password Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T23-Blank Password Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T24-Confirm Password Match Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T25-Confirm Password Mismatch Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T26-Valid First Name and Surname"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T27-Names with Spaces"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T28-Names with Hyphens"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T29-Blank First Name Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T30-Blank Surname Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T31-Names with Numeric Characters Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T32-Names with Special Characters Rejection"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T38-Verify Preferred Language Dropdown"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T39-Verify Referral Code Field"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T40-Verify Agree to All Checkbox"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T41-Verify Terms & Conditions Checkbox"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T42-Verify Promotions Checkbox"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T43-Verify Date of Birth Picker"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T44-Verify Sign Up Button is disabled when form is empty"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T33-Valid SA ID"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T34-Invalid South African ID Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T35-Valid Passport Number Format"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T36-Invalid Passport Number Validation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\signup.shared.ts",
+    "title": "T37-Complete Registration"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T1. Verify Page Loads Correctly"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T2. Verify Presence of All Column Headers"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T3. Verify Correct Display of Transaction Types"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T4. Verify Amount Formatting for Payout"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T5. Verify Amount Formatting for Wager"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T6. Verify Tlog Icon Opens Detailed View"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T7. Verify Detailed View"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T8. Verify Back Button Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T9. Verify Refresh Icon Reloads Transaction List"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T10. Verify Next Page Button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T11. Verify Page Number Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T12. Verify Go to Page Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T13. Verify Previous Page Button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T14. Verify Filter Button"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T15. Verify Filter Persistence"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T18. Verify Applied Filter Transaction List"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T20. Verify Reset Button on Filter Prompt"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T21. Verify Close Button on Filter Prompt"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T22. Verify No Results Message"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T23. Verify Calendar Date Selection Accessibility"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T25. Verify Last Week Option Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T26. Verify Last 14 Days Option Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T27. Verify Last 30 Days Option Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T28. Verify Manual Date Change Functionality, end date should be same"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T29. Verify Manual Date Change Functionality, end date should be same"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T31. Verify Calendar Date Selection Persistence"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T32. Verify Calendar Default State"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T34. Verify Calendar Date Selection Reset"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T35. Verify Calendar Date Range with No Transactions"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T36. Verify Calendar Date Selection with Filters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T37. Verify Calendar Date Selection with Multiple Filters"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T38. Verify Show Only Payout Toggle Activation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T39. Verify Show Only Payout Toggle Deactivation"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T40. Verify Show Only Payout Toggle State After Deselecting Other Types"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\transactionHistory.shared.ts",
+    "title": "T50.Verify Dropdown Displays Count"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T1. Verify fields and CTA are present"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T2. Verify password criteria hint visibility"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T3. Verify short password validation error"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T4. Verify mismatched password validation error"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T5. Verify successful password update (Check)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T6. Verify CTA is disabled until valid input"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T7. Verify CTA is enabled on valid input"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T8. Verify password input is masked"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\updatePassword.shared.ts",
+    "title": "T9. Verify reuse of old password shows error"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T1. Verify Display of Big Winners"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T2. Verify Big Winners Horizontal Scroll Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T3. Verify Display of All Winners"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T4. Verify Display of Hot Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T5. Verify Display of Most Popular Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T6. Verify Display of Most Liked Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T7. Verify Game Launch from Big Winners"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T8. Verify Game Launch from Hot Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T9. Verify Game Launch from Most Popular Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T10. Verify Game Launch from Most Liked Games"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\common\\tests\\winnersCircle.spec.ts",
+    "title": "T11. Verify All Winners Vertical Scroll Functionality"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\regions\\MW\\reports\\html-report\\trace\\assets\\codeMirrorModule-eyVcHN77.js",
+    "title": "\t"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\regions\\ZA\\tests\\modules\\homePage\\homePage.spec.ts",
+    "title": "TC_HOMEPAGE_001 Verify horizontal scrollability of banners"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\regions\\ZA\\tests\\modules\\homePage\\homePage.spec.ts",
+    "title": "TC_HOMEPAGE_002 Verify visibility of CTA buttons (Image Verification)"
+  },
+  {
+    "file": "d:\\JPC-Automation\\src\\regions\\ZA\\tests\\modules\\homePage\\homePage.spec.ts",
+    "title": "TC_HOMEPAGE_003 Verify CTA redirection from banners"
+  }
+]

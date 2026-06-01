@@ -1,9 +1,7 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromExcel } from '../../global/utils/file-utils/excelReader';
+import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
-
-const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
 
 export class HeaderPage {
     readonly page: Page;
@@ -11,16 +9,7 @@ export class HeaderPage {
 
     constructor(page: Page, private safeActions: SafeActions) {
         this.page = page;
-
-        let configs = loadLocatorsFromExcel(LOCATOR_URL, "header");
-
-        const mockData = this.getMockLocatorData();
-        if (!configs || Object.keys(configs).length === 0) {
-            console.warn("[HeaderPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = mockData;
-        } else {
-            configs = { ...mockData, ...configs };
-        }
+        const configs = loadLocatorsFromJson('header');
 
         this.locators = {
             menuButton: getLocator(this.page, configs["menuButton"]),
@@ -104,25 +93,4 @@ export class HeaderPage {
         }
     }
 
-    private getMockLocatorData(): Record<string, any> {
-        return {
-            "menuButton": { type: "role", value: "button", options: '{"name":"menu"}', nth: 0 },
-            "logoLink": { type: "role", value: "link", options: '{"name":"Jackpotcity", "exact":true}', nth: 0 },
-            "searchButton": { type: "text", value: "Search games", options: '{}', nth: 0 },
-            "searchInput": { type: "role", value: "textbox", options: '{"name":"Search games"}', nth: 0 },
-            "actualSearchInput": { type: "css", value: "#search", options: '{}', nth: 0 },
-            "loginCTA": { type: "role", value: "button", options: '{"name":"Login"}', nth: 0 },
-            "registerCTA": { type: "role", value: "button", options: '{"name":"Register"}', nth: 0 },
-            "liveChatIcon": { type: "role", value: "button", options: '{"name":"Live Chat"}', nth: 0 },
-            "themeToggle": { type: "css", value: '#site-header', options: '{"hasText": "light-mode"}', nth: 0 },
-            "themeToggle_fallback": { type: "css", value: '#site-header [aria-label="light-mode"]', options: '{}', nth: 0 },
-            "profileIcon": { type: "role", value: "button", options: '{"name":"account", "exact":true}', nth: 0 },
-            "notificationIcon": { type: "role", value: "button", options: '{"name":"notification-panel"}', nth: 0 },
-            "depositCTA": { type: "css", value: 'div:has-text("Cash") button:has(svg path[d="m19.5 8.25-7.5 7.5-7.5-7.5"])', options: '{}', nth: 0 },
-            "accountBalancesDialog": { type: "css", value: 'div[role="dialog"]:has-text("Account Balances")', options: '{}', nth: 0 },
-            "usernameInput": { type: "role", value: "textbox", options: '{"name":"username"}', nth: 0 },
-            "passwordInput": { type: "role", value: "textbox", options: '{"name":"password"}', nth: 0 },
-            "submitLoginButton": { type: "role", value: "button", options: '{"name":"Submit"}', nth: 0 },
-        };
-    }
 }

@@ -1,9 +1,7 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromExcel } from '../../global/utils/file-utils/excelReader';
+import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
-
-const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
 
 export class LoginPage {
     readonly page: Page;
@@ -11,17 +9,7 @@ export class LoginPage {
 
     constructor(page: Page, private safeActions: SafeActions) {
         this.page = page;
-
-        let configs = loadLocatorsFromExcel(LOCATOR_URL, "login");
-
-        const mockData = this.getMockLocatorData();
-        // If Excel loading fails or is empty, use the mock data
-        if (!configs || Object.keys(configs).length === 0) {
-            console.warn("[LoginPage POM] Excel locators not found or empty. Using internal mock data.");
-            configs = mockData;
-        } else {
-            configs = { ...mockData, ...configs };
-        }
+        const configs = loadLocatorsFromJson('login');
 
         this.locators = {
             loginButton: getLocator(this.page, configs["loginButton"]),
@@ -126,21 +114,4 @@ export class LoginPage {
         await this.safeActions.safeHighlight('usernameInput', this.locators.usernameInput);
     }
 
-    // --- Mock Data (Matches your raw spec selectors) ---
-    private getMockLocatorData(): Record<string, any> {
-        return {
-            "loginButton": { type: "role", value: "button", options: '{"name":"Login"}', nth: 0 },
-            "hamburgerButton": { type: "role", value: "button", options: '{"name":"menu"}', nth: 0 },
-            "hamburgerLoginButton": { type: "xpath", value: "//aside[@role='complementary']//button[normalize-space()='Login']", options: '{}', nth: 0 },
-            "registerButton": { type: "role", value: "button", options: '{"name":"Register"}', nth: 0 },
-            "loginLinkInSignup": { type: "text", value: "Already have an account?", options: '{}', nth: 0 },
-            "aviatorButton": { type: "role", value: "button", options: '{"name":"aviator Aviator"}', nth: 0 },
-            "aviatorHolster": { type: "css", value: "#aviator-holster", options: '{}', nth: 0 },
-            "aviatorLoginButton": { type: "xpath", value: "//*[@id='aviator-holster']//button[normalize-space()='Login']", options: '{}', nth: 0 },
-            "usernameInput": { type: "role", value: "textbox", options: '{"name":"username"}', nth: 0 },
-            "passwordInput": { type: "role", value: "textbox", options: '{"name":"Enter Password"}', nth: 0 },
-            "mobileValidationMsg": { type: "text", value: "Please enter a valid Mobile", options: '{}', nth: 0 },
-            "passwordValidationMsg": { type: "text", value: "Provide Valid Password", options: '{}', nth: 0 },
-        };
-    }
 }

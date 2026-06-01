@@ -1,10 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { loadLocatorsFromExcel } from '../../global/utils/file-utils/excelReader';
+import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
 import { highlightElements } from '../actions/HighlightElements';
-
-const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
 
 export enum TransactionFilterType {
     PAYOUT = 'Payout',
@@ -19,15 +17,7 @@ export class TransactionHistoryPage {
 
     constructor(page: Page, public readonly safeActions: SafeActions) {
         this.page = page;
-
-        let configs = loadLocatorsFromExcel(LOCATOR_URL, "transactionHistory");
-
-        const mockData = this.getMockLocatorData();
-        if (!configs || Object.keys(configs).length === 0) {
-            configs = mockData;
-        } else {
-            configs = { ...mockData, ...configs };
-        }
+        const configs = loadLocatorsFromJson('transactionHistory');
 
         this.locators = {
             menuButton: getLocator(this.page, configs["menuButton"]),
@@ -162,53 +152,4 @@ export class TransactionHistoryPage {
     }
 
 
-    // --- Mock Data ---
-    private getMockLocatorData(): Record<string, any> {
-        return {
-            "menuButton": { type: "role", value: "button", options: '{"name":"menu"}', nth: 0 },
-            "transactionSummaryLink": { type: "css", value: ".hamburger-account-options:has-text('Transaction Summary')", options: '{}', nth: 0 },
-
-            "filterButton": { type: "role", value: "button", options: '{"name":"Filter"}', nth: 0 },
-
-            "startDateInput": { type: "role", value: "combobox", options: '{"name":"Start Date"}', nth: 0 },
-            "endDateInput": { type: "role", value: "combobox", options: '{"name":"End Date"}', nth: 0 },
-            "previousMonthButton": { type: "role", value: "button", options: '{"name":"Previous Month"}', nth: 0 },
-
-            "continueButton": { type: "role", value: "button", options: '{"name":"Continue"}', nth: 0 },
-            "resetButton": { type: "role", value: "button", options: '{"name":"Reset"}', nth: 0 },
-            "closeFilterButton": { type: "css", value: "[element-name='close-modal']", options: '{}', nth: 0 },
-
-            "lastWeekButton": { type: "role", value: "button", options: '{"name":"Last Week"}', nth: 0 },
-            "last2WeeksButton": { type: "role", value: "button", options: '{"name":"Last 2 weeks"}', nth: 0 }, // Spec says "Last 2 weeks" but variable "Last 14 Days"
-            "lastMonthButton": { type: "role", value: "button", options: '{"name":"Last Month"}', nth: 0 },
-
-            "typeDropdownLabelContainer": { type: "css", value: "div[data-pc-section='labelcontainer']", options: '{}', nth: 0 },
-            "typeFilterLabel": { type: "text", value: "Filter By Type", options: '{}', nth: 0 },
-
-            "payoutToggleContainer": { type: "xpath", value: "//*[text()='Show Payout Only']/..", options: '{}', nth: 0 },
-            // Toggle input is inside the container
-            "payoutToggleInput": { type: "xpath", value: "//*[text()='Show Payout Only']/..//input[@role='switch']", options: '{}', nth: 0 },
-
-            "tableRows": { type: "css", value: "tbody tr.rowData", options: '{}', nth: 0 },
-            "columnHeaders": { type: "css", value: "thead th", options: '{}', nth: 0 }, // generic
-
-            "showDetailIcon": { type: "css", value: "td .showDetail", options: '{}', nth: 0 },
-            "detailViewBackBtn": { type: "css", value: "button:has(svg path[d*='15.75 19.5'])", options: '{}', nth: 0 },
-
-            "nextPageBtn": { type: "css", value: ".border-l > .w-6", options: '{}', nth: 0 },
-            "prevPageBtn": { type: "css", value: ".w-6.dark\\:text-white > path", options: '{}', nth: 0 }, // might need parent selector
-            "pageNumbers": { type: "css", value: ".pagination", options: '{}', nth: 0 },
-            "goToPageEllipsis": { type: "text", value: "...", options: '{}', nth: 0 },
-            "goToInput": { type: "css", value: "#goToInput", options: '{}', nth: 0 },
-            "goButton": { type: "role", value: "button", options: '{"name":"go"}', nth: 0 },
-
-            "refreshButton": { type: "role", value: "button", options: '{"name":"Refresh"}', nth: 0 },
-            "noResultsMessage": { type: "text", value: "No results", options: '{}', nth: 0 },
-
-            "payoutOption": { type: "role", value: "option", options: '{"name":"Payout"}', nth: 0 },
-            "wagerOption": { type: "role", value: "option", options: '{"name":"Wager"}', nth: 0 },
-            "bonusOption": { type: "role", value: "option", options: '{"name":"Bonus"}', nth: 0 },
-            "accountAdjustmentOption": { type: "role", value: "option", options: '{"name":"Account Adjustment"}', nth: 0 },
-        };
-    }
 }

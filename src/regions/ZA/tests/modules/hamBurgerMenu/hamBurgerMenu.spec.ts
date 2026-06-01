@@ -1,6 +1,6 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
-import { runHamburgerMenuTests } from '../../../../../common/tests/hamburgerMenu.shared';
+import { runHamburgerMenuNewSuiteTests } from '../../../../../common/tests/hamburgerMenuNewSuite.shared';
 
-test.describe('Hamburger Menu Tests', () => {
-    runHamburgerMenuTests(test, '/');
+test.describe('ZA Hamburger Menu Tests', () => {
+    runHamburgerMenuNewSuiteTests(test, '/');
 });

@@ -1,0 +1,581 @@
+{
+  "GH": {
+    "total": 39,
+    "implemented": 18,
+    "missing": [
+      "Verify Sign Up CTA Visibility on Homepage Header",
+      "Verify Banner CTA Triggers Sign Up Modal",
+      "Verify Play Now CTA Does Not Trigger Sign Up Modal",
+      "Verify Favourite Icon Does Not Trigger Sign Up Modal",
+      "Verify Mobile Number Field Restricts Input Beyond Maximum 9 Digit Limit",
+      "Verify Password Field Character Limit Validation",
+      "Verify Password Field Masks Entered Characters",
+      "Verify Password Field Accepts Valid Character Combination",
+      "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions",
+      "Verify Successful Sign Up with Valid Registration Details",
+      "Verify tapping Play Now button on game page triggers login prompt",
+      "Verify tapping Favourite icon triggers login prompt",
+      "Verify password visibility eye icon toggle functionality",
+      "Verify error message for invalid credentials",
+      "Verify Forgot Password CTA is displayed below Submit button",
+      "Verify tapping Forgot Password CTA redirects to Password Reset prompt",
+      "Verify only valid account number is accepted on Password Reset prompt",
+      "Verify entering same account number multiple times triggers max attempts error",
+      "Verify entering valid account number redirects to Update Password page",
+      "Verify invalid OTP triggers error message on Update Password page",
+      "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    ],
+    "matched": [
+      {
+        "excel": "Verify Mobile Number Field Restricts Special Character Input",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify Mobile Number Field Accepts Numeric Input Only",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Mobile Number Field Displays Validation for Empty Input",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Password Field Displays Validation for Empty Input",
+        "code": "T19 - Verify that user is not able to login if password field is empty",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Date of Birth Field Allows Valid Date Selection",
+        "code": "T43-Verify Date of Birth Picker",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Sign Up Button Remains Disabled When Form is Empty",
+        "code": "T44-Verify Sign Up Button is disabled when form is empty",
+        "score": 0.8571428571428571
+      },
+      {
+        "excel": "Verify Login button is displayed on homepage header",
+        "code": "T1-Verify login Button is visible on Homepage.",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify Login CTA on Sign Up prompt triggers login prompt",
+        "code": "T4. Verify Login CTA visibility and navigation",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Login button is displayed in hamburger menu",
+        "code": "T10 - Verify user is able to login from hamburger menu",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify special characters are not accepted in mobile number field",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.7142857142857143
+      },
+      {
+        "excel": "Verify alphanumeric characters are not accepted in mobile number field",
+        "code": "T17 - Verify user is not able to login if mobile number contains alphanumeric characters",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number less than 9 digits",
+        "code": "T15 - Verify user is not able to login if mobile number has less than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number more than 9 digits",
+        "code": "T16 - Verify user is not able to login if mobile number has more than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with empty password field",
+        "code": "T19 - Verify that user is not able to login if password field is empty",
+        "score": 0.8
+      },
+      {
+        "excel": "Verify password field is masked by default",
+        "code": "T8. Verify password input is masked",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify password field does not accept less than 8 characters",
+        "code": "T20 - Verify that user is not able to login if password field has less than 5 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify password field does not accept more than 20 characters",
+        "code": "T21 - Verify that user is not able to login if password field has more than 20 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify SUBMIT button is disabled when mandatory fields are empty",
+        "code": "T44-Verify Sign Up Button is disabled when form is empty",
+        "score": 0.5714285714285714
+      }
+    ],
+    "coverage": "46%"
+  },
+  "MW": {
+    "total": 74,
+    "implemented": 29,
+    "missing": [
+      "Verify Sign Up CTA Visibility on Homepage Header",
+      "Verify Banner CTA Triggers Sign Up Modal",
+      "Verify Play Now CTA Does Not Trigger Sign Up Modal",
+      "Verify Favourite Icon Does Not Trigger Sign Up Modal",
+      "Verify Password Field Character Limit Validation",
+      "Verify First Name Field Accepts Valid Input",
+      "Verify Last Name Field Accepts Valid Input",
+      "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions checkbox.",
+      "Verify Successful Sign Up with Valid Registration Details",
+      "Verify tapping Play Now button on game page triggers login prompt",
+      "Verify tapping Favourite icon triggers login prompt",
+      "Verify password visibility eye icon toggle functionality",
+      "Verify error message for invalid credentials",
+      "Verify Forgot Password CTA is displayed below Submit button",
+      "Verify tapping Forgot Password CTA redirects to Password Reset prompt",
+      "Verify only valid account number is accepted on Password Reset prompt",
+      "Verify entering same account number multiple times triggers max attempts error",
+      "Verify entering valid account number redirects to Update Password page",
+      "Verify invalid OTP triggers error message on Update Password page",
+      "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt",
+      "Verify recent transaction list is displayed correctly on page load.",
+      "Verify transaction type displays correctly as Payout/Wager with provider name.",
+      "Verify payout amount is displayed as a positive value.",
+      "Verify wager amount is displayed with a minus sign.",
+      "Verify tapping the Back button redirects the user to the Transaction Summary page.",
+      "Verify user is able to navigate through transaction pages using page numbers.",
+      "Verify user is able to navigate to a specific page using the Go to Page option.",
+      "Verify user is able to navigate transaction pages using Next pagination button.",
+      "Verify user is able to navigate transaction pages using Previous pagination button.",
+      "Verify Transaction Summary Displays Transactions Generated Within Last 30 Days Only",
+      "Verify filter prompt is accessible and displayed correctly.",
+      "Verify selected filters persist after navigating back to the Transaction Summary page.",
+      "Verify calendar allows selection of dates only within the last 30 days.",
+      "Verify default days duration options are displayed correctly.",
+      "Verify selecting the “Last Week” option sets the correct date range.",
+      "Verify selecting the “Last 14 Days” option sets the correct date range.",
+      "Verify selecting the “Last 30 Days” option sets the correct date range.",
+      "Verify user is able to manually change the selected start and end dates.",
+      "Verify transaction list updates according to the selected date range filter.",
+      "Verify appropriate error message is displayed when no transactions are available for the selected date range.",
+      "Verify Filter by Type dropdown displays “All” by default when no transaction type is selected.",
+      "Verify Reset button clears all selected transaction types from the dropdown.",
+      "Verify user is able to remove selected filter tags successfully.",
+      "Verify transaction count is displayed correctly on the dropdown.",
+      "Verify dropdown displays “All” text when all transaction types are selected."
+    ],
+    "matched": [
+      {
+        "excel": "Verify Mobile Number Field Restricts Special Character Input",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify Mobile Number Field Rejects Alphanumeric Input",
+        "code": "T14-Empty Mobile Number Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Mobile Number Field Validates 9-Digit Input Restriction",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Date of Birth Field Allows Valid Date Selection",
+        "code": "T43-Verify Date of Birth Picker",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Referral Code Field Accepts Valid Input",
+        "code": "T39-Verify Referral Code Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Send Promotions Checkbox Functionality",
+        "code": "T42-Verify Promotions Checkbox",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Terms and Conditions Checkbox Functionality",
+        "code": "T41-Verify Terms & Conditions Checkbox",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify Login button is displayed on homepage header",
+        "code": "T1-Verify login Button is visible on Homepage.",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify Login CTA on Sign Up prompt triggers login prompt",
+        "code": "T4. Verify Login CTA visibility and navigation",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Login button is displayed in hamburger menu",
+        "code": "T10 - Verify user is able to login from hamburger menu",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify special characters are not accepted in mobile number field",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.7142857142857143
+      },
+      {
+        "excel": "Verify alphanumeric characters are not accepted in mobile number field",
+        "code": "T17 - Verify user is not able to login if mobile number contains alphanumeric characters",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number less than 9 digits",
+        "code": "T15 - Verify user is not able to login if mobile number has less than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number more than 9 digits",
+        "code": "T16 - Verify user is not able to login if mobile number has more than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with empty password field",
+        "code": "T19 - Verify that user is not able to login if password field is empty",
+        "score": 0.8
+      },
+      {
+        "excel": "Verify password field is masked by default",
+        "code": "T8. Verify password input is masked",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify password field does not accept less than 8 characters",
+        "code": "T20 - Verify that user is not able to login if password field has less than 5 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify password field does not accept more than 20 characters",
+        "code": "T21 - Verify that user is not able to login if password field has more than 20 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify SUBMIT button is disabled when mandatory fields are empty",
+        "code": "T44-Verify Sign Up Button is disabled when form is empty",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify all required column headers are displayed correctly.",
+        "code": "T2. Verify Presence of All Column Headers",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify tapping the Tlog icon opens the transaction detailed view.",
+        "code": "T6. Verify Tlog Icon Opens Detailed View",
+        "score": 0.7142857142857143
+      },
+      {
+        "excel": "Verify tapping the Refresh icon reloads the latest transaction data.",
+        "code": "T9. Verify Refresh Icon Reloads Transaction List",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify Continue button functions correctly on the filter prompt.",
+        "code": "T20. Verify Reset Button on Filter Prompt",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Reset button clears all selected filters on the filter prompt.",
+        "code": "T20. Verify Reset Button on Filter Prompt",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Close button dismisses the filter prompt without applying changes.",
+        "code": "T21. Verify Close Button on Filter Prompt",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Reset button clears the selected calendar date range.",
+        "code": "T34. Verify Calendar Date Selection Reset",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify “Show Only Payout” toggle activates when only “Payout” is selected from transaction type dropdown.",
+        "code": "T38. Verify Show Only Payout Toggle Activation",
+        "score": 0.46153846153846156
+      },
+      {
+        "excel": "Verify “Show Only Payout” toggle deactivates when another filter type is selected along with “Payout”.",
+        "code": "T38. Verify Show Only Payout Toggle Activation",
+        "score": 0.4166666666666667
+      },
+      {
+        "excel": "Verify “Show Only Payout” toggle is deactivates when “Payout” is deselected.",
+        "code": "T38. Verify Show Only Payout Toggle Activation",
+        "score": 0.625
+      }
+    ],
+    "coverage": "39%"
+  },
+  "TZ": {
+    "total": 38,
+    "implemented": 20,
+    "missing": [
+      "Verify Sign Up CTA Visibility on Homepage Header",
+      "Verify Banner CTA Triggers Sign Up Modal",
+      "Verify Play Now CTA Does Not Trigger Sign Up Modal",
+      "Verify Favourite Icon Does Not Trigger Sign Up Modal",
+      "Verify Password Field Character Limit Validation",
+      "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions",
+      "Verify Successful Sign Up with Valid Registration Details",
+      "Verify tapping Play Now button on game page triggers login prompt",
+      "Verify tapping Favourite icon triggers login prompt",
+      "Verify password visibility eye icon toggle functionality",
+      "Verify error message for invalid credentials",
+      "Verify Forgot Password CTA is displayed below Submit button",
+      "Verify tapping Forgot Password CTA redirects to Password Reset prompt",
+      "Verify only valid account number is accepted on Password Reset prompt",
+      "Verify entering same account number multiple times triggers max attempts error",
+      "Verify entering valid account number redirects to Update Password page",
+      "Verify invalid OTP triggers error message on Update Password page",
+      "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    ],
+    "matched": [
+      {
+        "excel": "Verify Mobile Number Field Restricts Special Character Input",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify Mobile Number Field Rejects Alphanumeric Input",
+        "code": "T14-Empty Mobile Number Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Mobile Number Field Validates 9-Digit Input Restriction",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Preferred Language Dropdown Displays Available Options",
+        "code": "T38-Verify Preferred Language Dropdown",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Referral Code Field Accepts Valid Input",
+        "code": "T39-Verify Referral Code Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Send Promotions Checkbox Functionality",
+        "code": "T42-Verify Promotions Checkbox",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Terms and Conditions Checkbox Functionality",
+        "code": "T41-Verify Terms & Conditions Checkbox",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify Agree to All Checkbox Functionality",
+        "code": "T40-Verify Agree to All Checkbox",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify Login button is displayed on homepage header",
+        "code": "T1-Verify login Button is visible on Homepage.",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify Login CTA on Sign Up prompt triggers login prompt",
+        "code": "T4. Verify Login CTA visibility and navigation",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Login button is displayed in hamburger menu",
+        "code": "T10 - Verify user is able to login from hamburger menu",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify special characters are not accepted in mobile number field",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.7142857142857143
+      },
+      {
+        "excel": "Verify alphanumeric characters are not accepted in mobile number field",
+        "code": "T17 - Verify user is not able to login if mobile number contains alphanumeric characters",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number less than 9 digits",
+        "code": "T15 - Verify user is not able to login if mobile number has less than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number more than 9 digits",
+        "code": "T16 - Verify user is not able to login if mobile number has more than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with empty password field",
+        "code": "T19 - Verify that user is not able to login if password field is empty",
+        "score": 0.8
+      },
+      {
+        "excel": "Verify password field is masked by default",
+        "code": "T8. Verify password input is masked",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify password field does not accept less than 8 characters",
+        "code": "T20 - Verify that user is not able to login if password field has less than 5 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify password field does not accept more than 20 characters",
+        "code": "T21 - Verify that user is not able to login if password field has more than 20 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify SUBMIT button is disabled when mandatory fields are empty",
+        "code": "T44-Verify Sign Up Button is disabled when form is empty",
+        "score": 0.5714285714285714
+      }
+    ],
+    "coverage": "53%"
+  },
+  "ZA": {
+    "total": 44,
+    "implemented": 20,
+    "missing": [
+      "Verify Sign Up CTA Visibility on Homepage Header",
+      "Verify Banner CTA Triggers Sign Up Modal",
+      "Verify Play Now CTA Does Not Trigger Sign Up Modal",
+      "Verify Favourite Icon Does Not Trigger Sign Up Modal",
+      "Verify Password Field Character Limit Validation",
+      "Verify First Name Field Accepts Valid Input",
+      "Verify Last Name Field Accepts Valid Input",
+      "Verify Email Address Field Accepts Valid Email Format",
+      "Verify Invalid Email Address Format Triggers Validation",
+      "Verify ID Number Type Dropdown Displays South African ID and Passport Options",
+      "Verify Source of Income Dropdown Displays Available Options",
+      "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions",
+      "Verify Successful Sign Up with Valid Registration Details",
+      "Verify tapping Play Now button on game page triggers login prompt",
+      "Verify tapping Favourite icon triggers login prompt",
+      "Verify password visibility eye icon toggle functionality",
+      "Verify error message for invalid credentials",
+      "Verify Forgot Password CTA is displayed below Submit button",
+      "Verify tapping Forgot Password CTA redirects to Password Reset prompt",
+      "Verify only valid account number is accepted on Password Reset prompt",
+      "Verify entering same account number multiple times triggers max attempts error",
+      "Verify entering valid account number redirects to Update Password page",
+      "Verify invalid OTP triggers error message on Update Password page",
+      "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    ],
+    "matched": [
+      {
+        "excel": "Verify Mobile Number Field Restricts Special Character Input",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify Mobile Number Field Rejects Alphanumeric Input",
+        "code": "T14-Empty Mobile Number Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Mobile Number Field Validates 9-Digit Input Restriction",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Referral Code Field Accepts Valid Input",
+        "code": "T39-Verify Referral Code Field",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Date of Birth Field Allows Valid Date Selection",
+        "code": "T43-Verify Date of Birth Picker",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Send Promotions Checkbox Functionality",
+        "code": "T42-Verify Promotions Checkbox",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify Terms and Conditions Checkbox Functionality",
+        "code": "T41-Verify Terms & Conditions Checkbox",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify Agree to All Checkbox Functionality",
+        "code": "T40-Verify Agree to All Checkbox",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify Login button is displayed on homepage header",
+        "code": "T1-Verify login Button is visible on Homepage.",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify Login CTA on Sign Up prompt triggers login prompt",
+        "code": "T4. Verify Login CTA visibility and navigation",
+        "score": 0.42857142857142855
+      },
+      {
+        "excel": "Verify Login button is displayed in hamburger menu",
+        "code": "T10 - Verify user is able to login from hamburger menu",
+        "score": 0.6
+      },
+      {
+        "excel": "Verify special characters are not accepted in mobile number field",
+        "code": "T18 - Verify user is not able to enter special characters in mobile number field",
+        "score": 0.7142857142857143
+      },
+      {
+        "excel": "Verify alphanumeric characters are not accepted in mobile number field",
+        "code": "T17 - Verify user is not able to login if mobile number contains alphanumeric characters",
+        "score": 0.5714285714285714
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number less than 9 digits",
+        "code": "T15 - Verify user is not able to login if mobile number has less than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with mobile number more than 9 digits",
+        "code": "T16 - Verify user is not able to login if mobile number has more than 9 digits",
+        "score": 0.75
+      },
+      {
+        "excel": "Verify user is not able to login with empty password field",
+        "code": "T19 - Verify that user is not able to login if password field is empty",
+        "score": 0.8
+      },
+      {
+        "excel": "Verify password field is masked by default",
+        "code": "T8. Verify password input is masked",
+        "score": 0.5
+      },
+      {
+        "excel": "Verify password field does not accept less than 8 characters",
+        "code": "T20 - Verify that user is not able to login if password field has less than 5 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify password field does not accept more than 20 characters",
+        "code": "T21 - Verify that user is not able to login if password field has more than 20 characters",
+        "score": 0.625
+      },
+      {
+        "excel": "Verify SUBMIT button is disabled when mandatory fields are empty",
+        "code": "T44-Verify Sign Up Button is disabled when form is empty",
+        "score": 0.5714285714285714
+      }
+    ],
+    "coverage": "45%"
+  }
+}

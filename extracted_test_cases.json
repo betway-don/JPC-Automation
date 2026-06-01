@@ -1,0 +1,1010 @@
+{
+  "GH": [
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_001",
+      "title": "Verify Sign Up CTA Visibility on Homepage Header"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_002",
+      "title": "Verify Banner CTA Triggers Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_003",
+      "title": "Verify Play Now CTA Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_004",
+      "title": "Verify Favourite Icon Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_005",
+      "title": "Verify Mobile Number Field Restricts Special Character Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_006",
+      "title": "Verify Mobile Number Field Accepts Numeric Input Only"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_007",
+      "title": "Verify Mobile Number Field Restricts Input Beyond Maximum 9 Digit Limit"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_008",
+      "title": "Verify Mobile Number Field Displays Validation for Empty Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_009",
+      "title": "Verify Password Field Character Limit Validation"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_010",
+      "title": "Verify Password Field Masks Entered Characters"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_011",
+      "title": "Verify Password Field Accepts Valid Character Combination"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_012",
+      "title": "Verify Password Field Displays Validation for Empty Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_013",
+      "title": "Verify Date of Birth Field Allows Valid Date Selection"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_014",
+      "title": "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_015",
+      "title": "Verify Successful Sign Up with Valid Registration Details"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_016",
+      "title": "Verify Sign Up Button Remains Disabled When Form is Empty"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_001",
+      "title": "Verify Login button is displayed on homepage header"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_002",
+      "title": "Verify tapping Play Now button on game page triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_003",
+      "title": "Verify Login CTA on Sign Up prompt triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_004",
+      "title": "Verify Login button is displayed in hamburger menu"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_005",
+      "title": "Verify tapping Favourite icon triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_006",
+      "title": "Verify special characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_007",
+      "title": "Verify alphanumeric characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_008",
+      "title": "Verify user is not able to login with mobile number less than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_009",
+      "title": "Verify user is not able to login with mobile number more than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_010",
+      "title": "Verify user is not able to login with empty password field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_011",
+      "title": "Verify password field is masked by default"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_012",
+      "title": "Verify password visibility eye icon toggle functionality"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_013",
+      "title": "Verify password field does not accept less than 8 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_014",
+      "title": "Verify password field does not accept more than 20 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_015",
+      "title": "Verify error message for invalid credentials"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_016",
+      "title": "Verify SUBMIT button is disabled when mandatory fields are empty"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_017",
+      "title": "Verify Forgot Password CTA is displayed below Submit button"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_018",
+      "title": "Verify tapping Forgot Password CTA redirects to Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_019",
+      "title": "Verify only valid account number is accepted on Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_020",
+      "title": "Verify entering same account number multiple times triggers max attempts error"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_021",
+      "title": "Verify entering valid account number redirects to Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_022",
+      "title": "Verify invalid OTP triggers error message on Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_023",
+      "title": "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    }
+  ],
+  "MW": [
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_001",
+      "title": "Verify Sign Up CTA Visibility on Homepage Header"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_002",
+      "title": "Verify Banner CTA Triggers Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_003",
+      "title": "Verify Play Now CTA Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_004",
+      "title": "Verify Favourite Icon Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_005",
+      "title": "Verify Mobile Number Field Restricts Special Character Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_006",
+      "title": "Verify Mobile Number Field Rejects Alphanumeric Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_007",
+      "title": "Verify Mobile Number Field Validates 9-Digit Input Restriction"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_008",
+      "title": "Verify Password Field Character Limit Validation"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_009",
+      "title": "Verify First Name Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_010",
+      "title": "Verify Last Name Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_011",
+      "title": "Verify Date of Birth Field Allows Valid Date Selection"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_012",
+      "title": "Verify Referral Code Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_013",
+      "title": "Verify Send Promotions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_014",
+      "title": "Verify Terms and Conditions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_016",
+      "title": "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions checkbox."
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_017",
+      "title": "Verify Successful Sign Up with Valid Registration Details"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_001",
+      "title": "Verify Login button is displayed on homepage header"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_002",
+      "title": "Verify tapping Play Now button on game page triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_003",
+      "title": "Verify Login CTA on Sign Up prompt triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_004",
+      "title": "Verify Login button is displayed in hamburger menu"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_005",
+      "title": "Verify tapping Favourite icon triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_006",
+      "title": "Verify special characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_007",
+      "title": "Verify alphanumeric characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_008",
+      "title": "Verify user is not able to login with mobile number less than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_009",
+      "title": "Verify user is not able to login with mobile number more than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_010",
+      "title": "Verify user is not able to login with empty password field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_011",
+      "title": "Verify password field is masked by default"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_012",
+      "title": "Verify password visibility eye icon toggle functionality"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_013",
+      "title": "Verify password field does not accept less than 8 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_014",
+      "title": "Verify password field does not accept more than 20 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_015",
+      "title": "Verify error message for invalid credentials"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_016",
+      "title": "Verify SUBMIT button is disabled when mandatory fields are empty"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_017",
+      "title": "Verify Forgot Password CTA is displayed below Submit button"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_018",
+      "title": "Verify tapping Forgot Password CTA redirects to Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_019",
+      "title": "Verify only valid account number is accepted on Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_020",
+      "title": "Verify entering same account number multiple times triggers max attempts error"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_021",
+      "title": "Verify entering valid account number redirects to Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_022",
+      "title": "Verify invalid OTP triggers error message on Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_023",
+      "title": "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "Transaction Summary Page",
+      "title": ""
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_001",
+      "title": "Verify recent transaction list is displayed correctly on page load."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_002",
+      "title": "Verify all required column headers are displayed correctly."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_003",
+      "title": "Verify transaction type displays correctly as Payout/Wager with provider name."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_004",
+      "title": "Verify payout amount is displayed as a positive value."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_005",
+      "title": "Verify wager amount is displayed with a minus sign."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_006",
+      "title": "Verify tapping the Tlog icon opens the transaction detailed view."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_007",
+      "title": "Verify tapping the Back button redirects the user to the Transaction Summary page."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_008",
+      "title": "Verify tapping the Refresh icon reloads the latest transaction data."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_009",
+      "title": "Verify user is able to navigate through transaction pages using page numbers."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_010",
+      "title": "Verify user is able to navigate to a specific page using the Go to Page option."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_011",
+      "title": "Verify user is able to navigate transaction pages using Next pagination button."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_012",
+      "title": "Verify user is able to navigate transaction pages using Previous pagination button."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_013",
+      "title": "Verify Transaction Summary Displays Transactions Generated Within Last 30 Days Only"
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "Filter UI UX",
+      "title": ""
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_013",
+      "title": "Verify filter prompt is accessible and displayed correctly."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_014",
+      "title": "Verify selected filters persist after navigating back to the Transaction Summary page."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_015",
+      "title": "Verify Continue button functions correctly on the filter prompt."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_016",
+      "title": "Verify Reset button clears all selected filters on the filter prompt."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_017",
+      "title": "Verify Close button dismisses the filter prompt without applying changes."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "Calendar",
+      "title": ""
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_018",
+      "title": "Verify calendar allows selection of dates only within the last 30 days."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_019",
+      "title": "Verify default days duration options are displayed correctly."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_020",
+      "title": "Verify selecting the “Last Week” option sets the correct date range."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_021",
+      "title": "Verify selecting the “Last 14 Days” option sets the correct date range."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_022",
+      "title": "Verify selecting the “Last 30 Days” option sets the correct date range."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_023",
+      "title": "Verify user is able to manually change the selected start and end dates."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_024",
+      "title": "Verify transaction list updates according to the selected date range filter."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_025",
+      "title": "Verify Reset button clears the selected calendar date range."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_026",
+      "title": "Verify appropriate error message is displayed when no transactions are available for the selected date range."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "Payout Toggle",
+      "title": ""
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_027",
+      "title": "Verify “Show Only Payout” toggle activates when only “Payout” is selected from transaction type dropdown."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_028",
+      "title": "Verify “Show Only Payout” toggle deactivates when another filter type is selected along with “Payout”."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_029",
+      "title": "Verify “Show Only Payout” toggle is deactivates when “Payout” is deselected."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "Filter Type Dropdown",
+      "title": ""
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_030",
+      "title": "Verify Filter by Type dropdown displays “All” by default when no transaction type is selected."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_031",
+      "title": "Verify Reset button clears all selected transaction types from the dropdown."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_032",
+      "title": "Verify user is able to remove selected filter tags successfully."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_033",
+      "title": "Verify transaction count is displayed correctly on the dropdown."
+    },
+    {
+      "sheet": "Transaction Summary",
+      "id": "TC_TRANS_034",
+      "title": "Verify dropdown displays “All” text when all transaction types are selected."
+    }
+  ],
+  "TZ": [
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_001",
+      "title": "Verify Sign Up CTA Visibility on Homepage Header"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_002",
+      "title": "Verify Banner CTA Triggers Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_003",
+      "title": "Verify Play Now CTA Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_004",
+      "title": "Verify Favourite Icon Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_005",
+      "title": "Verify Mobile Number Field Restricts Special Character Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_006",
+      "title": "Verify Mobile Number Field Rejects Alphanumeric Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_007",
+      "title": "Verify Mobile Number Field Validates 9-Digit Input Restriction"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_008",
+      "title": "Verify Password Field Character Limit Validation"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_009",
+      "title": "Verify Preferred Language Dropdown Displays Available Options"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_010",
+      "title": "Verify Referral Code Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_011",
+      "title": "Verify Send Promotions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_012",
+      "title": "Verify Terms and Conditions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_013",
+      "title": "Verify Agree to All Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_014",
+      "title": "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_015",
+      "title": "Verify Successful Sign Up with Valid Registration Details"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_001",
+      "title": "Verify Login button is displayed on homepage header"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_002",
+      "title": "Verify tapping Play Now button on game page triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_003",
+      "title": "Verify Login CTA on Sign Up prompt triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_004",
+      "title": "Verify Login button is displayed in hamburger menu"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_005",
+      "title": "Verify tapping Favourite icon triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_006",
+      "title": "Verify special characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_007",
+      "title": "Verify alphanumeric characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_008",
+      "title": "Verify user is not able to login with mobile number less than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_009",
+      "title": "Verify user is not able to login with mobile number more than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_010",
+      "title": "Verify user is not able to login with empty password field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_011",
+      "title": "Verify password field is masked by default"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_012",
+      "title": "Verify password visibility eye icon toggle functionality"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_013",
+      "title": "Verify password field does not accept less than 8 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_014",
+      "title": "Verify password field does not accept more than 20 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_015",
+      "title": "Verify error message for invalid credentials"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_016",
+      "title": "Verify SUBMIT button is disabled when mandatory fields are empty"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_017",
+      "title": "Verify Forgot Password CTA is displayed below Submit button"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_018",
+      "title": "Verify tapping Forgot Password CTA redirects to Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_019",
+      "title": "Verify only valid account number is accepted on Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_020",
+      "title": "Verify entering same account number multiple times triggers max attempts error"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_021",
+      "title": "Verify entering valid account number redirects to Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_022",
+      "title": "Verify invalid OTP triggers error message on Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_023",
+      "title": "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    }
+  ],
+  "ZA": [
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_001",
+      "title": "Verify Sign Up CTA Visibility on Homepage Header"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_002",
+      "title": "Verify Banner CTA Triggers Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_003",
+      "title": "Verify Play Now CTA Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_004",
+      "title": "Verify Favourite Icon Does Not Trigger Sign Up Modal"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_005",
+      "title": "Verify Mobile Number Field Restricts Special Character Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_006",
+      "title": "Verify Mobile Number Field Rejects Alphanumeric Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_007",
+      "title": "Verify Mobile Number Field Validates 9-Digit Input Restriction"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_008",
+      "title": "Verify Password Field Character Limit Validation"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_009",
+      "title": "Verify First Name Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_010",
+      "title": "Verify Last Name Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_011",
+      "title": "Verify Email Address Field Accepts Valid Email Format"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_012",
+      "title": "Verify Invalid Email Address Format Triggers Validation"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_022",
+      "title": "Verify Referral Code Field Accepts Valid Input"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_013",
+      "title": "Verify ID Number Type Dropdown Displays South African ID and Passport Options"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_014",
+      "title": "Verify Date of Birth Field Allows Valid Date Selection"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_015",
+      "title": "Verify Source of Income Dropdown Displays Available Options"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_016",
+      "title": "Verify Send Promotions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_017",
+      "title": "Verify Terms and Conditions Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_020",
+      "title": "Verify Agree to All Checkbox Functionality"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_018",
+      "title": "Verify Sign Up Submission Restriction Without Accepting Terms and Conditions"
+    },
+    {
+      "sheet": "Register",
+      "id": "TC_SIGNUP_019",
+      "title": "Verify Successful Sign Up with Valid Registration Details"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_001",
+      "title": "Verify Login button is displayed on homepage header"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_002",
+      "title": "Verify tapping Play Now button on game page triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_003",
+      "title": "Verify Login CTA on Sign Up prompt triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_004",
+      "title": "Verify Login button is displayed in hamburger menu"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_005",
+      "title": "Verify tapping Favourite icon triggers login prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_006",
+      "title": "Verify special characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_007",
+      "title": "Verify alphanumeric characters are not accepted in mobile number field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_008",
+      "title": "Verify user is not able to login with mobile number less than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_009",
+      "title": "Verify user is not able to login with mobile number more than 9 digits"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_010",
+      "title": "Verify user is not able to login with empty password field"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_011",
+      "title": "Verify password field is masked by default"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_012",
+      "title": "Verify password visibility eye icon toggle functionality"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_013",
+      "title": "Verify password field does not accept less than 8 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_014",
+      "title": "Verify password field does not accept more than 20 characters"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_015",
+      "title": "Verify error message for invalid credentials"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_016",
+      "title": "Verify SUBMIT button is disabled when mandatory fields are empty"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_017",
+      "title": "Verify Forgot Password CTA is displayed below Submit button"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_018",
+      "title": "Verify tapping Forgot Password CTA redirects to Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_019",
+      "title": "Verify only valid account number is accepted on Password Reset prompt"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_020",
+      "title": "Verify entering same account number multiple times triggers max attempts error"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_021",
+      "title": "Verify entering valid account number redirects to Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_022",
+      "title": "Verify invalid OTP triggers error message on Update Password page"
+    },
+    {
+      "sheet": "Login",
+      "id": "TC_LOGIN_023",
+      "title": "Verify \"Don’t have an account yet? Register\" navigation to Sign Up prompt"
+    }
+  ]
+}

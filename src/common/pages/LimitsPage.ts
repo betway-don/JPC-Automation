@@ -1,9 +1,7 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromExcel } from '../../global/utils/file-utils/excelReader';
+import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
-
-const LOCATOR_URL = "src/global/utils/file-utils/locators.xlsx";
 
 export class LimitsPage {
     readonly page: Page;
@@ -11,15 +9,7 @@ export class LimitsPage {
 
     constructor(page: Page, public readonly safeActions: SafeActions) {
         this.page = page;
-
-        let configs = loadLocatorsFromExcel(LOCATOR_URL, "limits");
-
-        const mockData = this.getMockLocatorData();
-        if (!configs || Object.keys(configs).length === 0) {
-            configs = mockData;
-        } else {
-            configs = { ...mockData, ...configs };
-        }
+        const configs = loadLocatorsFromJson('limits');
 
         this.locators = {
             depositButton: getLocator(this.page, configs["depositButton"]),
@@ -194,40 +184,4 @@ export class LimitsPage {
     }
 
 
-    // --- Mock Data (Fixed with .gap-4 to avoid strict mode errors) ---
-    protected getMockLocatorData(): Record<string, any> {
-        return {
-            "depositButton": { type: "role", value: "button", options: '{"name":"Deposit"}', nth: 0 },
-            "responsibleGamingButton": { type: "role", value: "button", options: '{"name":"responsible gaming"}', nth: 0 },
-            "limitsTab": { type: "id", value: "Limits", options: '{}', nth: 0 },
-            "limitsOptionsContainer": { type: "css", value: ".tabs-content", options: '{}', nth: 0 },
-
-            // Daily - Added .gap-4
-            "dailyLimitSection": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Daily')", options: '{}', nth: 0 },
-            "dailyLimitInput": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Daily') >> input", options: '{}', nth: 0 },
-            "dailyLimitSetButton": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Daily') >> button:has-text('Set Your Limit')", options: '{}', nth: 0 },
-            "dailyAccruedBar": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Daily') >> role=progressbar", options: '{}', nth: 0 },
-
-            // Weekly - Added .gap-4
-            "weeklyLimitSection": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Weekly')", options: '{}', nth: 0 },
-            "weeklyLimitInput": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Weekly') >> input", options: '{}', nth: 0 },
-            "weeklyLimitSetButton": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Weekly') >> button:has-text('Set Your Limit')", options: '{}', nth: 0 },
-            "weeklyAccruedBar": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Weekly') >> role=progressbar", options: '{}', nth: 0 },
-
-            // Monthly - Added .gap-4
-            "monthlyLimitSection": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Monthly')", options: '{}', nth: 0 },
-            "monthlyLimitInput": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Monthly') >> input", options: '{}', nth: 0 },
-            "monthlyLimitSetButton": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Monthly') >> button:has-text('Set Your Limit')", options: '{}', nth: 0 },
-            "monthlyAccruedBar": { type: "css", value: ".relative.flex.gap-4:has-text('Duration Monthly') >> role=progressbar", options: '{}', nth: 0 },
-
-            "coolingOffContainer": { type: "css", value: ".tabs-content:has-text('Cooling off Period')", options: '{}', nth: 0 },
-            "disabledCoolingOffButton": { type: "css", value: ".tabs-content:has-text('Cooling off Period') >> button:has-text('Continue')", options: '{}', nth: 0 },
-
-            "sessionSection": { type: "css", value: ".relative.flex.gap-4:has-text('Session Timer')", options: '{}', nth: 0 },
-            "timeDropdown": { type: "css", value: ".relative.flex.gap-4:has-text('Session Timer') >> role=combobox", options: '{}', nth: 0 },
-            "submitButton": { type: "css", value: ".relative.flex.gap-4:has-text('Session Timer') >> button:has-text('Submit')", options: '{}', nth: 0 },
-
-            "successPopup": { type: "css", value: "div.border-red-500", options: '{}', nth: 0 },
-        };
-    }
 }
