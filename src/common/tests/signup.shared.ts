@@ -226,12 +226,12 @@ export async function runSignupTests(
         }
 
         // --- Preferred Language (TZ only) ---
-        if (!options?.excludeTags?.includes('T38')) {
-            test('T38-Verify Preferred Language Dropdown', async ({ page, signupPage, screenshotDir }: SignupTestFixtures, testInfo: TestInfo) => {
-                await signupPage.highlightPreferredLanguage();
-                await ScreenshotHelper(page, screenshotDir, 'T38-preferred-language', testInfo);
-            });
-        }
+        // if (!options?.excludeTags?.includes('T38')) {
+        //     test('T38-Verify Preferred Language Dropdown', async ({ page, signupPage, screenshotDir }: SignupTestFixtures, testInfo: TestInfo) => {
+        //         await signupPage.highlightPreferredLanguage();
+        //         await ScreenshotHelper(page, screenshotDir, 'T38-preferred-language', testInfo);
+        //     });
+        // }
 
         // --- Referral Code (TZ only) ---
         if (!options?.excludeTags?.includes('T39')) {

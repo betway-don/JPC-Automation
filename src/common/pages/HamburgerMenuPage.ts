@@ -61,7 +61,8 @@ export class HamburgerMenuPage {
             hamburgerSignUpCTA: getLocator(this.page, configs["hamburgerSignUpCTA"]),
             newGamesCTA: getLocator(this.page, configs["newGamesCTA"]),
             crashGamesCTA: getLocator(this.page, configs["crashGamesCTA"]),
-            updatePasswordCTA: getLocator(this.page, configs["updatePasswordCTA"]),
+            transactionSummaryShortcut: getLocator(this.page, configs["transactionSummaryShortcut"]),
+            cityRewardsShortcut: getLocator(this.page, configs["cityRewardsShortcut"]),
         };
     }
 
@@ -173,8 +174,12 @@ export class HamburgerMenuPage {
         await this.safeActions.safeClick('crashGamesCTA', this.locators.crashGamesCTA);
     }
 
-    async clickUpdatePasswordCTA() {
-        await this.safeActions.safeClick('updatePasswordCTA', this.locators.updatePasswordCTA);
+    async clickTransactionSummaryShortcut() {
+        await this.safeActions.safeClick('transactionSummaryShortcut', this.locators.transactionSummaryShortcut);
+    }
+
+    async clickCityRewardsShortcut() {
+        await this.safeActions.safeClick('cityRewardsShortcut', this.locators.cityRewardsShortcut);
     }
 
     // Highlight methods

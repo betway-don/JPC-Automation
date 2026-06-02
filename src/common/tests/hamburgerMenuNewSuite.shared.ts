@@ -436,19 +436,23 @@ export async function runHamburgerMenuNewSuiteTests(
             await ScreenshotHelper(page, screenshotDir, 'HM-LI-008-withdrawalCTA', testInfo);
         });
 
-        // TODO: provide HTML (direct shortcut, not via My Account dropdown)
+        // ✓ AUTOMATED
         test('HM-LI-009 - Verify Transaction Summary CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
             await page.waitForTimeout(1000);
-            // TODO: highlight the direct Transaction Summary shortcut and verify it opens the window
+            await hamburgerMenuPage.highlightElement('transactionSummaryShortcut');
+            await hamburgerMenuPage.clickTransactionSummaryShortcut();
+            await page.waitForTimeout(1000);
             await ScreenshotHelper(page, screenshotDir, 'HM-LI-009-transactionSummaryDirect', testInfo);
         });
 
-        // TODO: provide HTML (direct shortcut, not via My Account dropdown)
+        // ✓ AUTOMATED
         test('HM-LI-010 - Verify the City Rewards CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
             await page.waitForTimeout(1000);
-            // TODO: highlight the direct City Rewards shortcut and verify it opens the window
+            await hamburgerMenuPage.highlightElement('cityRewardsShortcut');
+            await hamburgerMenuPage.clickCityRewardsShortcut();
+            await page.waitForTimeout(1000);
             await ScreenshotHelper(page, screenshotDir, 'HM-LI-010-cityRewardsDirect', testInfo);
         });
 
@@ -524,13 +528,12 @@ export async function runHamburgerMenuNewSuiteTests(
             await ScreenshotHelper(page, screenshotDir, 'HM-LI-018-myProfile', testInfo);
         });
 
-        // TODO: confirm exact label for Update Password in My Account dropdown
+        // NOTE: Update Password CTA not present in hamburger My Account dropdown for ZA
         test('HM-LI-019 - Verify Update Password CTA', async ({ page, hamburgerMenuPage, screenshotDir }: HamburgerMenuFixtures, testInfo: TestInfo) => {
             await hamburgerMenuPage.openMenu();
             await page.waitForTimeout(1000);
             await hamburgerMenuPage.clickMyAccount();
             await page.waitForTimeout(500);
-            // Screenshot expanded My Account dropdown — check label and update updatePasswordCTA locator
             await ScreenshotHelper(page, screenshotDir, 'HM-LI-019-updatePassword', testInfo);
         });
 

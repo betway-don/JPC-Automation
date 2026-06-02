@@ -45,8 +45,8 @@
         "specialLast": "Smith$%"
     },
     "loginValid": {
-        "mobile": "866224463",
-        "password": "Jackpot@12345"
+        "mobile": "866224462",
+        "password": "Jackpot@1234"
     },
     "loginInvalid": {
         "shortMobile": "12345678",

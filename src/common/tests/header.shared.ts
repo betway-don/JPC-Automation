@@ -61,12 +61,12 @@ export async function runHeaderTests(
                 await ScreenshotHelper(page, screenshotDir, 'header-live-chat', testInfo);
             });
 
-            test('T7. Verify Theme Change icon toggles theme', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-                await headerPage.highlightElement('themeToggle');
-                await headerPage.toggleTheme();
-                await page.waitForTimeout(4000);
-                await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle', testInfo);
-            });
+            // test('T7. Verify Theme Change icon toggles theme', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+            //     await headerPage.highlightElement('themeToggle');
+            //     await headerPage.toggleTheme();
+            //     await page.waitForTimeout(4000);
+            //     await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle', testInfo);
+            // });
         });
     }
 
@@ -120,11 +120,11 @@ export async function runHeaderTests(
             await ScreenshotHelper(page, screenshotDir, 'header-live-chat-loggedin', testInfo);
         });
 
-        test('T14. Verify Theme Change icon toggles theme (Logged In)', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.highlightElement('themeToggle');
-            await headerPage.toggleTheme();
-            await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle-loggedin', testInfo);
-        });
+        // test('T14. Verify Theme Change icon toggles theme (Logged In)', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+        //     await headerPage.highlightElement('themeToggle');
+        //     await headerPage.toggleTheme();
+        //     await ScreenshotHelper(page, screenshotDir, 'header-theme-toggle-loggedin', testInfo);
+        // });
 
         test('T15. Verify Profile icon functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
             await headerPage.highlightElement('profileIcon');

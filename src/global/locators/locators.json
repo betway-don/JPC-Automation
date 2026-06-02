@@ -94,7 +94,9 @@
     { "key": "slotGamesCTA",           "type": "css",  "value": "div:has-text(\"Game Categories\") >> text=\"Slot Games\"",  "options": {}, "nth": 0 },
     { "key": "betGamesCTA",            "type": "css",  "value": "div:has-text(\"Game Categories\") >> text=\"Betgames\"",    "options": {}, "nth": 0 },
     { "key": "quickGamesCTA",          "type": "css",  "value": "div:has-text(\"Game Categories\") >> text=\"Quick Games\"", "options": {}, "nth": 0 },
-    { "key": "crashGamesCTA",          "type": "css",  "value": "div:has-text(\"Game Categories\") >> text=\"Crash Games\"", "options": {}, "nth": 0 }
+    { "key": "crashGamesCTA",          "type": "css",  "value": "div:has-text(\"Game Categories\") >> text=\"Crash Games\"", "options": {}, "nth": 0 },
+    { "key": "transactionSummaryShortcut", "type": "css", "value": ".hamburger-account-options:has-text(\"Transaction Summary\")", "options": {}, "nth": 0 },
+    { "key": "cityRewardsShortcut",    "type": "css",  "value": ".hamburger-account-options:has-text(\"City Rewards\")", "options": {}, "nth": 0 }
   ],
 
   "header": [
