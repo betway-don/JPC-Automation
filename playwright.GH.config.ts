@@ -11,7 +11,7 @@ export default defineConfig({
         ['html', { outputFolder: 'src/regions/GH/reports/html-report', open: 'never' }],
         ['allure-playwright', { outputFolder: 'src/regions/GH/reports/allure-results' }],
         ['list'],
-        ['blob', { outputDir: 'blob-report' }],
+        ['blob', { outputDir: process.env.BLOB_OUTPUT_DIR || 'blob-report' }],
     ],
     use: {
         baseURL: 'https://www.jackpotcitycasino.com.gh/',

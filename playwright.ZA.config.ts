@@ -103,7 +103,7 @@ export default defineConfig({
     ['json', { outputFile: path.resolve(__dirname, 'src/regions/ZA/reports', process.env.PLAYWRIGHT_JSON_OUTPUT_NAME || 'test-results.json') }],
     ['allure-playwright', { resultsDir: path.resolve(__dirname, 'src/regions/ZA/reports/allure-results') }],
     ['./src/common/utils/FailedScreenshotReporter.ts'],
-    ['blob', { outputDir: 'blob-report' }],
+    ['blob', { outputDir: process.env.BLOB_OUTPUT_DIR || 'blob-report' }],
   ],
  
   // ['json', { outputFile: 'test-results.json' }],
