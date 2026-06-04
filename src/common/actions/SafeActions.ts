@@ -15,7 +15,7 @@ export class SafeActions {
 
     constructor(public page: Page) {
         this.aiClient = new AIClient();
-        this.defaultTimeout = process.env.ANDROID_DEVICE ? 30000 : 5000;
+        this.defaultTimeout = process.env.ANDROID_DEVICE ? 30000 : 60000;
     }
 
     /**
