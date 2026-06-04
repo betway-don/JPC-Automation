@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 200000,
   forbidOnly: !!process.env.CI,
   retries: 1,
-  workers: process.env.CI ? 1 : 1,
+  workers: process.env.CI ? 1 : 6,
   reporter: [
     ['html', { outputFolder: 'src/regions/TZ/reports/html-report', open: 'never' }],
     ['allure-playwright', { outputFolder: 'src/regions/TZ/reports/allure-results' }]
