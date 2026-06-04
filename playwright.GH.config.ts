@@ -9,7 +9,9 @@ export default defineConfig({
     workers: process.env.CI ? 1 : 6,
     reporter: [
         ['html', { outputFolder: 'src/regions/GH/reports/html-report', open: 'never' }],
-        ['allure-playwright', { outputFolder: 'src/regions/GH/reports/allure-results' }]
+        ['allure-playwright', { outputFolder: 'src/regions/GH/reports/allure-results' }],
+        ['list'],
+        ['blob', { outputDir: 'blob-report' }],
     ],
     use: {
         baseURL: 'https://www.jackpotcitycasino.com.gh/',
