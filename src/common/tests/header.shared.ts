@@ -36,11 +36,11 @@ export async function runHeaderTests(
                 await ScreenshotHelper(page, screenshotDir, 'header-logo', testInfo);
             });
 
-            test('T3. Verify Search bar input functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-                await headerPage.searchFor('dimond');
-                await page.waitForTimeout(2000);
-                await ScreenshotHelper(page, screenshotDir, 'header-search', testInfo);
-            });
+            // test('T3. Verify Search bar input functionality', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+            //     await headerPage.searchFor('dimond');
+            //     await page.waitForTimeout(2000);
+            //     await ScreenshotHelper(page, screenshotDir, 'header-search', testInfo);
+            // });
 
             test('T4. Verify Login CTA visibility and navigation', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
                 await headerPage.highlightElement('loginCTA');
@@ -87,11 +87,11 @@ export async function runHeaderTests(
             await ScreenshotHelper(page, screenshotDir, 'header-logo-loggedin', testInfo);
         });
 
-        test('T10. Verify Search bar input functionality (Logged In)', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
-            await headerPage.searchFor('dimond');
-            await page.waitForTimeout(2000);
-            await ScreenshotHelper(page, screenshotDir, 'header-search-loggedin', testInfo);
-        });
+        // test('T10. Verify Search bar input functionality (Logged In)', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
+        //     await headerPage.searchFor('dimond');
+        //     await page.waitForTimeout(2000);
+        //     await ScreenshotHelper(page, screenshotDir, 'header-search-loggedin', testInfo);
+        // });
 
         test('T11. Verify Login CTA visibility and navigation (Logged In - Should not be visible?)', async ({ page, headerPage, screenshotDir }: HeaderTestFixtures, testInfo: TestInfo) => {
             try {

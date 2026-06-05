@@ -8,7 +8,9 @@ export enum TransactionFilterType {
     PAYOUT = 'Payout',
     WAGER = 'Wager',
     BONUS = 'Bonus',
-    ACCOUNT_ADJUSTMENT = 'Account Adjustment'
+    ACCOUNT_ADJUSTMENT = 'Account Adjustment',
+    WITHDRAWAL = 'Withdrawal',
+    DEPOSIT = 'Deposit'
 }
 
 export class TransactionHistoryPage {
@@ -68,6 +70,8 @@ export class TransactionHistoryPage {
             wagerOption: getLocator(this.page, configs["wagerOption"]),
             bonusOption: getLocator(this.page, configs["bonusOption"]),
             accountAdjustmentOption: getLocator(this.page, configs["accountAdjustmentOption"]),
+            withdrawalOption: getLocator(this.page, configs["withdrawalOption"]),
+            depositOption: getLocator(this.page, configs["depositOption"]),
         };
     }
 
@@ -98,6 +102,12 @@ export class TransactionHistoryPage {
                 break;
             case TransactionFilterType.ACCOUNT_ADJUSTMENT:
                 await this.locators.accountAdjustmentOption.click();
+                break;
+            case TransactionFilterType.WITHDRAWAL:
+                await this.locators.withdrawalOption.click();
+                break;
+            case TransactionFilterType.DEPOSIT:
+                await this.locators.depositOption.click();
                 break;
         }
     }
