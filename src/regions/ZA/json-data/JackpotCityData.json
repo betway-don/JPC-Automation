@@ -45,7 +45,7 @@
     "specialLast": "Smith$%"
   },
   "loginValid": {
-    "mobile": "640987613",
+    "mobile": "685332528",
     "password": "12345678"
   },
   "loginInvalid": {
@@ -55,5 +55,9 @@
     "specialMobile": "!@#$$%^",
     "shortPass": "1234",
     "longPass": "AAAAAAAAAAAAAAAAAAAAA"
+  },
+  "loginPartial": {
+    "mobile": "",
+    "password": ""
   }
 }

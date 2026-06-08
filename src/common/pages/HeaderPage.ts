@@ -17,6 +17,9 @@ export class HeaderPage {
             searchButton: getLocator(this.page, configs["searchButton"]),
             searchInput: getLocator(this.page, configs["searchInput"]),
             actualSearchInput: getLocator(this.page, configs["actualSearchInput"]),
+            searchModal: getLocator(this.page, configs["searchModal"]),
+            searchCloseModal: getLocator(this.page, configs["searchCloseModal"]),
+            signUpModal: getLocator(this.page, configs["signUpModal"]),
             loginCTA: getLocator(this.page, configs["loginCTA"]),
             registerCTA: getLocator(this.page, configs["registerCTA"]),
             liveChatIcon: getLocator(this.page, configs["liveChatIcon"]),
@@ -62,7 +65,12 @@ export class HeaderPage {
     }
 
     async toggleTheme() {
-        await this.safeActions.safeClick('themeToggle', this.locators.themeToggle);
+        const isDark = await this.page.evaluate(() => document.documentElement.classList.contains('dark'));
+        if (isDark) {
+            await this.page.getByRole('button', { name: 'light-mode' }).click();
+        } else {
+            await this.page.getByRole('button', { name: 'dark-mode' }).click();
+        }
     }
 
     async clickProfile() {
@@ -82,6 +90,47 @@ export class HeaderPage {
         await this.safeActions.safeFill('usernameInput', this.locators.usernameInput, mobile);
         await this.safeActions.safeFill('passwordInput', this.locators.passwordInput, pass);
         await this.safeActions.safeClick('submitLoginButton', this.locators.submitLoginButton);
+        await this.locators.depositCTA.waitFor({ state: 'visible', timeout: 15000 });
+    }
+
+    // Navigation tabs
+    getNavTab(name: string) {
+        return this.page.locator(`button[element-name="page-link-${name}"]`);
+    }
+
+    async clickNavTab(name: string) {
+        await this.getNavTab(name).click();
+    }
+
+    // Search modal
+    async openSearch() {
+        await this.safeActions.safeClick('searchInput', this.locators.searchInput);
+    }
+
+    async closeSearch() {
+        await this.safeActions.safeClick('searchCloseModal', this.locators.searchCloseModal);
+    }
+
+    async typeSearch(term: string) {
+        await this.safeActions.safeFill('actualSearchInput', this.locators.actualSearchInput, term);
+    }
+
+    getSearchResultCard() {
+        return this.locators.searchModal.locator('a.game-card').first();
+    }
+
+    getSearchNoResults() {
+        return this.locators.searchModal.getByText('No results');
+    }
+
+    // Wallet
+    async openWalletDropdown() {
+        await this.clickDeposit();
+    }
+
+    // Partial account
+    getCompleteAccountPrompt() {
+        return this.page.getByText('Complete Your Account');
     }
 
     // Highlight methods

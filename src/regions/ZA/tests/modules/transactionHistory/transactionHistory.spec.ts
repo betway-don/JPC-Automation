@@ -1,8 +1,6 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
-import { runTransactionHistoryTests } from '../../../../../common/tests/transactionHistory.shared';
-
-
+import { runTransactionHistoryNewSuiteTests } from '../../../../../common/tests/transactionHistoryNewSuite.shared';
 
 test.describe('ZA Transaction History Tests', () => {
-    runTransactionHistoryTests(test);
+    runTransactionHistoryNewSuiteTests(test);
 });

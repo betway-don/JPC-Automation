@@ -94,7 +94,7 @@ export default defineConfig({
   retries: 1,
  
   // Workers
-  workers: process.env.CI ? 2 : 6,
+  workers: process.env.CI ? 2 : 1,
  
   // Reports
   reporter: [

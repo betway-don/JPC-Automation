@@ -10,6 +10,9 @@ import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
 import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
 import { LimitsPage } from '../pages/LimitsPage';
 import { UpdatePasswordPage } from '../pages/UpdatePasswordPage';
+import { PromotionsPage } from '../pages/PromotionsPage';
+import { SearchPage } from '../pages/SearchPage';
+import { WinnersCirclePage } from '../pages/WinnersCirclePage';
 import { SafeActions } from '../../../common/actions/SafeActions';
 
 // 1. Define the shape of your new JSON data
@@ -21,6 +24,7 @@ export interface FullTestData {
     nameValidation: { [key: string]: string };
     loginValid: { [key: string]: string };
     loginInvalid: { [key: string]: string };
+    loginPartial: { [key: string]: string };
 }
 
 // 2. Read the JSON file
@@ -41,6 +45,9 @@ type JackpotCityFixtures = {
     transactionHistoryPage: TransactionHistoryPage;
     limitsPage: LimitsPage;
     updatePasswordPage: UpdatePasswordPage;
+    promotionsPage: PromotionsPage;
+    searchPage: SearchPage;
+    winnersCirclePage: WinnersCirclePage;
     safeActions: SafeActions;
     testData: FullTestData;
     screenshotDir: string;
@@ -96,6 +103,21 @@ const testBase = base.extend<JackpotCityFixtures>({
     updatePasswordPage: async ({ page, safeActions }: { page: Page, safeActions: SafeActions }, use: (r: UpdatePasswordPage) => Promise<void>) => {
         const updatePasswordPage = new UpdatePasswordPage(page, safeActions);
         await use(updatePasswordPage);
+    },
+
+    promotionsPage: async ({ page, safeActions }, use) => {
+        const promotionsPage = new PromotionsPage(page, safeActions);
+        await use(promotionsPage);
+    },
+
+    searchPage: async ({ page, safeActions }, use) => {
+        const searchPage = new SearchPage(page, safeActions);
+        await use(searchPage);
+    },
+
+    winnersCirclePage: async ({ page, safeActions }, use) => {
+        const winnersCirclePage = new WinnersCirclePage(page, safeActions);
+        await use(winnersCirclePage);
     },
 });
 

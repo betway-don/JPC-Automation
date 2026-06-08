@@ -768,7 +768,7 @@
     {
       "key": "themeToggle",
       "type": "css",
-      "value": "#site-header [aria-label=\"light-mode\"]",
+      "value": "button[aria-label=\"light-mode\"], button[aria-label=\"dark-mode\"]",
       "options": {},
       "nth": 0
     },
@@ -831,6 +831,27 @@
         "name": "Submit"
       },
       "nth": 0
+    },
+    {
+      "key": "searchModal",
+      "type": "css",
+      "value": "div[role=\"dialog\"][aria-labelledby=\"Search games-modal-title\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchCloseModal",
+      "type": "css",
+      "value": "button[element-name=\"close-modal\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "signUpModal",
+      "type": "css",
+      "value": "div[role=\"dialog\"][aria-labelledby=\"Sign Up-modal-title\"]",
+      "options": {},
+      "nth": 0
     }
   ],
   "transactionHistory": [
@@ -891,10 +912,10 @@
     },
     {
       "key": "resetButton",
-      "type": "role",
-      "value": "button",
+      "type": "text",
+      "value": "Reset",
       "options": {
-        "name": "Reset"
+        "exact": true
       },
       "nth": 0
     },
@@ -935,7 +956,7 @@
     {
       "key": "typeDropdownLabelContainer",
       "type": "css",
-      "value": "[data-pc-section=\"label\"]",
+      "value": "[data-pc-name=\"multiselect\"] [data-pc-section=\"label\"]",
       "options": {},
       "nth": 0
     },
@@ -1265,6 +1286,296 @@
       "nth": 0
     }
   ],
+  "promotions": [
+    {
+      "key": "allTab",
+      "type": "css",
+      "value": "#specialoffers",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "cityExclusivesTab",
+      "type": "css",
+      "value": "#cityexclusives",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "globalFavouritesTab",
+      "type": "css",
+      "value": "#globalfavourites",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardsGrid",
+      "type": "css",
+      "value": "div.tabs-content .grid",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "firstPromoCard",
+      "type": "css",
+      "value": "div.tabs-content a[href^=\"/promotions/\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardTitle",
+      "type": "css",
+      "value": "div.text-base.font-bold.line-clamp-1.mb-2",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardImage",
+      "type": "css",
+      "value": "div.tabs-content div.overflow-hidden img",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardTimeLeft",
+      "type": "css",
+      "value": "div.tabs-content .flex-center span",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "tellMeMoreCTA",
+      "type": "role",
+      "value": "button",
+      "options": {
+        "name": "Tell me more"
+      },
+      "nth": 1
+    },
+    {
+      "key": "promoDetailTitle",
+      "type": "css",
+      "value": "div.text-base-priority.text-xl.font-bold",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "howToParticipate",
+      "type": "text",
+      "value": "How to participate",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoLoginCTA",
+      "type": "css",
+      "value": "div.bg-light-100.mt-4 button",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "betNowCTA",
+      "type": "role",
+      "value": "button",
+      "options": {
+        "name": "Bet Now"
+      },
+      "nth": 0
+    },
+    {
+      "key": "termsToggle",
+      "type": "css",
+      "value": "details summary",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "termsContent",
+      "type": "css",
+      "value": "details[open] .px-3",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "eligibleGamesHeading",
+      "type": "text",
+      "value": "Eligible Games",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "showAllBtn",
+      "type": "role",
+      "value": "button",
+      "options": {
+        "name": "Show All"
+      },
+      "nth": 0
+    },
+    {
+      "key": "favoriteBtn",
+      "type": "css",
+      "value": "div[aria-label^=\"favorite-game\"]:has(svg.text-light-50)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favoriteActiveBtn",
+      "type": "css",
+      "value": "div[aria-label^=\"favorite-game\"]:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "eligibleGameCard",
+      "type": "css",
+      "value": "a.game-card[href*=\"feg=true\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "eligibleGameCardImage",
+      "type": "css",
+      "value": "a.game-card[href*=\"feg=true\"] img[alt]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "backButton",
+      "type": "css",
+      "value": "a[href=\"/promotions\"] button",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favouritesCarousel",
+      "type": "css",
+      "value": "div#favourites-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favouritesCarouselCard",
+      "type": "css",
+      "value": "div#favourites-carousel a.game-card",
+      "options": {},
+      "nth": 0
+    }
+  ],
+  "search": [
+    {
+      "key": "searchBtn",
+      "type": "css",
+      "value": "[element-name=\"nav-bar-search\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchModal",
+      "type": "css",
+      "value": "[role=\"dialog\"][aria-modal=\"true\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchModalTitle",
+      "type": "css",
+      "value": "[id=\"Search games-modal-title\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchCloseBtn",
+      "type": "css",
+      "value": "button[element-name=\"close-modal\"]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchInput",
+      "type": "css",
+      "value": "input#search",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchResultsGrid",
+      "type": "css",
+      "value": "[role=\"dialog\"] div.grid.pb-5.gap-2:visible",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchGameCard",
+      "type": "css",
+      "value": "[role=\"dialog\"] a.game-card[href*=\"sea=true\"]:visible",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchGameTitle",
+      "type": "css",
+      "value": "[role=\"dialog\"] a.game-card[href*=\"sea=true\"]:visible strong.line-clamp-1",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchGameImage",
+      "type": "css",
+      "value": "[role=\"dialog\"] a.game-card[href*=\"sea=true\"]:visible img[alt]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchNoResults",
+      "type": "css",
+      "value": "div.flex-col.leading-4",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchClearInputBtn",
+      "type": "css",
+      "value": "div.rounded-full.bg-stacked.p-1.cursor-pointer",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "recentSearchesSection",
+      "type": "css",
+      "value": "div.mt-4.overflow-auto",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "recentSearchItem",
+      "type": "css",
+      "value": "div.bg-layer-2.rounded-lg",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "recentSearchClearAll",
+      "type": "css",
+      "value": "div.bg-layer-1.rounded-lg",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchCategoryTabList",
+      "type": "css",
+      "value": "[role=\"dialog\"] div.tabs-header",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "searchActiveTab",
+      "type": "css",
+      "value": "[role=\"dialog\"] div.tabs-list.bg-primary",
+      "options": {},
+      "nth": 0
+    }
+  ],
   "updatePassword": [
     {
       "key": "depositButton",
@@ -1368,6 +1679,113 @@
       "value": "UPDATE PASSWORD",
       "options": {},
       "nth": 2
+    }
+  ],
+  "winnersCircle": [
+    {
+      "key": "bigWinnersHeading",
+      "type": "text",
+      "value": "Big Winners",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersCarousel",
+      "type": "css",
+      "value": "div.scroller-casino",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersCard",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersGameLink",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersGameName",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card strong.w-full",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersAmount",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card .text-sm.font-bold",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersMaskedUser",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card .text-xs.truncate",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "allWinnersHeading",
+      "type": "text",
+      "value": "All Winners",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "allWinnersTable",
+      "type": "css",
+      "value": "div.max-h-96.overflow-y-auto table",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "allWinnersTableContainer",
+      "type": "css",
+      "value": "div.max-h-96.overflow-y-auto",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hotGamesHeading",
+      "type": "text",
+      "value": "Hot Games",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "mostPopularHeading",
+      "type": "text",
+      "value": "Most Popular",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "mostLikedHeading",
+      "type": "text",
+      "value": "Most Liked",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "winnersFavBtn",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card div[aria-label^=\"favorite-game\"]:has(svg.text-light-50)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "winnersFavActiveBtn",
+      "type": "css",
+      "value": "div.game-card.is-carousel.big-card div[aria-label^=\"favorite-game\"]:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
     }
   ]
 }
