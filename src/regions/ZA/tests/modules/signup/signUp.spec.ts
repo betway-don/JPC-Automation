@@ -1,6 +1,6 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
-import { runSignupTests } from '../../../../../common/tests/signup.shared';
+import { runSignUpNewSuiteTests } from '../../../../../common/tests/signUpNewSuite.shared';
 
-test.describe('Jackpot City Signup Tests', () => {
-    runSignupTests(test, '/');
+test.describe('ZA Sign Up Tests', () => {
+    runSignUpNewSuiteTests(test);
 });

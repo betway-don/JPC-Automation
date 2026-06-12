@@ -2,13 +2,13 @@ import { Page, Locator } from '@playwright/test';
 import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
 
-export class SearchPage {
-    readonly page: Page;
+export class SearchPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, private safeActions: SafeActions) {
-        this.page = page;
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
         const configs = loadLocatorsFromJson('search');
 
         this.locators = {
@@ -29,6 +29,11 @@ export class SearchPage {
             searchCategoryTabList: getLocator(this.page, configs['searchCategoryTabList']),
             searchActiveTab: getLocator(this.page, configs['searchActiveTab']),
         };
+    }
+
+    /** Text of the first recent-search history entry. */
+    get recentSearchItemText(): Locator {
+        return this.locators.recentSearchItem.locator('p').first();
     }
 
     async navigate() {

@@ -40,10 +40,12 @@ export async function runWinnersCircleNewSuiteTests(
         test('WC-LO-003 - Verify Big Winners card structure', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.bigWinnersCard).toBeVisible({ timeout: 15000 });
             await winnersCirclePage.highlightElement('bigWinnersCard');
+            // win amount must be a real rand value, e.g. "R 236,580.00"
             const amount = await winnersCirclePage.locators.bigWinnersAmount.textContent({ timeout: 5000 });
-            expect(amount?.trim().length).toBeGreaterThan(0);
+            expect(amount?.trim()).toMatch(/R\s*[\d,]+(\.\d{2})?/);
+            // masked user must be an actually masked account, e.g. "*******5648"
             const maskedUser = await winnersCirclePage.locators.bigWinnersMaskedUser.textContent({ timeout: 5000 });
-            expect(maskedUser?.includes('*')).toBeTruthy();
+            expect(maskedUser?.trim()).toMatch(/^\*+\d+$/);
             const gameName = await winnersCirclePage.locators.bigWinnersGameName.textContent({ timeout: 5000 });
             expect(gameName?.trim().length).toBeGreaterThan(0);
             await ScreenshotHelper(page, screenshotDir, 'WC-LO-003-cardStructure', testInfo);
@@ -71,8 +73,10 @@ export async function runWinnersCircleNewSuiteTests(
 
         test('WC-LO-006 - Verify All Winners table has data rows', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.allWinnersTable).toBeVisible({ timeout: 15000 });
-            const rowCount = await winnersCirclePage.locators.allWinnersTable.locator('tbody tr').count();
+            const rowCount = await winnersCirclePage.allWinnersRows.count();
             expect(rowCount).toBeGreaterThan(0);
+            // rows must carry real winner data: a rand amount somewhere in the first row
+            await expect(winnersCirclePage.allWinnersRows.first()).toContainText(/R\s*[\d,]+/, { timeout: 10000 });
             await winnersCirclePage.highlightElement('allWinnersTable');
             await ScreenshotHelper(page, screenshotDir, 'WC-LO-006-allWinnersRows', testInfo);
         });
@@ -88,7 +92,7 @@ export async function runWinnersCircleNewSuiteTests(
                 const finalScroll = await container.evaluate((el: HTMLElement) => el.scrollTop);
                 expect(finalScroll).toBeGreaterThan(0);
             } else {
-                const rowCount = await winnersCirclePage.locators.allWinnersTable.locator('tbody tr').count();
+                const rowCount = await winnersCirclePage.allWinnersRows.count();
                 expect(rowCount).toBeGreaterThan(0);
             }
             await winnersCirclePage.highlightElement('allWinnersTableContainer');
@@ -139,7 +143,7 @@ export async function runWinnersCircleNewSuiteTests(
             await winnersCirclePage.highlightElement('bigWinnersGameLink');
             await winnersCirclePage.clickBigWinnersGame();
             await expect(page).toHaveURL(/\/home\//, { timeout: 15000 });
-            await expect(page.getByRole('button', { name: 'Play now' })).toBeVisible({ timeout: 15000 });
+            await expect(winnersCirclePage.playNowButton).toBeVisible({ timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'WC-LO-011-bigWinnersGameClick', testInfo);
         });
 
@@ -149,23 +153,27 @@ export async function runWinnersCircleNewSuiteTests(
             await expect(hotSection).toBeVisible({ timeout: 15000 });
             const firstCard = winnersCirclePage.getGameCards('Hot Games').first();
             await expect(firstCard).toBeVisible({ timeout: 15000 });
+            // remember WHICH game we clicked so we can verify the right page opens
+            const href = await firstCard.getAttribute('href');
+            const gamePath = (href || '').split('?')[0];
             await firstCard.click();
-            await expect(page).toHaveURL(/\/home\//, { timeout: 15000 });
-            await expect(page.getByRole('button', { name: 'Play now' })).toBeVisible({ timeout: 15000 });
+            await expect(page).toHaveURL(new RegExp(gamePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), { timeout: 15000 });
+            await expect(winnersCirclePage.playNowButton).toBeVisible({ timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'WC-LO-012-hotGamesGameClick', testInfo);
         });
 
-        test('WC-LO-013 - Verify Winners Circle page theme consistency', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
+        test('WC-LO-013 - Verify Winners Circle page theme consistency', async ({ page, winnersCirclePage, headerPage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.bigWinnersHeading).toBeVisible({ timeout: 15000 });
             await winnersCirclePage.highlightElement('bigWinnersCarousel');
-            const htmlClass = await page.locator('html').getAttribute('class');
-            const isDark = htmlClass?.includes('dark') ?? false;
-            if (isDark) {
-                await expect(page.locator('html')).toHaveClass(/dark/, { timeout: 15000 });
-            } else {
-                await expect(page.locator('html')).not.toHaveClass(/dark/, { timeout: 15000 });
-            }
+            // switching theme must flip the html dark class and keep the page rendering
+            const wasDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+            await headerPage.toggleTheme();
+            await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')), { timeout: 5000 }).toBe(!wasDark);
+            await expect(winnersCirclePage.locators.bigWinnersHeading).toBeVisible({ timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'WC-LO-013-theme', testInfo);
+            // restore the original theme
+            await headerPage.toggleTheme();
+            await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')), { timeout: 5000 }).toBe(wasDark);
         });
 
     });
@@ -198,10 +206,12 @@ export async function runWinnersCircleNewSuiteTests(
         test('WC-LI-003 - Verify Big Winners card structure', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.bigWinnersCard).toBeVisible({ timeout: 15000 });
             await winnersCirclePage.highlightElement('bigWinnersCard');
+            // win amount must be a real rand value, e.g. "R 236,580.00"
             const amount = await winnersCirclePage.locators.bigWinnersAmount.textContent({ timeout: 5000 });
-            expect(amount?.trim().length).toBeGreaterThan(0);
+            expect(amount?.trim()).toMatch(/R\s*[\d,]+(\.\d{2})?/);
+            // masked user must be an actually masked account, e.g. "*******5648"
             const maskedUser = await winnersCirclePage.locators.bigWinnersMaskedUser.textContent({ timeout: 5000 });
-            expect(maskedUser?.includes('*')).toBeTruthy();
+            expect(maskedUser?.trim()).toMatch(/^\*+\d+$/);
             const gameName = await winnersCirclePage.locators.bigWinnersGameName.textContent({ timeout: 5000 });
             expect(gameName?.trim().length).toBeGreaterThan(0);
             await ScreenshotHelper(page, screenshotDir, 'WC-LI-003-cardStructure', testInfo);
@@ -229,8 +239,10 @@ export async function runWinnersCircleNewSuiteTests(
 
         test('WC-LI-006 - Verify All Winners table has data rows', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.allWinnersTable).toBeVisible({ timeout: 15000 });
-            const rowCount = await winnersCirclePage.locators.allWinnersTable.locator('tbody tr').count();
+            const rowCount = await winnersCirclePage.allWinnersRows.count();
             expect(rowCount).toBeGreaterThan(0);
+            // rows must carry real winner data: a rand amount somewhere in the first row
+            await expect(winnersCirclePage.allWinnersRows.first()).toContainText(/R\s*[\d,]+/, { timeout: 10000 });
             await winnersCirclePage.highlightElement('allWinnersTable');
             await ScreenshotHelper(page, screenshotDir, 'WC-LI-006-allWinnersRows', testInfo);
         });
@@ -246,7 +258,7 @@ export async function runWinnersCircleNewSuiteTests(
                 const finalScroll = await container.evaluate((el: HTMLElement) => el.scrollTop);
                 expect(finalScroll).toBeGreaterThan(0);
             } else {
-                const rowCount = await winnersCirclePage.locators.allWinnersTable.locator('tbody tr').count();
+                const rowCount = await winnersCirclePage.allWinnersRows.count();
                 expect(rowCount).toBeGreaterThan(0);
             }
             await winnersCirclePage.highlightElement('allWinnersTableContainer');
@@ -297,7 +309,7 @@ export async function runWinnersCircleNewSuiteTests(
             await winnersCirclePage.highlightElement('bigWinnersGameLink');
             await winnersCirclePage.clickBigWinnersGame();
             await expect(page).toHaveURL(/\/home\//, { timeout: 15000 });
-            await expect(page.locator('canvas, iframe[src]').first()).toBeVisible({ timeout: 30000 });
+            await expect(winnersCirclePage.gameFrame).toBeVisible({ timeout: 30000 });
             await ScreenshotHelper(page, screenshotDir, 'WC-LI-011-bigWinnersGameLaunch', testInfo);
         });
 
@@ -307,15 +319,18 @@ export async function runWinnersCircleNewSuiteTests(
             await expect(hotSection).toBeVisible({ timeout: 15000 });
             const firstCard = winnersCirclePage.getGameCards('Hot Games').first();
             await expect(firstCard).toBeVisible({ timeout: 15000 });
+            // remember WHICH game we clicked so we can verify the right game launches
+            const href = await firstCard.getAttribute('href');
+            const gamePath = (href || '').split('?')[0];
             await firstCard.click();
-            await expect(page).toHaveURL(/\/home\//, { timeout: 15000 });
-            await expect(page.locator('canvas, iframe[src]').first()).toBeVisible({ timeout: 30000 });
+            await expect(page).toHaveURL(new RegExp(gamePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), { timeout: 15000 });
+            await expect(winnersCirclePage.gameFrame).toBeVisible({ timeout: 30000 });
             await ScreenshotHelper(page, screenshotDir, 'WC-LI-012-hotGamesGameLaunch', testInfo);
         });
 
         test('WC-LI-013 - Verify favourite icon is visible on Big Winners game cards', async ({ page, winnersCirclePage, screenshotDir }: WinnersCircleSuiteFixtures, testInfo: TestInfo) => {
             await expect(winnersCirclePage.locators.bigWinnersCard).toBeVisible({ timeout: 15000 });
-            const favIcons = page.locator('div.game-card.is-carousel.big-card div[aria-label^="favorite-game"]');
+            const favIcons = winnersCirclePage.bigWinnerFavIcons;
             const favCount = await favIcons.count();
             expect(favCount).toBeGreaterThan(0);
             await winnersCirclePage.highlightElement('bigWinnersCard');

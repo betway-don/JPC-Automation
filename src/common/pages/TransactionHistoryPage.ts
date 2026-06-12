@@ -58,6 +58,24 @@ export class TransactionHistoryPage {
         };
     }
 
+    // --- element accessors (selectors stay inside the Page Object) ---
+    get table(): Locator { return this.page.locator('table.shaded-table'); }
+    get allRowCells(): Locator { return this.page.locator('table.shaded-table tbody tr td'); }
+    get dateCellSpans(): Locator { return this.page.locator('table.shaded-table tbody tr td:nth-child(2) span'); }
+    get summaryHeading(): Locator { return this.page.locator('div.font-bold.text-base-priority', { hasText: 'Transaction Summary' }); }
+    get filterModal(): Locator { return this.page.locator('div[aria-labelledby="Filter Transaction Summary-modal-title"]'); }
+    get filterModalTitle(): Locator { return this.page.getByText('Filter Transaction Summary', { exact: true }); }
+    get filterPayoutSwitch(): Locator { return this.page.locator('input[role="switch"][data-pc-section="input"]'); }
+    get filterTypeMultiselect(): Locator { return this.page.locator('[data-pc-name="multiselect"]'); }
+    get startDatePlaceholder(): Locator { return this.page.locator('button[title="Start Date"]'); }
+    get endDatePlaceholder(): Locator { return this.page.locator('button[title="End Date"]'); }
+    get calendarGrid(): Locator { return this.page.locator('div[role="grid"]'); }
+    get calendarNextMonth(): Locator { return this.page.locator('button[title="next-month"]'); }
+    get calendarDisabledCells(): Locator { return this.page.locator('button[role="gridcell"][disabled]'); }
+    get calendarEnabledCells(): Locator { return this.page.locator('button[role="gridcell"]:not([disabled])'); }
+    calendarCellByTitle(title: string): Locator { return this.page.locator(`button[role="gridcell"][title="${title}"]`); }
+    get goToButton(): Locator { return this.page.getByRole('button', { name: 'go' }); }
+
     // --- Navigation ---
 
     async navigateToTransactionHistory() {
@@ -130,6 +148,11 @@ export class TransactionHistoryPage {
 
     getTransactionAmountCell(rowIndex: number) {
         return this.locators.tableRows.nth(rowIndex).locator('td').nth(4);
+    }
+
+    /** The gold "minus" indicator shown on Wager amounts (absent on Payouts) within an amount cell. */
+    minusIndicatorIn(amountCell: Locator): Locator {
+        return amountCell.locator('span.gold-gradient-text.font-bold.absolute');
     }
 
     // --- Filter Chips ---

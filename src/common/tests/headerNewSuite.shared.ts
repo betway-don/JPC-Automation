@@ -23,6 +23,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.menuButton).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('menuButton');
             await headerPage.clickMenu();
+            // clicking must actually open the menu panel
+            await expect(headerPage.hamburgerCloseButton).toBeVisible({ timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LO-001-hamburgerMenu', testInfo);
         });
 
@@ -41,6 +43,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.searchModal).toBeVisible({ timeout: 15000 });
             await headerPage.typeSearch('hot');
             await expect(headerPage.getSearchResultCard()).toBeVisible({ timeout: 15000 });
+            // results must be relevant to the query, not just any games
+            await expect(headerPage.getSearchResultCard()).toHaveAttribute('aria-label', /hot/i);
             await ScreenshotHelper(page, screenshotDir, 'H-LO-003-searchResults', testInfo);
         });
 
@@ -64,7 +68,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.liveChatIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('liveChatIcon');
             await headerPage.clickLiveChat();
-            await page.waitForTimeout(3000);
+            // the Genesys chat window must actually open
+            await expect(headerPage.liveChatFrame).toBeVisible({ timeout: 20000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LO-006-liveChat', testInfo);
         });
 
@@ -73,9 +78,9 @@ export function runHeaderNewSuiteTests(
             const wasDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
             await headerPage.toggleTheme();
             if (wasDark) {
-                await expect(page.locator('html')).not.toHaveClass(/\bdark\b/, { timeout: 15000 });
+                await expect(headerPage.htmlRoot).not.toHaveClass(/\bdark\b/, { timeout: 15000 });
             } else {
-                await expect(page.locator('html')).toHaveClass(/\bdark\b/, { timeout: 15000 });
+                await expect(headerPage.htmlRoot).toHaveClass(/\bdark\b/, { timeout: 15000 });
             }
             await ScreenshotHelper(page, screenshotDir, 'H-LO-007-themeToggle', testInfo);
         });
@@ -161,7 +166,7 @@ export function runHeaderNewSuiteTests(
             await headerPage.clickNavTab('spingames');
             await expect(page).toHaveURL(/\/spingames/, { timeout: 15000 });
             // Nuxt router marks the active link with router-link-active on the wrapping <a>
-            await expect(page.locator('#spingames-nav-item')).toHaveClass(/router-link-active/, { timeout: 15000 });
+            await expect(headerPage.navItem('spingames')).toHaveClass(/router-link-active/, { timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LO-020-activeTabHighlight', testInfo);
         });
     });
@@ -199,12 +204,17 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.searchModal).toBeVisible({ timeout: 15000 });
             await headerPage.typeSearch('hot');
             await expect(headerPage.getSearchResultCard()).toBeVisible({ timeout: 15000 });
+            // results must be relevant to the query, not just any games
+            await expect(headerPage.getSearchResultCard()).toHaveAttribute('aria-label', /hot/i);
             await ScreenshotHelper(page, screenshotDir, 'H-LI-004-searchResults', testInfo);
         });
 
         test('H-LI-005 - Verify Wallet/Cash balance is displayed correctly', async ({ page, headerPage, screenshotDir }: HeaderNewSuiteFixtures, testInfo: TestInfo) => {
             await expect(headerPage.locators.depositCTA).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('depositCTA');
+            // the header wallet widget must render the Cash label and an R-formatted amount
+            await expect(headerPage.siteHeader).toContainText('Cash', { timeout: 10000 });
+            await expect(headerPage.siteHeader).toContainText(/R\s*[\d,]+\.\d{2}/, { timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LI-005-walletBalance', testInfo);
         });
 
@@ -212,15 +222,22 @@ export function runHeaderNewSuiteTests(
             await headerPage.openWalletDropdown();
             await expect(headerPage.locators.accountBalancesDialog).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('accountBalancesDialog');
+            // dialog must show actual balances: Cash + Bonus Balance with R-formatted amounts
+            await expect(headerPage.locators.accountBalancesDialog).toContainText('Cash');
+            await expect(headerPage.locators.accountBalancesDialog).toContainText('Bonus Balance');
+            await expect(headerPage.locators.accountBalancesDialog).toContainText(/R\s*[\d,]+\.\d{2}/);
             await ScreenshotHelper(page, screenshotDir, 'H-LI-006-walletDropdown', testInfo);
         });
 
         test('H-LI-007 - Verify Deposit CTA popup', async ({ page, headerPage, screenshotDir }: HeaderNewSuiteFixtures, testInfo: TestInfo) => {
             await headerPage.openWalletDropdown();
             await expect(headerPage.locators.accountBalancesDialog).toBeVisible({ timeout: 15000 });
-            await expect(
-                headerPage.locators.accountBalancesDialog.getByRole('button', { name: /deposit/i })
-            ).toBeVisible({ timeout: 15000 });
+            const dialogDepositBtn = headerPage.walletDepositButton;
+            await expect(dialogDepositBtn).toBeVisible({ timeout: 15000 });
+            // clicking Deposit must open the Account Options dialog with the banking flow loaded
+            await dialogDepositBtn.click();
+            await expect(headerPage.accountOptionsDialog).toBeVisible({ timeout: 15000 });
+            await expect(headerPage.bankingFrame).toBeVisible({ timeout: 20000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LI-007-depositPopup', testInfo);
         });
 
@@ -228,7 +245,9 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.notificationIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('notificationIcon');
             await headerPage.clickNotification();
-            await page.waitForTimeout(2000);
+            // the Notifications drawer must open with its tabs
+            await expect(headerPage.notificationsTitle).toBeVisible({ timeout: 10000 });
+            await expect(headerPage.notificationsMarketingTab).toBeVisible({ timeout: 5000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LI-008-notification', testInfo);
         });
 
@@ -236,7 +255,9 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.profileIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('profileIcon');
             await headerPage.clickProfile();
-            await page.waitForTimeout(2000);
+            // the account drawer must open with the user's identity
+            await expect(headerPage.welcomeGreeting).toBeVisible({ timeout: 10000 });
+            await expect(headerPage.accountNumberText).toBeVisible({ timeout: 5000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LI-009-profileIcon', testInfo);
         });
 
@@ -244,7 +265,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.liveChatIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('liveChatIcon');
             await headerPage.clickLiveChat();
-            await page.waitForTimeout(3000);
+            // the Genesys chat window must actually open
+            await expect(headerPage.liveChatFrame).toBeVisible({ timeout: 20000 });
             await ScreenshotHelper(page, screenshotDir, 'H-LI-010-liveChat', testInfo);
         });
 
@@ -281,6 +303,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.menuButton).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('menuButton');
             await headerPage.clickMenu();
+            // clicking must actually open the menu panel
+            await expect(headerPage.hamburgerCloseButton).toBeVisible({ timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-001-hamburgerMenu', testInfo);
         });
 
@@ -292,11 +316,14 @@ export function runHeaderNewSuiteTests(
             await ScreenshotHelper(page, screenshotDir, 'H-PA-002-logo', testInfo);
         });
 
-        test('H-PA-003 - Verify sub-header tabs (Home, Promotions, Blog)', async ({ page, headerPage, screenshotDir }: HeaderNewSuiteFixtures, testInfo: TestInfo) => {
+        test('H-PA-003 - Verify sub-header navigation tabs', async ({ page, headerPage, screenshotDir }: HeaderNewSuiteFixtures, testInfo: TestInfo) => {
+            // NOTE vs Excel: partial accounts get the SAME full header nav as everyone else (confirmed
+            // live 2026-06-12) — there is no Slot-Games restriction, and "Blog" is a hamburger item,
+            // not a header tab. Assert the real nav set.
             await expect(headerPage.getNavTab('home')).toBeVisible({ timeout: 15000 });
             await expect(headerPage.getNavTab('Promotions')).toBeVisible({ timeout: 15000 });
-            await expect(headerPage.getNavTab('blog')).toBeVisible({ timeout: 15000 });
-            await expect(headerPage.getNavTab('spingames')).not.toBeVisible({ timeout: 15000 });
+            await expect(headerPage.getNavTab('winners')).toBeVisible({ timeout: 15000 });
+            await expect(headerPage.getNavTab('spingames')).toBeVisible({ timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-003-subHeaderTabs', testInfo);
         });
 
@@ -307,6 +334,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.searchModal).toBeVisible({ timeout: 15000 });
             await headerPage.typeSearch('hot');
             await expect(headerPage.getSearchResultCard()).toBeVisible({ timeout: 15000 });
+            // results must be relevant to the query, not just any games
+            await expect(headerPage.getSearchResultCard()).toHaveAttribute('aria-label', /hot/i);
             await ScreenshotHelper(page, screenshotDir, 'H-PA-004-searchResults', testInfo);
         });
 
@@ -314,14 +343,21 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.getCompleteAccountPrompt()).toBeVisible({ timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-005-completeAccountPrompt', testInfo);
             await headerPage.getCompleteAccountPrompt().click();
-            await expect(page).not.toHaveURL(url, { timeout: 15000 });
+            // clicking opens the account-completion / verification flow in-place (no URL change) —
+            // confirm something actionable actually appeared rather than a dead prompt
+            await expect(
+                headerPage.verificationOrDialog
+                    .first()
+            ).toBeVisible({ timeout: 15000 });
+            await ScreenshotHelper(page, screenshotDir, 'H-PA-005-completionFlowOpened', testInfo);
         });
 
         test('H-PA-006 - Verify Notification icon functionality', async ({ page, headerPage, screenshotDir }: HeaderNewSuiteFixtures, testInfo: TestInfo) => {
             await expect(headerPage.locators.notificationIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('notificationIcon');
             await headerPage.clickNotification();
-            await page.waitForTimeout(2000);
+            // the Notifications drawer must open with its tabs
+            await expect(headerPage.notificationsTitle).toBeVisible({ timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-006-notification', testInfo);
         });
 
@@ -329,7 +365,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.profileIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('profileIcon');
             await headerPage.clickProfile();
-            await page.waitForTimeout(2000);
+            // the account drawer must open with the user's identity
+            await expect(headerPage.welcomeGreeting).toBeVisible({ timeout: 10000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-007-profileIcon', testInfo);
         });
 
@@ -337,7 +374,8 @@ export function runHeaderNewSuiteTests(
             await expect(headerPage.locators.liveChatIcon).toBeVisible({ timeout: 15000 });
             await headerPage.highlightElement('liveChatIcon');
             await headerPage.clickLiveChat();
-            await page.waitForTimeout(3000);
+            // the Genesys chat window must actually open
+            await expect(headerPage.liveChatFrame).toBeVisible({ timeout: 20000 });
             await ScreenshotHelper(page, screenshotDir, 'H-PA-008-liveChat', testInfo);
         });
     });

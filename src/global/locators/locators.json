@@ -556,11 +556,9 @@
     },
     {
       "key": "withdrawalCTA",
-      "type": "role",
-      "value": "paragraph",
-      "options": {
-        "hasText": "^Withdrawal$"
-      },
+      "type": "css",
+      "value": ".hamburger-account-options:has-text(\"Withdrawal\")",
+      "options": {},
       "nth": 0
     },
     {
@@ -693,6 +691,27 @@
       "key": "cityRewardsShortcut",
       "type": "css",
       "value": ".hamburger-account-options:has-text(\"City Rewards\")",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsDialog",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby^='Account Options']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsActiveItem",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby^='Account Options'] button.bg-primary-blue-gradient",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsBankingFrame",
+      "type": "css",
+      "value": "iframe[id^='banking_frame']",
       "options": {},
       "nth": 0
     }
@@ -1720,7 +1739,7 @@
     {
       "key": "bigWinnersAmount",
       "type": "css",
-      "value": "div.game-card.is-carousel.big-card .text-sm.font-bold",
+      "value": "div.game-card.is-carousel.big-card span.text-sm.font-bold",
       "options": {},
       "nth": 0
     },
@@ -1784,6 +1803,899 @@
       "key": "winnersFavActiveBtn",
       "type": "css",
       "value": "div.game-card.is-carousel.big-card div[aria-label^=\"favorite-game\"]:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    }
+  ],
+  "gamePage": [
+    {
+      "key": "featuredGameCard",
+      "type": "css",
+      "value": "#featured-carousel a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBar",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarBackBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button.design-system-button",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarFavBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button:has(div[aria-label^='favorite-game'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarFavActiveBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 div[aria-label^='favorite-game']:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarGameTitle",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 span.font-bold.truncate",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotBanner",
+      "type": "css",
+      "value": "div[vertical=spingames]",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "loginModal",
+      "type": "css",
+      "value": "div.login-container",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "loginUsername",
+      "type": "css",
+      "value": "input[name='username'][type='tel']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "loginPassword",
+      "type": "css",
+      "value": "input[name='password'][type='password']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "loginSubmitBtn",
+      "type": "css",
+      "value": "button[group='primary']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "categoryDropdown",
+      "type": "css",
+      "value": "#in-game-category-dropdown",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "categoryDropdownNameBtn",
+      "type": "css",
+      "value": "#in-game-category-dropdown button:first-child",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "categoryDropdownToggle",
+      "type": "css",
+      "value": "#in-game-category-dropdown button:last-child",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarLikeBtn",
+      "type": "css",
+      "value": "#btn-up-thumb",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarDislikeBtn",
+      "type": "css",
+      "value": "#btn-down-thumb",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarShareBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button:has(path[d^='M7.217'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarMaximizeBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button:has(path[d^='M3.75 3.75v4.5'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarMinimizeBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button:has(path[d^='M4.367'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "topBarHamburgerBtn",
+      "type": "css",
+      "value": "div.bg-layer.flex.justify-between.p-1 button:has(path[d^='M3.75 6.75'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareModal",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='share-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareModalTitle",
+      "type": "css",
+      "value": "#share-modal-title",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareModalCloseBtn",
+      "type": "css",
+      "value": "button[element-name='close-modal']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareWhatsAppBtn",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='share-modal-title'] button:has(path[d^='M19.05'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareFacebookBtn",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='share-modal-title'] button:has(path[d^='M10.25 23'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareTwitterBtn",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='share-modal-title'] button:has(path[d^='M 4.0175781'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "shareEmailBtn",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='share-modal-title'] button:has(path[d^='M21.75 6.75v10.5'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerPanel",
+      "type": "css",
+      "value": "div.fixed.flex.flex-col.border-none.shadow-lg.z-40",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerLoginBtn",
+      "type": "css",
+      "value": "button[element-name='hamburger-menu-login']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerSignUpBtn",
+      "type": "css",
+      "value": "button[element-name='hamburger-menu-register']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerThemeToggle",
+      "type": "css",
+      "value": "div.fixed.z-40 button[aria-label*='mode']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerCloseBtn",
+      "type": "css",
+      "value": "button[element-name='hamburger-menu-close']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerGameTitle",
+      "type": "css",
+      "value": "div.fixed.z-40 p.font-semibold.text-lg.truncate",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerFavBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 button:has(div[aria-label^='favorite-game'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerFavActiveBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 div[aria-label^='favorite-game']:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerWhatsAppBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 button:has(path[d^='M19.05'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerFacebookBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 button:has(path[d^='M10.25 23'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerTwitterBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 button:has(path[d^='M 4.0175781'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerEmailBtn",
+      "type": "css",
+      "value": "div.fixed.z-40 button:has(path[d^='M21.75 6.75v10.5'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerLobbiesTitle",
+      "type": "css",
+      "value": "div.fixed.z-40 p.font-bold.text-lg.capitalize",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerLobbiesList",
+      "type": "css",
+      "value": "div.fixed.z-40 div.flex.flex-col.gap-2:has(a)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "categoryDropdownPanel",
+      "type": "css",
+      "value": "div.animate-fade-down.w-48",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "categoryDropdownItem",
+      "type": "css",
+      "value": "div.animate-fade-down div.truncate.cursor-pointer",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "signUpModal",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='Sign Up-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "signUpModalTitle",
+      "type": "css",
+      "value": "[id='Sign Up-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerWelcomeMsg",
+      "type": "css",
+      "value": "div.fixed.z-40 div.flex.flex-col.flex-1.text-xs.text-base-priority",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerMyAccountTab",
+      "type": "css",
+      "value": "div.fixed.z-40 div#my-account",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "hamburgerLobbiesTab",
+      "type": "css",
+      "value": "div.fixed.z-40 div#lobbies",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarPanel",
+      "type": "css",
+      "value": "div.bg-layer-secondary.container.mx-auto.p-2.rounded-t-xl",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarCloseBtn",
+      "type": "css",
+      "value": "div.bg-layer-secondary button[element-name='close-modal']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarContinueBtn",
+      "type": "css",
+      "value": "button[element-name='continue-playing']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarGameCard",
+      "type": "css",
+      "value": "div.bg-layer-secondary div.scroller-casino a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarActiveCard",
+      "type": "css",
+      "value": "div.bg-layer-secondary a[aria-current='page'].game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trySimilarActiveBadge",
+      "type": "css",
+      "value": "div.bg-layer-secondary a[aria-current='page'] strong",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "gameMinBet",
+      "type": "css",
+      "value": "div.bg-dark-800.px-3.py-1.text-xs.capitalize.rounded-md",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsDialog",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby^='Account Options']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsActiveItem",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby^='Account Options'] button.bg-primary-blue-gradient",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "accountOptionsBankingFrame",
+      "type": "css",
+      "value": "iframe[id^='banking_frame']",
+      "options": {},
+      "nth": 0
+    }
+  ],
+  "homePage": [
+    {
+      "key": "bannerCarousel",
+      "type": "css",
+      "value": "section.carousel.is-ltr.is-effect-fade",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bannerActiveSlide",
+      "type": "css",
+      "value": "section.carousel.is-ltr li.carousel__slide--active",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bannerImage",
+      "type": "css",
+      "value": "section.carousel.is-ltr li.carousel__slide--active img[alt='Standard Banner']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bannerNextBtn",
+      "type": "css",
+      "value": "div.banner-navigation.next",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bannerPrevBtn",
+      "type": "css",
+      "value": "div.banner-navigation.prev",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bannerActivePagination",
+      "type": "css",
+      "value": "button.carousel__pagination-button--active",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trendingSection",
+      "type": "css",
+      "value": "div#featured-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trendingGameCard",
+      "type": "css",
+      "value": "#featured-carousel a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trendingGameImg",
+      "type": "css",
+      "value": "#featured-carousel a.game-card img",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trendingFavBtn",
+      "type": "css",
+      "value": "#featured-carousel div[aria-label^='favorite-game']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "trendingFavActiveBtn",
+      "type": "css",
+      "value": "#featured-carousel div[aria-label^='favorite-game']:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersMarquee",
+      "type": "css",
+      "value": ".marquee__content[aria-hidden='false']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersItem",
+      "type": "css",
+      "value": ".marquee__content[aria-hidden='false'] a",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersGameTitle",
+      "type": "css",
+      "value": ".marquee__content[aria-hidden='false'] a span.truncate-text",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersAmount",
+      "type": "css",
+      "value": ".marquee__content[aria-hidden='false'] a span.text-primary-gold-600",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "bigWinnersMaskedUser",
+      "type": "css",
+      "value": ".marquee__content[aria-hidden='false'] a span.font-bold:not(.text-primary-gold-600)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "gameSection",
+      "type": "css",
+      "value": "div.scroller-casino:not(#featured-carousel)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "gameSectionCard",
+      "type": "css",
+      "value": "div.scroller-casino:not(#featured-carousel) a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "gameSectionImg",
+      "type": "css",
+      "value": "div.scroller-casino:not(#featured-carousel) a.game-card img",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "gameSectionAllLink",
+      "type": "css",
+      "value": "a[href='/spingames']:has(button[aria-label='All Games'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favouritesSection",
+      "type": "css",
+      "value": "#favourites-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favouritesGameCard",
+      "type": "css",
+      "value": "#favourites-carousel a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "favouritesFavActiveBtn",
+      "type": "css",
+      "value": "#favourites-carousel div[aria-label^='favorite-game']:has(svg.primary-pink-gradient-text)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "recentlyPlayedSection",
+      "type": "css",
+      "value": "#recently-played-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "recentlyPlayedCard",
+      "type": "css",
+      "value": "#recently-played-carousel a.game-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "loginPromptModal",
+      "type": "css",
+      "value": "div.login-container",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "signUpModal",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='Sign Up-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "providersSection",
+      "type": "css",
+      "value": "#home-providers-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "providerTile",
+      "type": "css",
+      "value": "#home-providers-carousel a.provider-card",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "providerImg",
+      "type": "css",
+      "value": "#home-providers-carousel a.provider-card img.provider-image",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "providersShowAllLink",
+      "type": "css",
+      "value": "a[href='/home/providers']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "providerDetailBreadcrumbProviders",
+      "type": "css",
+      "value": "a.underline.cursor-pointer[href='/home/providers']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "specialOffersSection",
+      "type": "css",
+      "value": "#specialoffers-carousel",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCard",
+      "type": "css",
+      "value": "#specialoffers-carousel a[href^='/promotions/']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardTitle",
+      "type": "css",
+      "value": "#specialoffers-carousel .text-base.font-bold.line-clamp-1",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "promoCardImg",
+      "type": "css",
+      "value": "#specialoffers-carousel div.overflow-hidden img",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "specialOffersShowAllLink",
+      "type": "css",
+      "value": "a[href='/promotions']:has(button)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotBanner",
+      "type": "css",
+      "value": "div.rounded-xl:has(button:has(img[alt*='more_info']))",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotJackpotMeter",
+      "type": "css",
+      "value": "a[href='/spingames?progressive=true']:has(span.text-primary-pink-1300)",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotPlayNowBtn",
+      "type": "css",
+      "value": "a[href='/spingames?progressive=true']:has(img[alt*='play_now'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotMoreInfoBtn",
+      "type": "css",
+      "value": "button:has(img[alt*='more_info'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotModal",
+      "type": "css",
+      "value": "[role='dialog'][aria-labelledby='STACKPOT JACKPOT-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotModalTitle",
+      "type": "css",
+      "value": "[id='STACKPOT JACKPOT-modal-title']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotModalDescription",
+      "type": "css",
+      "value": "[role='dialog'] div.h-full div.p-4 > .text-base-priority",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotModalCloseBtn",
+      "type": "css",
+      "value": "[role='dialog'] div.bg-base > button",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "stackpotModalPlayNowBtn",
+      "type": "css",
+      "value": "[role='dialog'] div.bg-base a[href='/spingames?progressive=true'] button",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "heroSection",
+      "type": "css",
+      "value": "div.hero-section",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "heroShowAllBtn",
+      "type": "css",
+      "value": "button.design-system-button.rounded-xl.p-2:not([aria-label]):not([disabled])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerResponsibleGambling",
+      "type": "css",
+      "value": "a[href='/responsible-gambling'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerFaq",
+      "type": "css",
+      "value": "a[href='/faq'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerGetTheApp",
+      "type": "css",
+      "value": "a[href='/get-the-app'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerPrivacyPolicy",
+      "type": "css",
+      "value": "a[href='/privacy-policy'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerContactUs",
+      "type": "css",
+      "value": "a[href='/contact-us'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerTermsConditions",
+      "type": "css",
+      "value": "a[href='/terms-and-conditions'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerAboutUs",
+      "type": "css",
+      "value": "a[href='/about-us'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerPaiaManual",
+      "type": "css",
+      "value": "a[href='/paia-manual'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerHowTo",
+      "type": "css",
+      "value": "a[href='/how-to'].footer-nav",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerAppDownloadLink",
+      "type": "css",
+      "value": "a[href*='JackpotCityAppDownload']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerAppleBtn",
+      "type": "css",
+      "value": "button:has(img[alt='Jackpotcity Apple App'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerAndroidBtn",
+      "type": "css",
+      "value": "button:has(img[alt='Jackpotcity Android App'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerHuaweiBtn",
+      "type": "css",
+      "value": "button:has(img[alt='Jackpotcity Huawei App'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerInstagramLink",
+      "type": "css",
+      "value": "a[href*='instagram.com']:has(button[aria-label='instagram'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerFacebookLink",
+      "type": "css",
+      "value": "a[href*='facebook.com']:has(button[aria-label='Facebook:'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerTwitterLink",
+      "type": "css",
+      "value": "a[href*='x.com']:has(button[aria-label='Twitter:'])",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerVisaIcon",
+      "type": "css",
+      "value": "img[alt='visa']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerMastercardIcon",
+      "type": "css",
+      "value": "img[alt='master_card']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerZapperIcon",
+      "type": "css",
+      "value": "img[alt='zapper']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerOzowIcon",
+      "type": "css",
+      "value": "img[alt='ozow']",
+      "options": {},
+      "nth": 0
+    },
+    {
+      "key": "footerApplePayIcon",
+      "type": "css",
+      "value": "img[alt='apple_pay']",
       "options": {},
       "nth": 0
     }

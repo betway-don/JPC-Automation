@@ -59,8 +59,14 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(VALID_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchResultsGrid).toBeVisible({ timeout: 15000 });
-            const count = await searchPage.getSearchResults().count();
-            expect(count).toBeGreaterThan(0);
+            const labels = await searchPage.getSearchResults().evaluateAll(
+                (els: Element[]) => els.map(e => e.getAttribute('aria-label') || ''));
+            expect(labels.length).toBeGreaterThan(0);
+            // the engine matches fuzzily (e.g. "hot" also surfaces "Burning Goals"), so require the
+            // top result to match exactly and the majority of the set to be on-topic
+            expect(labels[0], `top result "${labels[0]}" does not match query "${VALID_QUERY}"`).toMatch(/hot/i);
+            const matching = labels.filter(l => /hot/i.test(l)).length;
+            expect(matching, `only ${matching}/${labels.length} results match "${VALID_QUERY}"`).toBeGreaterThanOrEqual(Math.ceil(labels.length / 2));
             await searchPage.highlightElement('searchResultsGrid');
             await ScreenshotHelper(page, screenshotDir, 'GS-LO-004-relevantResults', testInfo);
         });
@@ -71,6 +77,8 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(PARTIAL_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchGameImage).toBeVisible({ timeout: 15000 });
+            // thumbnail must have actually loaded, not just have a broken src
+            await expect.poll(() => searchPage.locators.searchGameImage.first().evaluate((el: any) => el.naturalWidth), { timeout: 10000 }).toBeGreaterThan(0);
             await expect(searchPage.locators.searchGameTitle).toBeVisible({ timeout: 15000 });
             await searchPage.highlightElement('searchGameImage');
             await searchPage.highlightElement('searchGameTitle');
@@ -107,9 +115,14 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(VALID_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchGameCard).toBeVisible({ timeout: 15000 });
+            // remember WHICH game we clicked so we can verify the right page opens
+            const href = await searchPage.getSearchResults().first().getAttribute('href');
+            const gamePath = (href || '').split('?')[0];
+            expect(gamePath).toContain('/home/');
             await searchPage.clickFirstResult();
-            await page.waitForTimeout(2000);
-            expect(page.url()).toContain('/home/');
+            await expect(page).toHaveURL(new RegExp(gamePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), { timeout: 15000 });
+            // logged out: the game page offers Play now (login required to play)
+            await expect(searchPage.playNowButton).toBeVisible({ timeout: 15000 });
             await ScreenshotHelper(page, screenshotDir, 'GS-LO-008-gamePageRedirect', testInfo);
         });
 
@@ -211,6 +224,8 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(PARTIAL_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchGameImage).toBeVisible({ timeout: 15000 });
+            // thumbnail must have actually loaded, not just have a broken src
+            await expect.poll(() => searchPage.locators.searchGameImage.first().evaluate((el: any) => el.naturalWidth), { timeout: 10000 }).toBeGreaterThan(0);
             await searchPage.highlightElement('searchGameImage');
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-007-gameTileImage', testInfo);
         });
@@ -275,9 +290,22 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(PARTIAL_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchCategoryTabList).toBeVisible({ timeout: 15000 });
+            // capture the full result set first, then verify the category shows a subset of it.
+            // NOTE: compare by game slug — the same game carries a different path per tab
+            // (e.g. /home/topspins/<slug> in All vs /home/featured/<slug> in a category)
+            const slugOf = (href: string) => (href.split('?')[0].split('/').filter(Boolean).pop() || '');
+            const allSlugs = await searchPage.getSearchResults().evaluateAll(
+                (els: Element[]) => els.map(e => e.getAttribute('href') || ''));
             await searchPage.clickCategoryTab(CATEGORY_NAME);
             await page.waitForTimeout(1500);
             await expect(searchPage.locators.searchResultsGrid).toBeVisible({ timeout: 15000 });
+            const categorySlugs = await searchPage.getSearchResults().evaluateAll(
+                (els: Element[]) => els.map(e => e.getAttribute('href') || ''));
+            expect(categorySlugs.length).toBeGreaterThan(0);
+            const allSet = new Set(allSlugs.map(slugOf));
+            for (const h of categorySlugs) {
+                expect(allSet.has(slugOf(h)), `category result ${h} was not present in the All results`).toBe(true);
+            }
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-012-categoryFilter', testInfo);
         });
 
@@ -334,8 +362,14 @@ export async function runSearchNewSuiteTests(
             await searchPage.clickCategoryTab(CATEGORY_NAME);
             await page.waitForTimeout(1500);
             await expect(searchPage.locators.searchResultsGrid).toBeVisible({ timeout: 15000 });
-            const count = await searchPage.getSearchResults().count();
-            expect(count).toBeGreaterThanOrEqual(0);
+            // "no unrelated games": fuzzy matching means a tail of loose matches is expected
+            // (e.g. "Hit Bar" for "hot"), but the top result and the majority must be on-topic
+            const labels = await searchPage.getSearchResults().evaluateAll(
+                (els: Element[]) => els.map(e => e.getAttribute('aria-label') || ''));
+            expect(labels.length).toBeGreaterThan(0);
+            expect(labels[0], `top result "${labels[0]}" unrelated to query "${PARTIAL_QUERY}"`).toMatch(/hot/i);
+            const matching = labels.filter(l => /hot/i.test(l)).length;
+            expect(matching, `only ${matching}/${labels.length} category results match "${PARTIAL_QUERY}"`).toBeGreaterThanOrEqual(Math.ceil(labels.length / 2));
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-016-noUnrelatedGames', testInfo);
         });
 
@@ -409,6 +443,8 @@ export async function runSearchNewSuiteTests(
             await expect(searchPage.locators.searchResultsGrid).toBeVisible({ timeout: 15000 });
             const count = await searchPage.getSearchResults().count();
             expect(count).toBeGreaterThan(0);
+            // the top result must actually be a roulette game
+            await expect(searchPage.getSearchResults().first()).toHaveAttribute('aria-label', /roulette/i);
             await searchPage.highlightElement('searchResultsGrid');
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-022-categoryKeywordSearch', testInfo);
         });
@@ -419,9 +455,14 @@ export async function runSearchNewSuiteTests(
             await searchPage.typeSearch(VALID_QUERY);
             await page.waitForTimeout(2000);
             await expect(searchPage.locators.searchGameCard).toBeVisible({ timeout: 15000 });
+            // remember WHICH game we clicked so we can verify the right page opens
+            const href = await searchPage.getSearchResults().first().getAttribute('href');
+            const gamePath = (href || '').split('?')[0];
+            expect(gamePath).toContain('/home/');
             await searchPage.clickFirstResult();
-            await page.waitForTimeout(2000);
-            expect(page.url()).toContain('/home/');
+            await expect(page).toHaveURL(new RegExp(gamePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), { timeout: 15000 });
+            // logged in: the game must actually launch in its canvas/iframe
+            await expect(searchPage.gameFrame).toBeVisible({ timeout: 30000 });
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-023-launchGame', testInfo);
         });
 
@@ -502,7 +543,7 @@ export async function runSearchNewSuiteTests(
             await page.waitForTimeout(1000);
             await expect(searchPage.locators.recentSearchesSection).toBeVisible({ timeout: 15000 });
             await expect(searchPage.locators.recentSearchItem).toBeVisible({ timeout: 15000 });
-            const historyText = await searchPage.locators.recentSearchItem.locator('p').first().textContent();
+            const historyText = await searchPage.recentSearchItemText.textContent();
             expect(historyText?.trim()).toBe(VALID_QUERY);
             await searchPage.highlightElement('recentSearchesSection');
             await ScreenshotHelper(page, screenshotDir, 'GS-LI-029-recentSearchHistory', testInfo);

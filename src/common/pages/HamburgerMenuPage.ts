@@ -2,13 +2,13 @@ import { Page, Locator } from '@playwright/test';
 import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
 
-export class HamburgerMenuPage {
-    readonly page: Page;
+export class HamburgerMenuPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, protected safeActions: SafeActions) {
-        this.page = page;
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
         const configs = loadLocatorsFromJson('hamBurgerMenu');
 
         this.locators = {
@@ -63,11 +63,26 @@ export class HamburgerMenuPage {
             crashGamesCTA: getLocator(this.page, configs["crashGamesCTA"]),
             transactionSummaryShortcut: getLocator(this.page, configs["transactionSummaryShortcut"]),
             cityRewardsShortcut: getLocator(this.page, configs["cityRewardsShortcut"]),
+            // account options dialog (opened by My Account options / shortcuts)
+            accountOptionsDialog: getLocator(this.page, configs["accountOptionsDialog"]),
+            accountOptionsActiveItem: getLocator(this.page, configs["accountOptionsActiveItem"]),
+            accountOptionsBankingFrame: getLocator(this.page, configs["accountOptionsBankingFrame"]),
         };
+    }
+
+    /** Scrollable body of the open hamburger panel. */
+    get menuScrollContainer(): Locator {
+        return this.page.locator('.grow.overflow-y-auto').first();
+    }
+    /** Update button inside the Account Settings pane of the Account Options dialog. */
+    get accountSettingsUpdateButton(): Locator {
+        return this.locators.accountOptionsDialog.getByRole('button', { name: /update/i });
     }
 
     async openMenu() {
         await this.safeActions.safeClick('menuButton', this.locators.menuButton);
+        // menu is open once its close button renders — saves every caller a blind sleep
+        await this.locators.hamburgerMenuClose.waitFor({ state: 'visible', timeout: 10000 });
     }
 
     async toggleTheme() {

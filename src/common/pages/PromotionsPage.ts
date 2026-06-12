@@ -2,13 +2,13 @@ import { Page, Locator } from '@playwright/test';
 import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
 
-export class PromotionsPage {
-    readonly page: Page;
+export class PromotionsPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, private safeActions: SafeActions) {
-        this.page = page;
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
         const configs = loadLocatorsFromJson('promotions');
 
         this.locators = {
@@ -119,6 +119,21 @@ export class PromotionsPage {
 
     getPromoCards() {
         return this.page.locator('div.tabs-content a[href^="/promotions/"]');
+    }
+
+    /** First promo card that exposes a "Tell me more" CTA. */
+    get firstTellMeMoreCard(): Locator {
+        return this.getPromoCards()
+            .filter({ has: this.page.getByRole('button', { name: 'Tell me more' }) })
+            .first();
+    }
+    /** Title element within a given promo card. */
+    cardTitleOf(card: Locator): Locator {
+        return card.locator('div.text-base.font-bold.line-clamp-1').first();
+    }
+    /** "Tell me more" CTA within a given promo card. */
+    tellMeMoreOf(card: Locator): Locator {
+        return card.getByRole('button', { name: 'Tell me more' });
     }
 
     getEligibleGameCards() {

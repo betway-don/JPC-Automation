@@ -2,13 +2,13 @@ import { Page, Locator } from '@playwright/test';
 import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
 import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
 
-export class WinnersCirclePage {
-    readonly page: Page;
+export class WinnersCirclePage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, private safeActions: SafeActions) {
-        this.page = page;
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
         const configs = loadLocatorsFromJson('winnersCircle');
 
         this.locators = {
@@ -35,6 +35,15 @@ export class WinnersCirclePage {
         await this.page.waitForURL(/\/winners/, { timeout: 10000 });
         await this.page.waitForLoadState('domcontentloaded');
         await this.page.locator('div.game-card.is-carousel.big-card').first().waitFor({ state: 'visible', timeout: 15000 });
+    }
+
+    /** Rows in the All Winners table. */
+    get allWinnersRows(): Locator {
+        return this.locators.allWinnersTable.locator('tbody tr');
+    }
+    /** Favourite icons on the Big Winners carousel cards. */
+    get bigWinnerFavIcons(): Locator {
+        return this.page.locator('div.game-card.is-carousel.big-card div[aria-label^="favorite-game"]');
     }
 
     getGameSection(title: string) {
