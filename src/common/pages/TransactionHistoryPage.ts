@@ -1,7 +1,7 @@
-import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
-import { getLocator } from '../../global/utils/file-utils/locatorResolver';
+import { Page, Locator, expect } from '@playwright/test';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
+import { css, xpath, role, text, first, at } from '../locators/sel';
 
 export enum TransactionFilterType {
     PAYOUT = 'Payout',
@@ -12,50 +12,47 @@ export enum TransactionFilterType {
     DEPOSIT = 'Deposit'
 }
 
-export class TransactionHistoryPage {
-    readonly page: Page;
+export class TransactionHistoryPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, public readonly safeActions: SafeActions) {
-        this.page = page;
-        const configs = loadLocatorsFromJson('transactionHistory');
-
-        this.locators = {
-            menuButton: getLocator(this.page, configs["menuButton"]),
-            transactionSummaryLink: getLocator(this.page, configs["transactionSummaryLink"]),
-            filterButton: getLocator(this.page, configs["filterButton"]),
-            startDateInput: getLocator(this.page, configs["startDateInput"]),
-            endDateInput: getLocator(this.page, configs["endDateInput"]),
-            previousMonthButton: getLocator(this.page, configs["previousMonthButton"]),
-            continueButton: getLocator(this.page, configs["continueButton"]),
-            resetButton: getLocator(this.page, configs["resetButton"]),
-            closeFilterButton: getLocator(this.page, configs["closeFilterButton"]),
-            lastWeekButton: getLocator(this.page, configs["lastWeekButton"]),
-            last2WeeksButton: getLocator(this.page, configs["last2WeeksButton"]),
-            lastMonthButton: getLocator(this.page, configs["lastMonthButton"]),
-            typeDropdownLabelContainer: getLocator(this.page, configs["typeDropdownLabelContainer"]),
-            typeFilterLabel: getLocator(this.page, configs["typeFilterLabel"]),
-            payoutToggleContainer: getLocator(this.page, configs["payoutToggleContainer"]),
-            payoutToggleInput: getLocator(this.page, configs["payoutToggleInput"]),
-            tableRows: getLocator(this.page, configs["tableRows"]),
-            columnHeaders: getLocator(this.page, configs["columnHeaders"]),
-            showDetailIcon: getLocator(this.page, configs["showDetailIcon"]),
-            detailViewBackBtn: getLocator(this.page, configs["detailViewBackBtn"]),
-            nextPageBtn: getLocator(this.page, configs["nextPageBtn"]),
-            prevPageBtn: getLocator(this.page, configs["prevPageBtn"]),
-            pageNumbers: getLocator(this.page, configs["pageNumbers"]),
-            goToPageEllipsis: getLocator(this.page, configs["goToPageEllipsis"]),
-            goToInput: getLocator(this.page, configs["goToInput"]),
-            goButton: getLocator(this.page, configs["goButton"]),
-            refreshButton: getLocator(this.page, configs["refreshButton"]),
-            noResultsMessage: getLocator(this.page, configs["noResultsMessage"]),
-            payoutOption: getLocator(this.page, configs["payoutOption"]),
-            wagerOption: getLocator(this.page, configs["wagerOption"]),
-            bonusOption: getLocator(this.page, configs["bonusOption"]),
-            accountAdjustmentOption: getLocator(this.page, configs["accountAdjustmentOption"]),
-            withdrawalOption: getLocator(this.page, configs["withdrawalOption"]),
-            depositOption: getLocator(this.page, configs["depositOption"]),
-        };
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
+        this.locators = this.build('transactionHistory', {
+            menuButton: first(role("button", {"name":"menu"})),
+            transactionSummaryLink: at(css("div:has-text('Transaction Summary')"), 5),
+            filterButton: first(role("button", {"name":"Filter"})),
+            startDateInput: css("button[title=\"Start Date\"]"),
+            endDateInput: css("button[title=\"End Date\"]"),
+            previousMonthButton: css("button[title=\"previous-month\"]"),
+            continueButton: first(role("button", {"name":"Continue"})),
+            resetButton: first(text("Reset", {"exact":true})),
+            closeFilterButton: first(css("[element-name='close-modal']")),
+            lastWeekButton: first(role("button", {"name":"Last Week"})),
+            last2WeeksButton: first(role("button", {"name":"Last 2 weeks"})),
+            lastMonthButton: first(role("button", {"name":"Last Month"})),
+            typeDropdownLabelContainer: first(css("[data-pc-name=\"multiselect\"] [data-pc-section=\"label\"]")),
+            typeFilterLabel: first(text("Filter By Type")),
+            payoutToggleContainer: first(xpath("//*[text()='Show Payout Only']/..")),
+            payoutToggleInput: first(role("switch")),
+            tableRows: css("table.shaded-table tbody tr"),
+            columnHeaders: first(css("td.cell-width:has-text(\"{headerName}\")")),
+            showDetailIcon: first(css("td .showDetail")),
+            detailViewBackBtn: first(role("button", {"name":"Back"})),
+            nextPageBtn: css("div.rounded-r-md"),
+            prevPageBtn: css("div.rounded-l-md"),
+            pageNumbers: css("div.flex-row.border-1.std-border.rounded-md"),
+            goToPageEllipsis: first(text("...")),
+            goToInput: first(css("#goToInput")),
+            goButton: first(role("button", {"name":"go"})),
+            refreshButton: first(role("button", {"name":"Refresh"})),
+            noResultsMessage: first(text("No results")),
+            payoutOption: first(role("option", {"name":"Payout"})),
+            wagerOption: first(role("option", {"name":"Wager"})),
+            bonusOption: first(role("option", {"name":"Bonus"})),
+            withdrawalOption: first(role("option", {"name":"Withdrawal"})),
+            depositOption: first(role("option", {"name":"Deposit"})),
+            accountAdjustmentOption: first(role("option", {"name":"Account Adjustment"})),
+        });
     }
 
     // --- element accessors (selectors stay inside the Page Object) ---
@@ -168,4 +165,169 @@ export class TransactionHistoryPage {
         await chip.locator('svg').click({ force: true });
     }
 
+    // ══════════════════════════════════════════════════════════════════════════
+    //  Intent API — mechanics (waits, date math, DOM probes) live here.
+    // ══════════════════════════════════════════════════════════════════════════
+    private static readonly DATE_RE = /\d{2}\/\d{2}\/\d{2}-\d{2}:\d{2}:\d{2}/;
+    private static readonly AMOUNT_RE = /[\d,]+\.\d{2}/;
+    private readonly headerNames = ['Transaction ID', 'Date', 'Game Name', 'Transaction Type', 'Amount'];
+
+    get firstRow(): Locator { return this.locators.tableRows.first(); }
+    get noResultsMessage(): Locator { return this.locators.noResultsMessage; }
+    get payoutToggle(): Locator { return this.locators.payoutToggleInput; }
+    get typeDropdownLabel(): Locator { return this.locators.typeDropdownLabelContainer; }
+
+    // ── actions (absorb waits) ──────────────────────────────────────────────────
+    async open(): Promise<void> {
+        await this.navigateToTransactionHistory();
+        await this.firstRow.waitFor({ state: 'visible' });
+    }
+    async openDetailView(): Promise<void> {
+        await this.locators.showDetailIcon.first().click();
+        await this.locators.detailViewBackBtn.waitFor({ state: 'visible' });
+    }
+    async backToSummary(): Promise<void> {
+        await this.locators.detailViewBackBtn.click();
+        await this.summaryHeading.waitFor({ state: 'visible' });
+    }
+    async clickRefresh(): Promise<void> {
+        await this.locators.refreshButton.click();
+        await this.firstRow.waitFor({ state: 'visible' });
+    }
+    async gotoPageNumber(n: number): Promise<void> { await this.goToPage(n); }
+    async gotoPageViaInput(n: number): Promise<void> {
+        await this.locators.goToPageEllipsis.click();
+        await this.locators.goToInput.fill(String(n));
+        await this.goToButton.click();
+    }
+    async nextPage(): Promise<void> { await this.locators.nextPageBtn.click(); }
+    async prevPage(): Promise<void> { await this.locators.prevPageBtn.click(); }
+    async applyDuration(which: 'week' | '2weeks' | 'month'): Promise<void> {
+        const btn = which === 'week' ? this.locators.lastWeekButton : which === '2weeks' ? this.locators.last2WeeksButton : this.locators.lastMonthButton;
+        await btn.click();
+    }
+    async continueFilter(): Promise<void> { await this.locators.continueButton.click(); await this.filterModal.waitFor({ state: 'hidden' }).catch(() => { }); }
+    async resetFilter(): Promise<void> { await this.locators.resetButton.click(); }
+    async closeFilter(): Promise<void> { await this.locators.closeFilterButton.click(); await this.filterModal.waitFor({ state: 'hidden' }).catch(() => { }); }
+    async openStartCalendar(): Promise<void> { await this.locators.startDateInput.click(); await this.calendarGrid.waitFor({ state: 'visible' }); }
+    async openEndCalendar(): Promise<void> { await this.locators.endDateInput.click(); await this.calendarGrid.waitFor({ state: 'visible' }); }
+    async prevCalendarMonth(): Promise<void> { await this.locators.previousMonthButton.click(); }
+    async pickFirstEnabledDate(): Promise<string> {
+        const cell = this.calendarEnabledCells.first();
+        const title = (await cell.getAttribute('title')) ?? '';
+        await cell.click();
+        return title;
+    }
+    async pickLastEnabledDate(): Promise<void> { await this.calendarEnabledCells.last().click(); }
+    async pickDateByTitle(title: string): Promise<void> { await this.calendarCellByTitle(title).click(); }
+
+    // ── data helpers ────────────────────────────────────────────────────────────
+    private typeTexts(): Promise<string[]> {
+        return this.locators.tableRows.evaluateAll((rows: Element[]) =>
+            rows.map(r => (r.querySelectorAll('td')[3]?.querySelector('span.truncate')?.textContent ?? '').trim()));
+    }
+
+    // ── assertions ──────────────────────────────────────────────────────────────
+    async expectListLoaded(): Promise<void> { await expect(this.firstRow).toBeVisible(); }
+    async expectColumnHeaders(): Promise<void> {
+        for (const h of this.headerNames) await expect(this.getColumnHeader(h)).toBeVisible();
+    }
+    /** Payout/Wager rows follow the "[Provider] [Type]" format. */
+    async expectTypeFormat(): Promise<void> {
+        const texts = await this.typeTexts();
+        expect(texts.length).toBeGreaterThan(0);
+        for (const t of texts) if (t.endsWith('Payout') || t.endsWith('Wager')) expect(t).toMatch(/^.+\s(Payout|Wager)$/);
+    }
+    async expectPayoutsPositive(): Promise<void> {
+        const texts = await this.typeTexts();
+        for (let i = 0; i < texts.length; i++) {
+            if (!texts[i].endsWith('Payout')) continue;
+            const cell = this.getTransactionAmountCell(i);
+            await expect(this.minusIndicatorIn(cell)).toHaveCount(0);
+            await expect(cell).toContainText(TransactionHistoryPage.AMOUNT_RE);
+        }
+    }
+    async expectWagersNegative(): Promise<void> {
+        const texts = await this.typeTexts();
+        for (let i = 0; i < texts.length; i++) {
+            if (!texts[i].endsWith('Wager')) continue;
+            const cell = this.getTransactionAmountCell(i);
+            await expect(this.minusIndicatorIn(cell)).toHaveCount(1);
+            await expect(cell).toContainText(TransactionHistoryPage.AMOUNT_RE);
+        }
+    }
+    async expectDetailViewOpen(): Promise<void> { await expect(this.locators.detailViewBackBtn).toBeVisible(); }
+    async expectOnSummary(): Promise<void> { await expect(this.summaryHeading).toBeVisible(); }
+    async expectActivePage(n: number): Promise<void> { await expect(this.getPageLocator(n)).toHaveClass(/blue-gradient/); }
+    async expectActivePage1(): Promise<void> { await expect(this.getPage1Locator()).toHaveClass(/blue-gradient/); }
+    /** Every visible row's date falls within the last `days` days (empty result is valid). */
+    async expectRowsWithinDays(days: number): Promise<void> {
+        if (await this.noResultsMessage.isVisible().catch(() => false)) return;
+        const cellTexts = await this.allRowCells.allTextContents();
+        const dates = cellTexts.map(t => (t.match(TransactionHistoryPage.DATE_RE) || [])[0]).filter((t): t is string => !!t);
+        expect(dates.length, 'no date cells in filtered table').toBeGreaterThan(0);
+        const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days); cutoff.setHours(0, 0, 0, 0);
+        for (const raw of dates) {
+            const [dd, mm, yy] = raw.split('-')[0].split('/').map(Number);
+            expect(new Date(2000 + yy, mm - 1, dd).getTime(), `row date ${raw} outside last ${days} days`).toBeGreaterThanOrEqual(cutoff.getTime());
+        }
+    }
+    async expectWithin30Days(): Promise<void> {
+        const count = await this.dateCellSpans.count();
+        const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30); cutoff.setHours(0, 0, 0, 0);
+        for (let i = 0; i < count; i++) {
+            const raw = (await this.dateCellSpans.nth(i).textContent())?.trim() ?? '';
+            const [dd, mm, yy] = raw.split('-')[0].split('/').map(Number);
+            expect(new Date(2000 + yy, mm - 1, dd).getTime()).toBeGreaterThanOrEqual(cutoff.getTime());
+        }
+    }
+    async expectFilterPromptUI(): Promise<void> {
+        await expect(this.filterModal).toBeVisible();
+        await expect(this.filterModalTitle).toBeVisible();
+        await expect(this.locators.startDateInput).toBeVisible();
+        await expect(this.locators.endDateInput).toBeVisible();
+        await expect(this.locators.lastWeekButton).toBeVisible();
+        await expect(this.locators.last2WeeksButton).toBeVisible();
+        await expect(this.locators.lastMonthButton).toBeVisible();
+        await expect(this.filterPayoutSwitch).toBeAttached();
+        await expect(this.filterTypeMultiselect).toBeVisible();
+        await expect(this.locators.resetButton).toBeVisible();
+        await expect(this.locators.continueButton).toBeVisible();
+    }
+    async expectFilterModalClosed(): Promise<void> { await expect(this.filterModal).not.toBeVisible(); }
+    async expectDateRangeChosen(): Promise<void> {
+        await expect(this.startDatePlaceholder).toHaveCount(0);
+        await expect(this.endDatePlaceholder).toHaveCount(0);
+    }
+    async expectDateRangeCleared(): Promise<void> {
+        await expect(this.startDatePlaceholder).toBeVisible();
+        await expect(this.endDatePlaceholder).toBeVisible();
+    }
+    async expectFiltersReset(): Promise<void> {
+        await this.expectDateRangeCleared();
+        await expect(this.typeDropdownLabel).toHaveText('All');
+    }
+    async expectCalendarLimitedToLast30Days(): Promise<void> {
+        await expect(this.calendarGrid).toBeVisible();
+        await expect(this.calendarNextMonth).toBeDisabled();
+        await expect(this.calendarDisabledCells.first()).toBeVisible();
+        await this.prevCalendarMonth();
+        await expect(this.calendarDisabledCells.first()).toBeVisible();
+    }
+    async expectDurationOptions(): Promise<void> {
+        await expect(this.locators.lastWeekButton).toBeVisible();
+        await expect(this.locators.last2WeeksButton).toBeVisible();
+        await expect(this.locators.lastMonthButton).toBeVisible();
+    }
+    async expectNoResults(): Promise<void> { await expect(this.noResultsMessage).toBeVisible(); }
+    async expectPayoutToggle(checked: boolean): Promise<void> { await expect(this.payoutToggle).toHaveAttribute('aria-checked', String(checked)); }
+    async expectTypeDropdownAll(): Promise<void> {
+        await expect(this.typeDropdownLabel).toHaveText('All');
+        await expect(this.typeDropdownLabel).toHaveAttribute('data-p', 'placeholder');
+    }
+    async expectTypeDropdownCount(n: number): Promise<void> { await expect(this.typeDropdownLabel).toContainText(`(${n}) Transactions Selected`); }
+    async expectTypeDropdownContains(text: string): Promise<void> { await expect(this.typeDropdownLabel).toContainText(text); }
+    async expectTypeDropdownNotPlaceholder(): Promise<void> { await expect(this.typeDropdownLabel).not.toHaveAttribute('data-p', 'placeholder'); }
+    async expectFilterChip(label: string): Promise<void> { await expect(this.getFilterChip(label)).toBeVisible(); }
+    async expectFilterChipGone(label: string): Promise<void> { await expect(this.getFilterChip(label)).not.toBeVisible(); }
 }

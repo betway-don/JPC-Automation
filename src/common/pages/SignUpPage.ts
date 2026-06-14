@@ -1,45 +1,42 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
-import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
+import { css, id, role, text, title, first, at, withText } from '../locators/sel';
 
-export class SignUpPage {
-    readonly page: Page;
+export class SignUpPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, private safeActions: SafeActions) {
-        this.page = page;
-        const configs = loadLocatorsFromJson('signUp');
-
-        this.locators = {
-            registerButton: getLocator(this.page, configs["registerButton"]),
-            loginButton: getLocator(this.page, configs["loginButton"]),
-            mobileInput: getLocator(this.page, configs["mobileInput"]),
-            passwordInput: getLocator(this.page, configs["passwordInput"]),
-            confirmPasswordInput: getLocator(this.page, configs["confirmPasswordInput"]),
-            firstNameInput: getLocator(this.page, configs["firstNameInput"]),
-            lastNameInput: getLocator(this.page, configs["lastNameInput"]),
-            emailInput: getLocator(this.page, configs["emailInput"]),
-            nextButton: getLocator(this.page, configs["nextButton"]),
-            idTypeDropdown: getLocator(this.page, configs["idTypeDropdown"]),
-            passportOption: getLocator(this.page, configs["passportOption"]),
-            saIdOption: getLocator(this.page, configs["saIdOption"]),
-            passportInput: getLocator(this.page, configs["passportInput"]),
-            saIdInput: getLocator(this.page, configs["saIdInput"]),
-            dobDropdown: getLocator(this.page, configs["dobDropdown"]),
-            dobSampleDate: getLocator(this.page, configs["dobSampleDate"]),
-            sourceOfIncomeDropdown: getLocator(this.page, configs["sourceOfIncomeDropdown"]),
-            sourceOfIncomeSalary: getLocator(this.page, configs["sourceOfIncomeSalary"]),
-            promoCheckbox: getLocator(this.page, configs["promoCheckbox"]),
-            ageCheckbox: getLocator(this.page, configs["ageCheckbox"]),
-            agreeToAllCheckbox: getLocator(this.page, configs["agreeToAllCheckbox"]),
-            termsCheckbox: getLocator(this.page, configs["termsCheckbox"]),
-            preferredLanguageDropdown: getLocator(this.page, configs["preferredLanguageDropdown"]),
-            referralCodeToggle: getLocator(this.page, configs["referralCodeToggle"]),
-            referralCodeInput: getLocator(this.page, configs["referralCodeInput"]),
-            signUpFormButton: getLocator(this.page, configs["signUpFormButton"]),
-            diallingCode: getLocator(this.page, configs["diallingCode"]),
-        };
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
+        this.locators = this.build('signUp', {
+            registerButton: first(role("button", {"name":"Register"})),
+            loginButton: first(role("button", {"name":"Login"})),
+            mobileInput: first(id("username")),
+            passwordInput: first(id("password")),
+            firstNameInput: first(role("textbox", {"name":"firstname"})),
+            lastNameInput: first(role("textbox", {"name":"lastname"})),
+            emailInput: first(role("textbox", {"name":"/email/i"})),
+            nextButton: first(role("button", {"name":"Next","exact":true})),
+            idTypeDropdown: first(withText(role('combobox'), 'South African ID')),
+            passportOption: first(text("Passport")),
+            saIdOption: at(text("South African ID"), 1),
+            passportInput: first(role("textbox", {"name":"Passport"})),
+            saIdInput: first(role("textbox", {"name":"idNumber"})),
+            dobDropdown: first(role("combobox", {"name":"Enter Date of Birth"})),
+            dobSampleDate: first(title("05/09/2026")),
+            sourceOfIncomeDropdown: first(role("combobox", {"name":"Enter Source of Income"})),
+            sourceOfIncomeSalary: first(text("Salary / Wages")),
+            promoCheckbox: first(role("checkbox", {"name":"Send Jackpot City Promotions"})),
+            ageCheckbox: first(role("checkbox", {"name":"I am over 18 years of age & I"})),
+            signUpFormButton: first(role("button", {"name":"Sign Up"})),
+            diallingCode: first(css("span.absolute.text-base-priority.left-0 > span")),
+            confirmPasswordInput: first(id("passwordConfirmation")),
+            agreeToAllCheckbox: first(id("agreeToAll")),
+            termsCheckbox: first(id("terms")),
+            preferredLanguageDropdown: first(id("preferredLanguage")),
+            referralCodeToggle: first(css("[data-element='input-referralCode-container'] .cursor-pointer")),
+            referralCodeInput: first(id("referralCode")),
+        });
     }
 
     async goto(url?: string) {

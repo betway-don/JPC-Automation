@@ -8,8 +8,6 @@ import { LoginPage } from '../pages/LoginPage';
 import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
 import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
-import { LimitsPage } from '../pages/LimitsPage';
-import { UpdatePasswordPage } from '../pages/UpdatePasswordPage';
 import { PromotionsPage } from '../pages/PromotionsPage';
 import { SearchPage } from '../pages/SearchPage';
 import { WinnersCirclePage } from '../pages/WinnersCirclePage';
@@ -47,8 +45,6 @@ type JackpotCityFixtures = {
     hamburgerMenuPage: HamburgerMenuPage;
     headerPage: HeaderPage;
     transactionHistoryPage: TransactionHistoryPage;
-    limitsPage: LimitsPage;
-    updatePasswordPage: UpdatePasswordPage;
     promotionsPage: PromotionsPage;
     searchPage: SearchPage;
     winnersCirclePage: WinnersCirclePage;
@@ -102,16 +98,6 @@ const testBase = base.extend<JackpotCityFixtures>({
     transactionHistoryPage: async ({ page, safeActions }, use) => {
         const transactionHistoryPage = new TransactionHistoryPage(page, safeActions);
         await use(transactionHistoryPage);
-    },
-
-    limitsPage: async ({ page, safeActions }, use) => {
-        const limitsPage = new LimitsPage(page, safeActions);
-        await use(limitsPage);
-    },
-
-    updatePasswordPage: async ({ page, safeActions }: { page: Page, safeActions: SafeActions }, use: (r: UpdatePasswordPage) => Promise<void>) => {
-        const updatePasswordPage = new UpdatePasswordPage(page, safeActions);
-        await use(updatePasswordPage);
     },
 
     promotionsPage: async ({ page, safeActions }, use) => {

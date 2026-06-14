@@ -1,20 +1,23 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
-import { getLocator } from '../../global/utils/file-utils/locatorResolver';
+import { LocatorMap } from '../locators/sel';
+import { overridesForPage } from '../locators/regionOverrides';
 import { SafeActions } from '../actions/SafeActions';
 
 /**
  * BasePage — foundation for every Page Object.
  *
  * Architecture contract (enterprise POM):
- *  - Selectors live ONLY in the locator store (locators.json) or inside Page Objects.
- *    They must never appear in *.shared.ts test files.
- *  - Tests interact with the app exclusively through Page Object getters / actions /
- *    assertions. A guard test (architecture.guard.spec) enforces this.
- *  - Shared, cross-page UI (login modal, share modal, account-options dialog, …) is
- *    modelled as Component Objects (see src/common/components) and reused by Page Objects.
+ *  - Every selector lives in exactly ONE place: a Page Object's `loc` map (or a Component's),
+ *    declared with the `sel` builders (css/role/text/…). Raw selector strings must never appear
+ *    in *.shared.ts test files, and a Page Object never calls `page.locator(...)` outside its map.
+ *  - A region that differs supplies a partial override map in regions/<R>/locators.ts; BasePage
+ *    merges it automatically (see {@link build}). One selector change = one place.
+ *  - Tests interact with the app exclusively through Page Object getters / actions / assertions.
+ *    A guard test (architecture.guard.spec) enforces the no-raw-selectors rule.
+ *  - Shared, cross-page UI (login modal, share modal, …) is modelled as Component Objects
+ *    (see src/common/components) and reused by Page Objects.
  *
- * Subclasses call `this.bind('<locatorGroup>')` to load their locator group from the store.
+ * Subclasses build their resolved locator map with `this.locators = this.build('<group>', { … })`.
  */
 export abstract class BasePage {
     constructor(
@@ -22,11 +25,14 @@ export abstract class BasePage {
         protected readonly safeActions: SafeActions,
     ) {}
 
-    /** Load a locator group from the central store into a typed map. */
-    protected bind(group: string): Record<string, Locator> {
-        const cfg = loadLocatorsFromJson(group);
+    /**
+     * Resolve a Page Object's selector map into live Locators, applying the active region's
+     * overrides for this group (region key wins over the base definition).
+     */
+    protected build(group: string, defs: LocatorMap): Record<string, Locator> {
+        const merged: LocatorMap = { ...defs, ...overridesForPage(group) };
         const out: Record<string, Locator> = {};
-        for (const key of Object.keys(cfg)) out[key] = getLocator(this.page, cfg[key]);
+        for (const key of Object.keys(merged)) out[key] = merged[key](this.page);
         return out;
     }
 
@@ -41,9 +47,25 @@ export abstract class BasePage {
         return this.page.evaluate(() => document.documentElement.classList.contains('dark'));
     }
 
+    /** Assert the browser navigated to a URL matching the pattern (hides `page` from specs). */
+    async expectAt(urlPattern: RegExp | string): Promise<void> {
+        await expect(this.page).toHaveURL(urlPattern);
+    }
+
+    /** Assert navigation to a content page: right URL AND a heading actually rendered. */
+    async expectOnContentPage(urlPattern: RegExp | string): Promise<void> {
+        await expect(this.page).toHaveURL(urlPattern);
+        await expect(this.pageHeading).toBeVisible();
+    }
+
     async scrollToPageBottom(): Promise<number> {
         await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
         return this.page.evaluate(() => window.scrollY);
+    }
+
+    /** Reload the current page and wait for the DOM. */
+    async refresh(): Promise<void> {
+        await this.page.reload({ waitUntil: 'domcontentloaded' });
     }
 
     // ─── cross-page elements (shared by many suites; defined once here) ─────────

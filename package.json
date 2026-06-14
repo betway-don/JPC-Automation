@@ -9,6 +9,8 @@
   "scripts": {
     "test": "npx playwright test",
     "exec": "node runner.js",
+    "report:regression": "node runner.js --suite=regression --region=all",
+    "report:smoke": "node runner.js --suite=smoke --region=all",
     "test:gh": "npx playwright test --config=playwright.GH.config.ts --project=\"GH Region\"",
     "test:mw": "npx playwright test --config=playwright.MW.config.ts --project=\"MW Region\"",
     "test:tz": "npx playwright test --config=playwright.TZ.config.ts --project=\"TZ Region\"",

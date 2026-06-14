@@ -1,9 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Region marker — the locator loader merges src/regions/TZ/locators.ts over the base.
+process.env.JPC_REGION = 'TZ';
+
 export default defineConfig({
   testDir: './src/regions/TZ/tests',
   fullyParallel: true,
   timeout: 200000,
+  expect: { timeout: 15000 },
   forbidOnly: !!process.env.CI,
   retries: 1,
   workers: process.env.CI ? 1 : 6,
@@ -20,7 +24,7 @@ export default defineConfig({
       args: ['--start-maximized'],
     },
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'on',          // auto evidence per test — specs no longer call ScreenshotHelper
     actionTimeout: 60000,
     navigationTimeout: 60000,
   },

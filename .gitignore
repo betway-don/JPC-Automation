@@ -29,3 +29,6 @@ discovery-*.json
 Thumbs.db
 .idea/
 .vscode/
+
+# Generated test reports (PDF + screenshots), pruned after 7 days
+reports/

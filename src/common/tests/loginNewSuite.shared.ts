@@ -1,22 +1,20 @@
-import { Page, TestInfo, TestType, expect } from '@playwright/test';
+import { Page, TestType, expect } from '@playwright/test';
 import { HeaderPage } from '../pages/HeaderPage';
 import { LoginModal } from '../components/LoginModal';
-import { ScreenshotHelper } from '../actions/ScreenshotHelper';
 
 /**
- * Login suite (NewSuite) — TC_LOG_001..023 against the live login modal. IDs: LOG-001..023.
- * All login-modal selectors live in the LoginModal component object.
+ * Login suite (NewSuite) — LOG-001..023 against the live login modal.
+ * Every login-modal selector + flow lives in the LoginModal component object.
  *
  * Deliberately skipped (need a policy decision / dedicated account):
- *  - LOG-020 max-attempts: could lock the shared test account's password reset.
- *  - LOG-021/022: trigger real OTP SMS sends to the account's phone.
+ *  - LOG-020 max-attempts: could lock the shared account's password reset.
+ *  - LOG-021/022: trigger real OTP SMS sends.
  */
 
 type LoginSuiteFixtures = {
     page: Page;
     headerPage: HeaderPage;
     loginModal: LoginModal;
-    screenshotDir: string;
     testData: any;
 };
 
@@ -32,190 +30,136 @@ export async function runLoginNewSuiteTests(
 
     test.describe('Login - NewSuite', () => {
 
-        test.beforeEach(async ({ page }: LoginSuiteFixtures) => {
-            await page.goto('/', { waitUntil: 'domcontentloaded' });
+        test.beforeEach(async ({ headerPage }: LoginSuiteFixtures) => {
+            await headerPage.navigateTo('/');
         });
 
-        test('LOG-001 - Verify Login button is displayed on homepage header', async ({ page, headerPage, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
-            await expect(headerPage.locators.loginCTA).toBeVisible({ timeout: 15000 });
-            await headerPage.highlightElement('loginCTA');
-            await ScreenshotHelper(page, screenshotDir, 'LOG-001-loginBtnHeader', testInfo);
+        test('LOG-001 - Login button is shown in the header', async ({ headerPage }: LoginSuiteFixtures) => {
+            await expect(headerPage.loginButton).toBeVisible();
         });
 
-        test('LOG-002 - Verify Play Now on game page triggers login prompt', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-002 - Play Now on a game page prompts login', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await headerPage.featuredGameCard.click();
-            await page.waitForURL(/\/home\//, { timeout: 15000 });
-            await expect(headerPage.playNowButton).toBeVisible({ timeout: 15000 });
+            await headerPage.expectAt(/\/home\//);
+            await expect(headerPage.playNowButton).toBeVisible();
             await headerPage.playNowButton.click();
-            await expect(loginModal.dialog).toBeVisible({ timeout: 15000 });
-            await expect(loginModal.username).toBeVisible({ timeout: 10000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-002-playNowLogin', testInfo);
+            await expect(loginModal.dialog).toBeVisible();
+            await expect(loginModal.username).toBeVisible();
         });
 
-        test('LOG-003 - Verify Login CTA on Sign Up prompt triggers login prompt', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-003 - the Login link on the Sign Up prompt opens login', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await headerPage.clickRegisterCTA();
-            await expect(headerPage.signUpModalDialog).toBeVisible({ timeout: 15000 });
+            await expect(headerPage.signUpModalDialog).toBeVisible();
             await headerPage.signUpLoginLink.click();
-            await expect(loginModal.dialog).toBeVisible({ timeout: 15000 });
-            await expect(loginModal.username).toBeVisible({ timeout: 10000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-003-signUpToLogin', testInfo);
+            await expect(loginModal.dialog).toBeVisible();
+            await expect(loginModal.username).toBeVisible();
         });
 
-        test('LOG-004 - Verify Login button is displayed in hamburger menu', async ({ page, headerPage, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-004 - Login button is shown in the hamburger menu', async ({ headerPage }: LoginSuiteFixtures) => {
             await headerPage.clickMenu();
-            await expect(headerPage.hamburgerLoginButton).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-004-hamburgerLoginBtn', testInfo);
+            await expect(headerPage.hamburgerLoginButton).toBeVisible();
         });
 
-        test('LOG-005 - Verify tapping Favourite icon triggers login prompt', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
-            await expect(headerPage.trendingFavouriteButton).toBeVisible({ timeout: 15000 });
+        test('LOG-005 - tapping a favourite icon prompts login', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
+            await expect(headerPage.trendingFavouriteButton).toBeVisible();
             await headerPage.trendingFavouriteButton.click();
-            await expect(loginModal.dialog).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-005-favLoginPrompt', testInfo);
+            await expect(loginModal.dialog).toBeVisible();
         });
 
-        test('LOG-006 - Verify special characters are not accepted in mobile number field', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-006 - the mobile field rejects special characters', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially('@#$%!', { delay: 50 });
-            const value = await loginModal.username.inputValue();
-            expect(value, `mobile field accepted special characters: "${value}"`).toMatch(/^\d*$/);
-            await ScreenshotHelper(page, screenshotDir, 'LOG-006-specialChars', testInfo);
+            await loginModal.expectMobileRejectsNonDigits('@#$%!');
         });
 
-        test('LOG-007 - Verify alphanumeric characters are not accepted in mobile number field', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-007 - the mobile field rejects letters', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially('abc123xyz', { delay: 50 });
-            const value = await loginModal.username.inputValue();
-            expect(value, `mobile field accepted letters: "${value}"`).toMatch(/^\d*$/);
-            await ScreenshotHelper(page, screenshotDir, 'LOG-007-alphanumeric', testInfo);
+            await loginModal.expectMobileRejectsNonDigits('abc123xyz');
         });
 
-        test('LOG-008 - Verify login fails with mobile number shorter than 9 digits', async ({ page, headerPage, loginModal, testData, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-008 - login fails with a mobile shorter than 9 digits', async ({ headerPage, loginModal, testData }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially('1234567', { delay: 30 });
-            await loginModal.password.fill(testData.loginValid.password);
-            await loginModal.expectLoginRejected();
-            await ScreenshotHelper(page, screenshotDir, 'LOG-008-shortMobile', testInfo);
+            await loginModal.attemptAndExpectRejected('1234567', testData.loginValid.password);
         });
 
-        test('LOG-009 - Verify login fails with mobile number longer than 9 digits', async ({ page, headerPage, loginModal, testData, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-009 - a mobile longer than 9 digits is capped or rejected', async ({ headerPage, loginModal, testData }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially('1234567890123', { delay: 30 });
-            const value = await loginModal.username.inputValue();
-            if (value.length <= 9) {
-                // field truncates excess digits — that IS the restriction working
-                expect(value.length).toBeLessThanOrEqual(9);
-            } else {
-                await loginModal.password.fill(testData.loginValid.password);
-                await loginModal.expectLoginRejected();
-            }
-            await ScreenshotHelper(page, screenshotDir, 'LOG-009-longMobile', testInfo);
+            await loginModal.expectLongMobileHandled('1234567890123', testData.loginValid.password);
         });
 
-        test('LOG-010 - Verify login fails with empty password field', async ({ page, headerPage, loginModal, testData, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-010 - login fails with an empty password', async ({ headerPage, loginModal, testData }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially(testData.loginValid.mobile, { delay: 30 });
-            // password left empty — submission must be blocked or rejected
-            await loginModal.expectLoginRejected();
-            await ScreenshotHelper(page, screenshotDir, 'LOG-010-emptyPassword', testInfo);
+            await loginModal.attemptAndExpectRejected(testData.loginValid.mobile);
         });
 
-        test('LOG-011 - Verify password field is masked by default', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-011 - the password field is masked by default', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.password.fill('SamplePass123');
-            await expect(loginModal.password).toHaveAttribute('type', 'password');
-            await ScreenshotHelper(page, screenshotDir, 'LOG-011-passwordMasked', testInfo);
+            await loginModal.fillPassword('SamplePass123');
+            await loginModal.expectPasswordMasked();
         });
 
-        test('LOG-012 - Verify password visibility eye icon toggles masking', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-012 - the eye icon toggles password visibility', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.password.fill('SamplePass123');
-            await loginModal.eyeIcon.click();
-            await expect(loginModal.password).toHaveAttribute('type', 'text', { timeout: 5000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-012-passwordVisible', testInfo);
-            await loginModal.eyeIcon.click();
-            await expect(loginModal.password).toHaveAttribute('type', 'password', { timeout: 5000 });
+            await loginModal.fillPassword('SamplePass123');
+            await loginModal.togglePasswordVisibility();
+            await loginModal.expectPasswordVisible();
+            await loginModal.togglePasswordVisibility();
+            await loginModal.expectPasswordMasked();
         });
 
-        test('LOG-013 - Verify password shorter than 8 characters cannot log in', async ({ page, headerPage, loginModal, testData, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-013 - login fails with a password shorter than 8 chars', async ({ headerPage, loginModal, testData }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially(testData.loginValid.mobile, { delay: 30 });
-            await loginModal.password.fill('1234');
-            await loginModal.expectLoginRejected();
-            await ScreenshotHelper(page, screenshotDir, 'LOG-013-shortPassword', testInfo);
+            await loginModal.attemptAndExpectRejected(testData.loginValid.mobile, '1234');
         });
 
-        test('LOG-014 - Verify password field restricts input beyond 20 characters', async ({ page, headerPage, loginModal, testData, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-014 - a password longer than 20 chars is capped or rejected', async ({ headerPage, loginModal, testData }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            const longPassword = 'Abcdefgh1'.repeat(3); // 27 chars
-            await loginModal.password.pressSequentially(longPassword, { delay: 20 });
-            const value = await loginModal.password.inputValue();
-            if (value.length <= 20) {
-                expect(value.length).toBeLessThanOrEqual(20);
-            } else {
-                // no input cap — then submitting must fail with feedback
-                await loginModal.username.pressSequentially(testData.loginValid.mobile, { delay: 30 });
-                await loginModal.expectLoginRejected();
-            }
-            await ScreenshotHelper(page, screenshotDir, 'LOG-014-longPassword', testInfo);
+            await loginModal.expectLongPasswordHandled(testData.loginValid.mobile);
         });
 
-        test('LOG-015 - Verify error message for invalid credentials', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-015 - invalid credentials show an error', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.username.pressSequentially('731234567', { delay: 30 });
-            await loginModal.password.fill('WrongPass123!');
-            await loginModal.submitButton.click();
-            // the exact user-facing error (confirmed live 2026-06-12) must appear, and the user stays logged out
-            await expect(loginModal.invalidCredentialsError).toBeVisible({ timeout: 15000 });
-            await expect(loginModal.dialog).toBeVisible({ timeout: 5000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-015-invalidCredsError', testInfo);
+            await loginModal.typeUsername('731234567');
+            await loginModal.fillPassword('WrongPass123!');
+            await loginModal.submit();
+            await loginModal.expectInvalidCredentials();
         });
 
-        test('LOG-016 - Verify Submit button is disabled when mandatory fields are empty', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-016 - Submit is disabled when fields are empty', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await expect(loginModal.submitButton).toBeDisabled({ timeout: 5000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-016-submitDisabled', testInfo);
+            await loginModal.expectSubmitDisabled();
         });
 
-        test('LOG-017 - Verify Forgot Password CTA is displayed below Submit button', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-017 - the Forgot Password link is shown', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await expect(loginModal.forgotPasswordLink).toBeVisible({ timeout: 10000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-017-forgotPasswordCTA', testInfo);
+            await loginModal.expectForgotPasswordVisible();
         });
 
-        test('LOG-018 - Verify tapping Forgot Password CTA opens Password Reset prompt', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-018 - Forgot Password opens the reset prompt', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.forgotPasswordLink.click();
-            // the login form must give way to the reset prompt
-            await expect.poll(async () => {
-                const loginFormGone = !(await loginModal.form.isVisible().catch(() => false));
-                const titleChanged = !/^login$/i.test(((await loginModal.anyModalTitle.textContent().catch(() => 'Login')) ?? '').trim());
-                return loginFormGone || titleChanged;
-            }, { timeout: 10000 }).toBe(true);
-            await ScreenshotHelper(page, screenshotDir, 'LOG-018-passwordResetPrompt', testInfo);
+            await loginModal.openPasswordReset();
+            await loginModal.expectSwitchedToReset();
         });
 
-        test('LOG-019 - Verify only valid account number is accepted on Password Reset prompt', async ({ page, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
-            test.fixme(true, 'needs the Password Reset prompt HTML to assert its fields/validation — provide markup to implement');
+        test('LOG-019 - only a valid account number is accepted on the reset prompt', async () => {
+            test.fixme(true, 'needs the Password Reset prompt HTML to assert its fields/validation');
         });
 
-        test('LOG-020 - Verify max attempts error on Password Reset prompt', async ({ page }: LoginSuiteFixtures) => {
-            test.fixme(true, 'deliberately NOT automated: triggering max attempts could lock the shared test account\'s reset flow');
+        test('LOG-020 - max attempts error on the reset prompt', async () => {
+            test.fixme(true, 'deliberately NOT automated: could lock the shared account\'s reset flow');
         });
 
-        test('LOG-021 - Verify valid account number redirects to Update Password page', async ({ page }: LoginSuiteFixtures) => {
-            test.fixme(true, 'deliberately NOT automated: sends a real OTP SMS to the test account\'s number — needs dedicated account/OTP access');
+        test('LOG-021 - a valid account number redirects to Update Password', async () => {
+            test.fixme(true, 'deliberately NOT automated: sends a real OTP SMS — needs a dedicated account');
         });
 
-        test('LOG-022 - Verify invalid OTP triggers error on Update Password page', async ({ page }: LoginSuiteFixtures) => {
-            test.fixme(true, 'deliberately NOT automated: reaching this page sends a real OTP SMS — needs dedicated account/OTP access');
+        test('LOG-022 - invalid OTP shows an error on Update Password', async () => {
+            test.fixme(true, 'deliberately NOT automated: reaching this page sends a real OTP SMS');
         });
 
-        test('LOG-023 - Verify Register link navigates to Sign Up prompt', async ({ page, headerPage, loginModal, screenshotDir }: LoginSuiteFixtures, testInfo: TestInfo) => {
+        test('LOG-023 - the Register link opens the Sign Up prompt', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
             await openLogin(headerPage, loginModal);
-            await loginModal.registerLink.click();
-            await expect(headerPage.signUpModalDialog).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'LOG-023-registerToSignUp', testInfo);
+            await loginModal.openRegister();
+            await expect(headerPage.signUpModalDialog).toBeVisible();
         });
 
     });

@@ -119,4 +119,142 @@ export class SignUpModal {
             this.page.getByText(/an error occurred/i).waitFor({ state: 'visible', timeout: 30000 }).then(() => 'error' as const),
         ]).catch(() => 'timeout' as const);
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  Intent API — field-level validation mechanics live here.
+    // ══════════════════════════════════════════════════════════════════════════
+    private async fillValidStepOneExcept(skip: 'mobile' | 'email' | 'none' = 'none'): Promise<void> {
+        if (skip !== 'mobile') await this.username.pressSequentially(SignUpModal.randomMobile(), { delay: 20 });
+        await this.password.fill('ValidPass123!');
+        await this.firstName.fill('John');
+        await this.lastName.fill('Tester');
+        if (skip !== 'email') await this.email.fill('qa.automation.jpc@example.com');
+    }
+
+    async expectMobileRejectsNonDigits(junk: string): Promise<void> {
+        await this.username.pressSequentially(junk, { delay: 50 });
+        expect(await this.username.inputValue(), `mobile field accepted "${junk}"`).toMatch(/^\d*$/);
+    }
+    /** A 7-digit mobile must block Next; a >9-digit mobile is capped at 9 or blocks Next. */
+    async expectNineDigitRestriction(): Promise<void> {
+        await this.username.pressSequentially('1234567', { delay: 20 });
+        await this.fillValidStepOneExcept('mobile');
+        expect(await this.nextButton.isEnabled().catch(() => false), 'form must not proceed with a 7-digit mobile').toBe(false);
+        await this.username.fill('');
+        await this.username.pressSequentially('1234567890123', { delay: 20 });
+        const v = await this.username.inputValue();
+        if (v.length > 9) expect(await this.nextButton.isEnabled().catch(() => false), 'form must not proceed with a >9-digit mobile').toBe(false);
+        else expect(v.length).toBeLessThanOrEqual(9);
+    }
+    /** A 27-char password must be capped at 20, flagged, or block Next. */
+    async expectPasswordLimitHandled(): Promise<void> {
+        await this.password.pressSequentially('Abcdefgh1'.repeat(3), { delay: 15 });
+        const v = await this.password.inputValue();
+        if (v.length <= 20) { expect(v.length).toBeLessThanOrEqual(20); return; }
+        await this.username.pressSequentially(SignUpModal.randomMobile(), { delay: 20 });
+        await this.firstName.fill('John'); await this.lastName.fill('Tester');
+        await this.email.fill('qa.automation.jpc@example.com');
+        const proceedable = await this.nextButton.isEnabled().catch(() => false);
+        const feedback = await this.errorFeedback.first().isVisible().catch(() => false);
+        expect(proceedable === false || feedback, 'a 27-char password must be capped, flagged, or block Next').toBe(true);
+    }
+    /** A valid registered mobile-number format is accepted and lets the form advance. */
+    async expectValidMobileAccepted(): Promise<void> {
+        await this.fillValidStepOneExcept('none');
+        await expect(this.nextButton).toBeEnabled();
+    }
+    /** A valid password (per the configured policy) is accepted and lets the form advance. */
+    async expectValidPasswordAccepted(): Promise<void> {
+        await this.fillValidStepOneExcept('none');
+        await expect(this.password).toHaveValue('ValidPass123!');
+        await expect(this.nextButton).toBeEnabled();
+    }
+    async expectFieldAccepts(field: 'firstName' | 'lastName' | 'email', value: string): Promise<void> {
+        const input = field === 'firstName' ? this.firstName : field === 'lastName' ? this.lastName : this.email;
+        const errKey = field === 'firstName' ? 'firstname' : field === 'lastName' ? 'lastname' : 'email';
+        await input.fill(value);
+        await input.blur();
+        await expect(input).toHaveValue(value);
+        await expect(this.fieldError(errKey)).not.toBeVisible();
+    }
+    async expectInvalidEmailFlagged(): Promise<void> {
+        await this.fillValidStepOneExcept('email');
+        await this.email.fill('not-an-email@');
+        await this.email.blur();
+        const errorShown = await this.fieldError('email').isVisible().catch(() => false);
+        const blocked = !(await this.nextButton.isEnabled().catch(() => false));
+        expect(errorShown || blocked, 'invalid email must show validation or block Next').toBe(true);
+    }
+    async fillReferralCode(code: string): Promise<void> {
+        await this.referralExpander.click();
+        await expect(this.referralCode).toBeVisible();
+        await this.referralCode.fill(code);
+        await expect(this.referralCode).toHaveValue(code);
+    }
+    async expectIdTypeOptions(): Promise<void> {
+        await this.idTypeCombobox.click();
+        await expect(this.option(/south african id/i)).toBeVisible();
+        await expect(this.option(/passport/i)).toBeVisible();
+    }
+    async selectPassport(): Promise<void> {
+        await this.idTypeCombobox.click();
+        await this.option(/passport/i).click();
+        await expect(this.idTypeCombobox).toHaveText(/passport/i);
+    }
+    async expectSaIdDefaultWithField(): Promise<void> {
+        await expect(this.idTypeCombobox).toHaveText(/south african id/i);
+        await expect(this.idNumber).toBeVisible();
+    }
+    async expectIdNumberFieldShown(): Promise<void> { await expect(this.idNumber).toBeVisible(); }
+    async expectInvalidIdFlagged(value: string): Promise<void> {
+        await this.idNumber.fill(value);
+        await this.idNumber.blur();
+        await expect(this.idNumberError).toBeVisible();
+        expect(((await this.idNumberError.textContent()) ?? '').trim().length, 'ID error must have text').toBeGreaterThan(0);
+    }
+    /** Synthetic passport may be rejected by real validation — returns whether it was flagged. */
+    async fillPassportNumber(): Promise<boolean> {
+        await this.fillStepTwo('A' + String(Math.floor(10000000 + Math.random() * 89999999)));
+        return this.idNumberError.isVisible().catch(() => false);
+    }
+    async selectFirstDob(): Promise<void> {
+        await this.dobButton.click();
+        await expect(this.datePanel).toBeVisible();
+        await this.firstSelectableDate.click();
+        await expect(this.dobButton).toHaveCount(0);
+    }
+    async expectSourceOptions(): Promise<void> {
+        await this.sourceCombobox.click();
+        await expect(this.options.first()).toBeVisible();
+        expect(await this.options.count(), 'source of income must offer options').toBeGreaterThan(0);
+    }
+    async expectPromoToggles(): Promise<void> {
+        await expect(this.promoCheckboxBox).toHaveAttribute('data-p-checked', 'false');
+        await this.promoCheckbox.click();
+        await expect(this.promoCheckboxBox).toHaveAttribute('data-p-checked', 'true');
+        await this.promoCheckbox.click();
+        await expect(this.promoCheckboxBox).toHaveAttribute('data-p-checked', 'false');
+    }
+    async expectTermsToggles(): Promise<void> {
+        await expect(this.termsCheckboxBox).toHaveAttribute('data-p-checked', 'false');
+        await this.termsCheckbox.click();
+        await expect(this.termsCheckboxBox).toHaveAttribute('data-p-checked', 'true');
+        await this.termsCheckbox.click();
+        await expect(this.termsCheckboxBox).toHaveAttribute('data-p-checked', 'false');
+    }
+    async hasAgreeToAll(): Promise<boolean> { return this.agreeToAll.isVisible().catch(() => false); }
+    async expectAgreeToAllChecksBoth(): Promise<void> {
+        await this.agreeToAll.click();
+        await expect(this.termsCheckboxBox).toHaveAttribute('data-p-checked', 'true');
+        await expect(this.promoCheckboxBox).toHaveAttribute('data-p-checked', 'true');
+    }
+    /** Fill step two but leave Terms unchecked — registration must stay blocked. */
+    async expectRegisterBlockedWithoutTerms(): Promise<void> {
+        await this.idNumber.fill('9001015009087');
+        await this.dobButton.click({ timeout: 5000 }).catch(() => { });
+        await this.firstSelectableDate.click({ timeout: 5000 }).catch(() => { });
+        await this.sourceCombobox.click({ timeout: 5000 }).catch(() => { });
+        await this.options.first().click({ timeout: 5000 }).catch(() => { });
+        await expect(this.registerButton).toBeDisabled();
+    }
 }

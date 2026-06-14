@@ -1,30 +1,27 @@
 import { Page, Locator } from '@playwright/test';
-import { loadLocatorsFromJson } from '../../global/utils/file-utils/jsonLocatorLoader';
-import { getLocator } from '../../global/utils/file-utils/locatorResolver';
 import { SafeActions } from '../actions/SafeActions';
+import { BasePage } from './BasePage';
+import { css, role, text, first, at } from '../locators/sel';
 
-export class LoginPage {
-    readonly page: Page;
+export class LoginPage extends BasePage {
     readonly locators: Record<string, Locator>;
 
-    constructor(page: Page, private safeActions: SafeActions) {
-        this.page = page;
-        const configs = loadLocatorsFromJson('login');
-
-        this.locators = {
-            loginButton: getLocator(this.page, configs["loginButton"]),
-            hamburgerButton: getLocator(this.page, configs["hamburgerButton"]),
-            hamburgerLoginButton: getLocator(this.page, configs["hamburgerLoginButton"]),
-            registerButton: getLocator(this.page, configs["registerButton"]),
-            loginLinkInSignup: getLocator(this.page, configs["loginLinkInSignup"]),
-            aviatorButton: getLocator(this.page, configs["aviatorButton"]),
-            aviatorHolster: getLocator(this.page, configs["aviatorHolster"]),
-            aviatorLoginButton: getLocator(this.page, configs["aviatorLoginButton"]),
-            usernameInput: getLocator(this.page, configs["usernameInput"]),
-            passwordInput: getLocator(this.page, configs["passwordInput"]),
-            mobileValidationMsg: getLocator(this.page, configs["mobileValidationMsg"]),
-            passwordValidationMsg: getLocator(this.page, configs["passwordValidationMsg"]),
-        };
+    constructor(page: Page, safeActions: SafeActions) {
+        super(page, safeActions);
+        this.locators = this.build('login', {
+            loginButton: first(role("button", {"name":"Login"})),
+            hamburgerButton: first(role("button", {"name":"menu"})),
+            hamburgerLoginButton: at(role("button", {"name":"Login"}), 1),
+            registerButton: first(role("button", {"name":"Register"})),
+            loginLinkInSignup: first(text("Already have an account?")),
+            aviatorButton: first(role("button", {"name":"aviator Aviator"})),
+            aviatorHolster: first(css("#aviator-holster")),
+            aviatorLoginButton: first(css("#aviator-holster >> role=button[name=\"Login\"]")),
+            usernameInput: first(role("textbox", {"name":"username"})),
+            passwordInput: first(role("textbox", {"name":"password"})),
+            mobileValidationMsg: first(text("Please enter a valid Mobile")),
+            passwordValidationMsg: first(text("Provide Valid Password")),
+        });
     }
 
     // --- Navigation ---

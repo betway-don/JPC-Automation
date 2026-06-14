@@ -1,6 +1,6 @@
 import { test } from '../../../fixtures/jackpotCityFixture';
-import { runLoginTests } from '../../../../../common/tests/login.shared';
+import { runLoginNewSuiteTests } from '../../../../../common/tests/loginNewSuite.shared';
 
 test.describe('GH Login Tests', () => {
-    runLoginTests(test, '/');
+    runLoginNewSuiteTests(test);
 });

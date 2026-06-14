@@ -1,524 +1,266 @@
-import { Page, TestInfo, TestType, expect } from '@playwright/test';
+import { Page, TestType } from '@playwright/test';
 import { TransactionHistoryPage, TransactionFilterType } from '../pages/TransactionHistoryPage';
 import { LoginPage } from '../pages/LoginPage';
-import { ScreenshotHelper } from '../actions/ScreenshotHelper';
-import { highlightElements } from '../actions/HighlightElements';
 
 type TransactionHistoryFixtures = {
     page: Page;
     transactionHistoryPage: TransactionHistoryPage;
     loginPage: LoginPage;
-    screenshotDir: string;
     testData: any;
 };
-
-/**
- * After a date filter is applied, every visible row must fall inside the selected window —
- * this is what actually proves the backend filtered (an empty result set is legitimate).
- * Dates render as DD/MM/YY-HH:MM:SS, e.g. "04/06/26-12:41:49".
- */
-async function expectRowsWithinDays(page: Page, transactionHistoryPage: TransactionHistoryPage, days: number) {
-    const noResults = await transactionHistoryPage.locators.noResultsMessage.isVisible().catch(() => false);
-    if (noResults) return;
-    // column positions differ between the default and filtered table layouts —
-    // find the date-shaped cell text in each row instead of trusting an index
-    const cellTexts = await transactionHistoryPage.allRowCells.allTextContents();
-    const dateTexts = cellTexts
-        .map(t => (t.match(/\d{2}\/\d{2}\/\d{2}-\d{2}:\d{2}:\d{2}/) || [])[0])
-        .filter((t): t is string => !!t);
-    expect(dateTexts.length, 'no date cells found in the filtered table').toBeGreaterThan(0);
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - days);
-    cutoff.setHours(0, 0, 0, 0);
-    for (const raw of dateTexts) {
-        const [datePart] = raw.split('-');
-        const [dd, mm, yy] = datePart.split('/').map(Number);
-        const txDate = new Date(2000 + yy, mm - 1, dd);
-        expect(txDate.getTime(), `row date ${raw} is outside the last ${days} days`).toBeGreaterThanOrEqual(cutoff.getTime());
-    }
-}
-
-/** Read every row's transaction-type text in one pass — no per-row waiting, tolerates rows without span.truncate. */
-async function getTypeTexts(transactionHistoryPage: TransactionHistoryPage): Promise<string[]> {
-    return transactionHistoryPage.locators.tableRows.evaluateAll((rows: Element[]) =>
-        rows.map(r => (r.querySelectorAll('td')[3]?.querySelector('span.truncate')?.textContent ?? '').trim()));
-}
 
 export async function runTransactionHistoryNewSuiteTests(
     test: TestType<TransactionHistoryFixtures, any>
 ) {
 
-    test.beforeEach(async ({ page, loginPage, testData }: TransactionHistoryFixtures) => {
+    test.beforeEach(async ({ loginPage, transactionHistoryPage, testData }: TransactionHistoryFixtures) => {
+        test.skip(process.env.JPC_ACCOUNT_RESTRICTED === '1', 'Logged-in: pending test account');
         await loginPage.goto();
         await loginPage.clickLogin();
-        await page.waitForTimeout(2000);
         await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
-        await page.waitForTimeout(2000);
+        await transactionHistoryPage.open();
     });
 
     test.describe('Transaction Summary', () => {
 
-        test('TH-001 - Verify recent transaction list is displayed correctly on page load', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await expect(transactionHistoryPage.locators.tableRows.first()).toBeVisible({ timeout: 15000 });
-            await highlightElements(transactionHistoryPage.table);
-            await ScreenshotHelper(page, screenshotDir, 'TH-001-transactionList', testInfo);
+        test('TH-001 - the recent transaction list is shown on load', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectListLoaded();
         });
 
-        test('TH-002 - Verify all required column headers are displayed correctly', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const headers = ['Transaction ID', 'Date', 'Game Name', 'Transaction Type', 'Amount'];
-            for (const header of headers) {
-                const el = transactionHistoryPage.getColumnHeader(header);
-                await expect(el).toBeVisible({ timeout: 15000 });
-                await highlightElements(el);
-            }
-            await ScreenshotHelper(page, screenshotDir, 'TH-002-columnHeaders', testInfo);
+        test('TH-002 - all required column headers are shown', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectColumnHeaders();
         });
 
-        test('TH-003 - Verify transaction type displays correctly as Payout/Wager with provider name', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const typeTexts = await getTypeTexts(transactionHistoryPage);
-            expect(typeTexts.length).toBeGreaterThan(0);
-            // Only Payout/Wager rows follow "[Provider Name] [Type]" format; others (e.g. Bonus Flush) are skipped
-            for (const text of typeTexts) {
-                if (text.endsWith('Payout') || text.endsWith('Wager')) {
-                    expect(text).toMatch(/^.+\s(Payout|Wager)$/);
-                }
-            }
-            await highlightElements(transactionHistoryPage.getTransactionTypeCell(0));
-            await ScreenshotHelper(page, screenshotDir, 'TH-003-transactionType', testInfo);
+        test('TH-003 - transaction type shows as Payout/Wager with provider', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectTypeFormat();
         });
 
-        test('TH-004 - Verify payout amount is displayed as a positive value', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const typeTexts = await getTypeTexts(transactionHistoryPage);
-            for (let i = 0; i < typeTexts.length; i++) {
-                if (!typeTexts[i].endsWith('Payout')) continue;
-                const amountCell = transactionHistoryPage.getTransactionAmountCell(i);
-                await expect(transactionHistoryPage.minusIndicatorIn(amountCell)).toHaveCount(0, { timeout: 15000 });
-                // and the cell must contain a real currency value, not be empty
-                await expect(amountCell).toContainText(/[\d,]+\.\d{2}/, { timeout: 10000 });
-                await highlightElements(amountCell);
-            }
-            await ScreenshotHelper(page, screenshotDir, 'TH-004-payoutPositive', testInfo);
+        test('TH-004 - payout amounts are positive', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectPayoutsPositive();
         });
 
-        test('TH-005 - Verify wager amount is displayed with a minus sign', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const typeTexts = await getTypeTexts(transactionHistoryPage);
-            for (let i = 0; i < typeTexts.length; i++) {
-                if (!typeTexts[i].endsWith('Wager')) continue;
-                const amountCell = transactionHistoryPage.getTransactionAmountCell(i);
-                await expect(transactionHistoryPage.minusIndicatorIn(amountCell)).toHaveCount(1, { timeout: 15000 });
-                // and the cell must contain a real currency value, not be empty
-                await expect(amountCell).toContainText(/[\d,]+\.\d{2}/, { timeout: 10000 });
-                await highlightElements(amountCell);
-            }
-            await ScreenshotHelper(page, screenshotDir, 'TH-005-wagerMinus', testInfo);
+        test('TH-005 - wager amounts show a minus sign', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectWagersNegative();
         });
 
-        test('TH-006 - Verify tapping the Tlog icon opens the transaction detailed view', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await highlightElements(transactionHistoryPage.locators.showDetailIcon.first());
-            await transactionHistoryPage.locators.showDetailIcon.first().click();
-            // the detail view must actually open — its back button is its distinguishing control
-            await expect(transactionHistoryPage.locators.detailViewBackBtn).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-006-tlogDetailView', testInfo);
+        test('TH-006 - the Tlog icon opens the transaction detail view', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.openDetailView();
+            await transactionHistoryPage.expectDetailViewOpen();
         });
 
-        test('TH-007 - Verify tapping the Back button redirects the user to the Transaction Summary page', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await transactionHistoryPage.locators.showDetailIcon.first().click();
-            await page.waitForTimeout(1500);
-            await transactionHistoryPage.locators.detailViewBackBtn.click();
-            await page.waitForTimeout(1000);
-            await expect(transactionHistoryPage.summaryHeading).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-007-backToSummary', testInfo);
+        test('TH-007 - Back returns to the Transaction Summary', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.openDetailView();
+            await transactionHistoryPage.backToSummary();
+            await transactionHistoryPage.expectOnSummary();
         });
 
-        test('TH-008 - Verify tapping the Refresh icon reloads the latest transaction data', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await highlightElements(transactionHistoryPage.locators.refreshButton);
-            await transactionHistoryPage.locators.refreshButton.click();
-            await page.waitForTimeout(2000);
-            await expect(transactionHistoryPage.locators.tableRows.first()).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-008-refresh', testInfo);
+        test('TH-008 - Refresh reloads the latest data', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.clickRefresh();
+            await transactionHistoryPage.expectListLoaded();
         });
 
-        test('TH-009 - Verify user is able to navigate through transaction pages using page numbers', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await highlightElements(transactionHistoryPage.locators.pageNumbers);
-            await transactionHistoryPage.goToPage(2);
-            await page.waitForTimeout(1500);
-            await expect(transactionHistoryPage.getPageLocator(2)).toHaveClass(/blue-gradient/, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-009-pageNumbers', testInfo);
+        test('TH-009 - pages can be navigated by page number', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.gotoPageNumber(2);
+            await transactionHistoryPage.expectActivePage(2);
         });
 
-        test('TH-010 - Verify user is able to navigate to a specific page using the Go to Page option', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const ellipsis = transactionHistoryPage.locators.goToPageEllipsis;
-            await highlightElements(ellipsis);
-            await ellipsis.click();
-            await page.waitForTimeout(500);
-            await transactionHistoryPage.locators.goToInput.fill('5');
-            await transactionHistoryPage.goToButton.click();
-            // page 5 must actually become the active page
-            await expect(transactionHistoryPage.getPageLocator(5)).toHaveClass(/blue-gradient/, { timeout: 15000 });
-            await expect(transactionHistoryPage.locators.tableRows.first()).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-010-goToPage', testInfo);
+        test('TH-010 - a specific page can be reached via Go to Page', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.gotoPageViaInput(5);
+            await transactionHistoryPage.expectActivePage(5);
+            await transactionHistoryPage.expectListLoaded();
         });
 
-        test('TH-011 - Verify user is able to navigate transaction pages using Next pagination button', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await highlightElements(transactionHistoryPage.locators.nextPageBtn);
-            await transactionHistoryPage.locators.nextPageBtn.click();
-            await page.waitForTimeout(1500);
-            await expect(transactionHistoryPage.getPageLocator(2)).toHaveClass(/blue-gradient/, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-011-nextPage', testInfo);
+        test('TH-011 - the Next button advances the page', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.nextPage();
+            await transactionHistoryPage.expectActivePage(2);
         });
 
-        test('TH-012 - Verify user is able to navigate transaction pages using Previous pagination button', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            await transactionHistoryPage.locators.nextPageBtn.click();
-            await page.waitForTimeout(1500);
-            await highlightElements(transactionHistoryPage.locators.prevPageBtn);
-            await transactionHistoryPage.locators.prevPageBtn.click();
-            await page.waitForTimeout(1500);
-            await expect(transactionHistoryPage.getPage1Locator()).toHaveClass(/blue-gradient/, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-012-prevPage', testInfo);
+        test('TH-012 - the Previous button goes back a page', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.nextPage();
+            await transactionHistoryPage.prevPage();
+            await transactionHistoryPage.expectActivePage1();
         });
 
-        test('TH-013 - Verify Transaction Summary Displays Transactions Generated Within Last 30 Days Only', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
-            const dateCells = transactionHistoryPage.dateCellSpans;
-            const count = await dateCells.count();
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            thirtyDaysAgo.setHours(0, 0, 0, 0);
-            for (let i = 0; i < count; i++) {
-                const raw = (await dateCells.nth(i).textContent())?.trim() ?? '';
-                // Format: DD/MM/YY-HH:MM:SS  e.g. "04/06/26-12:41:49"
-                const [datePart] = raw.split('-');
-                const [dd, mm, yy] = datePart.split('/').map(Number);
-                const txDate = new Date(2000 + yy, mm - 1, dd);
-                expect(txDate.getTime()).toBeGreaterThanOrEqual(thirtyDaysAgo.getTime());
-            }
-            await ScreenshotHelper(page, screenshotDir, 'TH-013-last30Days', testInfo);
+        test('TH-013 - only transactions from the last 30 days are shown', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+            await transactionHistoryPage.expectWithin30Days();
         });
 
     });
 
     test.describe('Filter Prompt', () => {
 
-        test('TH-014 - Verify filter prompt is accessible and displayed correctly', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-014 - the filter prompt is shown with all its controls', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            const modal = transactionHistoryPage.filterModal;
-            await expect(modal).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.filterModalTitle).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.startDateInput).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.endDateInput).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.lastWeekButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.last2WeeksButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.lastMonthButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.filterPayoutSwitch).toBeAttached({ timeout: 15000 });
-            await expect(transactionHistoryPage.filterTypeMultiselect).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.resetButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.continueButton).toBeVisible({ timeout: 15000 });
-            await highlightElements(modal);
-            await ScreenshotHelper(page, screenshotDir, 'TH-014-filterPrompt', testInfo);
+            await transactionHistoryPage.expectFilterPromptUI();
         });
 
-        test('TH-015 - Verify selected filters persist after navigating back to the Transaction Summary page', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-015 - selected filters persist after leaving and returning', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            await transactionHistoryPage.locators.showDetailIcon.first().click();
-            await page.waitForTimeout(1000);
-            await transactionHistoryPage.locators.detailViewBackBtn.click();
-            await page.waitForTimeout(1000);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.openDetailView();
+            await transactionHistoryPage.backToSummary();
             await transactionHistoryPage.openFilter();
-            // button[title="Start Date"] disappears once a date is selected (title changes to the date value)
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-015-filterPersistence', testInfo);
+            await transactionHistoryPage.expectDateRangeChosen();
         });
 
-        test('TH-016 - Verify Continue button functions correctly on the filter prompt', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-016 - Continue applies the filter and closes the prompt', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            await highlightElements(transactionHistoryPage.locators.continueButton);
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            await expect(transactionHistoryPage.filterModal).not.toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-016-continueButton', testInfo);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectFilterModalClosed();
         });
 
-        test('TH-017 - Verify Reset button clears all selected filters on the filter prompt', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-017 - Reset clears all selected filters', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
+            await transactionHistoryPage.applyDuration('week');
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT]);
-            await ScreenshotHelper(page, screenshotDir, 'TH-017-beforeReset', testInfo);
-            await highlightElements(transactionHistoryPage.locators.resetButton);
-            await transactionHistoryPage.locators.resetButton.click();
-            await page.waitForTimeout(500);
-            await expect(transactionHistoryPage.startDatePlaceholder).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.endDatePlaceholder).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveText('All', { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-017-afterReset', testInfo);
+            await transactionHistoryPage.resetFilter();
+            await transactionHistoryPage.expectFiltersReset();
         });
 
-        test('TH-018 - Verify Close button dismisses the filter prompt without applying changes', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-018 - Close dismisses the prompt without applying', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            await highlightElements(transactionHistoryPage.locators.closeFilterButton);
-            await transactionHistoryPage.locators.closeFilterButton.click();
-            await page.waitForTimeout(500);
-            await expect(transactionHistoryPage.filterModal).not.toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.tableRows.first()).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-018-closeButton', testInfo);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.closeFilter();
+            await transactionHistoryPage.expectFilterModalClosed();
+            await transactionHistoryPage.expectListLoaded();
         });
 
     });
 
     test.describe('Calendar / Date Filter', () => {
 
-        test('TH-019 - Verify calendar allows selection of dates only within the last 30 days', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-019 - the calendar only allows the last 30 days', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.startDateInput.click();
-            await page.waitForTimeout(300);
-            await expect(transactionHistoryPage.calendarGrid).toBeVisible({ timeout: 15000 });
-            // Future dates blocked — next-month button must be disabled
-            await expect(transactionHistoryPage.calendarNextMonth).toBeDisabled({ timeout: 15000 });
-            const disabledInCurrentMonth = transactionHistoryPage.calendarDisabledCells;
-            await expect(disabledInCurrentMonth.first()).toBeVisible({ timeout: 15000 });
-            await highlightElements(disabledInCurrentMonth.first());
-            await ScreenshotHelper(page, screenshotDir, 'TH-019-currentMonth', testInfo);
-            // Dates earlier than 30 days ago must also be disabled in the previous month
-            await transactionHistoryPage.locators.previousMonthButton.click();
-            await page.waitForTimeout(300);
-            const disabledInPrevMonth = transactionHistoryPage.calendarDisabledCells;
-            await expect(disabledInPrevMonth.first()).toBeVisible({ timeout: 15000 });
-            await highlightElements(disabledInPrevMonth.first());
-            await ScreenshotHelper(page, screenshotDir, 'TH-019-prevMonth', testInfo);
+            await transactionHistoryPage.openStartCalendar();
+            await transactionHistoryPage.expectCalendarLimitedToLast30Days();
         });
 
-        test('TH-020 - Verify default days duration options are displayed correctly', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-020 - the default duration options are shown', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await expect(transactionHistoryPage.locators.lastWeekButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.last2WeeksButton).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.locators.lastMonthButton).toBeVisible({ timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.lastWeekButton);
-            await highlightElements(transactionHistoryPage.locators.last2WeeksButton);
-            await highlightElements(transactionHistoryPage.locators.lastMonthButton);
-            await ScreenshotHelper(page, screenshotDir, 'TH-020-durationOptions', testInfo);
+            await transactionHistoryPage.expectDurationOptions();
         });
 
-        test('TH-021 - Verify selecting the "Last Week" option sets the correct date range', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-021 - "Last Week" sets a 7-day range', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await highlightElements(transactionHistoryPage.locators.lastWeekButton);
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            // button[title="Start Date"] disappears once a date is selected (title changes to the date value)
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await expect(transactionHistoryPage.endDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-021-lastWeek', testInfo);
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            // the list must actually respect the 7-day window
-            await expectRowsWithinDays(page, transactionHistoryPage, 7);
-            await ScreenshotHelper(page, screenshotDir, 'TH-021-lastWeek-result', testInfo);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.expectDateRangeChosen();
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectRowsWithinDays(7);
         });
 
-        test('TH-022 - Verify selecting the "Last 14 Days" option sets the correct date range', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-022 - "Last 14 Days" sets a 14-day range', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await highlightElements(transactionHistoryPage.locators.last2WeeksButton);
-            await transactionHistoryPage.locators.last2WeeksButton.click();
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await expect(transactionHistoryPage.endDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-022-last14Days', testInfo);
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            // the list must actually respect the 14-day window
-            await expectRowsWithinDays(page, transactionHistoryPage, 14);
-            await ScreenshotHelper(page, screenshotDir, 'TH-022-last14Days-result', testInfo);
+            await transactionHistoryPage.applyDuration('2weeks');
+            await transactionHistoryPage.expectDateRangeChosen();
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectRowsWithinDays(14);
         });
 
-        test('TH-023 - Verify selecting the "Last 30 Days" option sets the correct date range', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-023 - "Last 30 Days" sets a 30-day range', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await highlightElements(transactionHistoryPage.locators.lastMonthButton);
-            await transactionHistoryPage.locators.lastMonthButton.click();
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await expect(transactionHistoryPage.endDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-023-last30Days', testInfo);
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            // the list must actually respect the 30-day window
-            await expectRowsWithinDays(page, transactionHistoryPage, 30);
-            await ScreenshotHelper(page, screenshotDir, 'TH-023-last30Days-result', testInfo);
+            await transactionHistoryPage.applyDuration('month');
+            await transactionHistoryPage.expectDateRangeChosen();
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectRowsWithinDays(30);
         });
 
-        test('TH-024 - Verify user is able to manually change the selected start and end dates', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-024 - start and end dates can be chosen manually', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.startDateInput.click();
-            await page.waitForTimeout(300);
-            await transactionHistoryPage.calendarEnabledCells.first().click();
-            await page.waitForTimeout(300);
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-024-startDate', testInfo);
-            await transactionHistoryPage.locators.endDateInput.click();
-            await page.waitForTimeout(300);
-            await transactionHistoryPage.calendarEnabledCells.last().click();
-            await page.waitForTimeout(300);
-            await expect(transactionHistoryPage.endDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-024-endDate', testInfo);
+            await transactionHistoryPage.openStartCalendar();
+            await transactionHistoryPage.pickFirstEnabledDate();
+            await transactionHistoryPage.openEndCalendar();
+            await transactionHistoryPage.pickLastEnabledDate();
+            await transactionHistoryPage.expectDateRangeChosen();
         });
 
-        test('TH-025 - Verify transaction list updates according to the selected date range filter', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-025 - the list updates to the selected date range', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            // every visible row must be inside the selected 7-day window — that's what proves the filter applied
-            await expectRowsWithinDays(page, transactionHistoryPage, 7);
-            await ScreenshotHelper(page, screenshotDir, 'TH-025-dateRangeFilter', testInfo);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectRowsWithinDays(7);
         });
 
-        test('TH-026 - Verify Reset button clears the selected calendar date range', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-026 - Reset clears the calendar date range', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.lastWeekButton.click();
-            await expect(transactionHistoryPage.startDatePlaceholder).toHaveCount(0, { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-026-beforeReset', testInfo);
-            await transactionHistoryPage.locators.resetButton.click();
-            await page.waitForTimeout(500);
-            await expect(transactionHistoryPage.startDatePlaceholder).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.endDatePlaceholder).toBeVisible({ timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-026-afterReset', testInfo);
+            await transactionHistoryPage.applyDuration('week');
+            await transactionHistoryPage.expectDateRangeChosen();
+            await transactionHistoryPage.resetFilter();
+            await transactionHistoryPage.expectDateRangeCleared();
         });
 
-        test('TH-027 - Verify appropriate error message is displayed when no transactions are available for the selected date range', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-027 - an empty-state message shows when no transactions match', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await transactionHistoryPage.locators.startDateInput.click();
-            await page.waitForTimeout(300);
-            await transactionHistoryPage.locators.previousMonthButton.click();
-            await page.waitForTimeout(300);
-            const oldestDate = transactionHistoryPage.calendarEnabledCells.first();
-            const oldestTitle = await oldestDate.getAttribute('title') ?? '';
-            await oldestDate.click();
-            await page.waitForTimeout(300);
-            // End Date calendar already opens at previous month (same month as start date)
-            await transactionHistoryPage.locators.endDateInput.click();
-            await page.waitForTimeout(300);
-            await transactionHistoryPage.calendarCellByTitle(oldestTitle).click();
-            await page.waitForTimeout(300);
-            await transactionHistoryPage.locators.continueButton.click();
-            await page.waitForTimeout(1500);
-            await expect(transactionHistoryPage.locators.noResultsMessage).toBeVisible({ timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.noResultsMessage);
-            await ScreenshotHelper(page, screenshotDir, 'TH-027-noResults', testInfo);
+            await transactionHistoryPage.openStartCalendar();
+            await transactionHistoryPage.prevCalendarMonth();
+            const oldest = await transactionHistoryPage.pickFirstEnabledDate();
+            await transactionHistoryPage.openEndCalendar();
+            await transactionHistoryPage.pickDateByTitle(oldest);
+            await transactionHistoryPage.continueFilter();
+            await transactionHistoryPage.expectNoResults();
         });
 
     });
 
     test.describe('Show Only Payout Toggle', () => {
 
-        test('TH-028 - Verify "Show Only Payout" toggle activates when only "Payout" is selected from transaction type dropdown', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-028 - the toggle activates when only Payout is selected', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT]);
-            await expect(transactionHistoryPage.locators.payoutToggleInput).toHaveAttribute('aria-checked', 'true', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.payoutToggleInput);
-            await ScreenshotHelper(page, screenshotDir, 'TH-028-toggleActivates', testInfo);
+            await transactionHistoryPage.expectPayoutToggle(true);
         });
 
-        test('TH-029 - Verify "Show Only Payout" toggle deactivates when another filter type is selected along with "Payout"', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-029 - the toggle deactivates when another type is added', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT]);
-            await expect(transactionHistoryPage.locators.payoutToggleInput).toHaveAttribute('aria-checked', 'true', { timeout: 15000 });
-            // Adding Wager alongside Payout deactivates the toggle
+            await transactionHistoryPage.expectPayoutToggle(true);
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.WAGER]);
-            await expect(transactionHistoryPage.locators.payoutToggleInput).toHaveAttribute('aria-checked', 'false', { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-029-toggleDeactivates', testInfo);
+            await transactionHistoryPage.expectPayoutToggle(false);
         });
 
-        test('TH-030 - Verify "Show Only Payout" toggle deactivates when "Payout" is deselected', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-030 - the toggle deactivates when Payout is deselected', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT]);
-            await expect(transactionHistoryPage.locators.payoutToggleInput).toHaveAttribute('aria-checked', 'true', { timeout: 15000 });
+            await transactionHistoryPage.expectPayoutToggle(true);
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT]);
-            await expect(transactionHistoryPage.locators.payoutToggleInput).toHaveAttribute('aria-checked', 'false', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.payoutToggleInput);
-            await ScreenshotHelper(page, screenshotDir, 'TH-030-toggleDeactivatesOnDeselect', testInfo);
+            await transactionHistoryPage.expectPayoutToggle(false);
         });
 
     });
 
     test.describe('Filter by Type Dropdown', () => {
 
-        test('TH-031 - Verify Filter by Type dropdown displays "All" by default when no transaction type is selected', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-031 - the dropdown shows "All" by default', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveText('All', { timeout: 15000 });
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveAttribute('data-p', 'placeholder', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.typeDropdownLabelContainer);
-            await ScreenshotHelper(page, screenshotDir, 'TH-031-dropdownDefault', testInfo);
+            await transactionHistoryPage.expectTypeDropdownAll();
         });
 
-        test('TH-032 - Verify Reset button clears all selected transaction types from the dropdown', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-032 - Reset clears all selected types', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT, TransactionFilterType.WAGER]);
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).not.toHaveAttribute('data-p', 'placeholder', { timeout: 15000 });
-            await transactionHistoryPage.locators.resetButton.click();
-            await page.waitForTimeout(500);
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveText('All', { timeout: 15000 });
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveAttribute('data-p', 'placeholder', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.typeDropdownLabelContainer);
-            await ScreenshotHelper(page, screenshotDir, 'TH-032-resetDropdown', testInfo);
+            await transactionHistoryPage.expectTypeDropdownNotPlaceholder();
+            await transactionHistoryPage.resetFilter();
+            await transactionHistoryPage.expectTypeDropdownAll();
         });
 
-        test('TH-033 - Verify user is able to remove selected filter tags successfully', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-033 - filter chips can be removed', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.WAGER, TransactionFilterType.PAYOUT]);
-            await expect(transactionHistoryPage.getFilterChip('Wager')).toBeVisible({ timeout: 15000 });
-            await expect(transactionHistoryPage.getFilterChip('Payout')).toBeVisible({ timeout: 15000 });
-            await highlightElements(transactionHistoryPage.getFilterChip('Wager'));
-            await ScreenshotHelper(page, screenshotDir, 'TH-033-chipsVisible', testInfo);
+            await transactionHistoryPage.expectFilterChip('Wager');
+            await transactionHistoryPage.expectFilterChip('Payout');
             await transactionHistoryPage.removeFilterChip('Wager');
-            await page.waitForTimeout(300);
-            await expect(transactionHistoryPage.getFilterChip('Wager')).not.toBeVisible({ timeout: 15000 });
-            // When only 1 type remains the chip carousel is hidden; assert via the dropdown label instead
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toContainText('Payout', { timeout: 15000 });
-            await ScreenshotHelper(page, screenshotDir, 'TH-033-wagerRemoved', testInfo);
+            await transactionHistoryPage.expectFilterChipGone('Wager');
+            await transactionHistoryPage.expectTypeDropdownContains('Payout');
         });
 
-        test('TH-034 - Verify transaction count is displayed correctly on the dropdown', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-034 - the dropdown shows the selected transaction count', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([TransactionFilterType.PAYOUT, TransactionFilterType.WAGER]);
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toContainText('(2) Transactions Selected', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.typeDropdownLabelContainer);
-            await ScreenshotHelper(page, screenshotDir, 'TH-034-dropdownCount', testInfo);
+            await transactionHistoryPage.expectTypeDropdownCount(2);
         });
 
-        test('TH-035 - Verify dropdown displays "All" text when all transaction types are selected', async ({ page, transactionHistoryPage, screenshotDir }: TransactionHistoryFixtures, testInfo: TestInfo) => {
-            await transactionHistoryPage.navigateToTransactionHistory();
+        test('TH-035 - the dropdown shows "All" when every type is selected', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.openFilter();
             await transactionHistoryPage.selectFilterTypes([
                 TransactionFilterType.WAGER,
@@ -528,9 +270,7 @@ export async function runTransactionHistoryNewSuiteTests(
                 TransactionFilterType.DEPOSIT,
                 TransactionFilterType.BONUS,
             ]);
-            await expect(transactionHistoryPage.locators.typeDropdownLabelContainer).toHaveText('All', { timeout: 15000 });
-            await highlightElements(transactionHistoryPage.locators.typeDropdownLabelContainer);
-            await ScreenshotHelper(page, screenshotDir, 'TH-035-allSelected', testInfo);
+            await transactionHistoryPage.expectTypeDropdownAll();
         });
 
     });

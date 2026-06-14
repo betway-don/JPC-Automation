@@ -87,7 +87,10 @@ export default defineConfig({
  
   fullyParallel: true,
   timeout: 90000,
- 
+
+  // Default assertion timeout so specs don't repeat { timeout: 15000 } on every expect.
+  expect: { timeout: 15000 },
+
   forbidOnly: !!process.env.CI,
  
   // 👉 Retry ONLY failed tests once
@@ -120,7 +123,7 @@ export default defineConfig({
     },
  
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'on',          // auto evidence per test — specs no longer call ScreenshotHelper
  
     actionTimeout: 60000,
     navigationTimeout: 60000,

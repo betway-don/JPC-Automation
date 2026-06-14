@@ -7,9 +7,16 @@ import { SignUpPage } from '../pages/SignUpPage';
 import { LoginPage } from '../pages/LoginPage';
 import { HeaderPage } from '../pages/HeaderPage';
 import { HamburgerMenuPage } from '../pages/HamburgerMenuPage';
-import { LimitsPage } from '../pages/LimitsPage';
 import { TransactionHistoryPage } from '../pages/TransactionHistoryPage';
-import { UpdatePasswordPage } from '../pages/UpdatePasswordPage';
+// region-agnostic NewSuite page objects + components (reused from common)
+import { PromotionsPage } from '../../../common/pages/PromotionsPage';
+import { SearchPage } from '../../../common/pages/SearchPage';
+import { WinnersCirclePage } from '../../../common/pages/WinnersCirclePage';
+import { GamePage } from '../pages/GamePage';
+import { HomePage } from '../../../common/pages/HomePage';
+import { MwHomePage } from '../pages/MwHomePage';
+import { LoginModal } from '../../../common/components/LoginModal';
+import { SignUpModal } from '../../../common/components/SignUpModal';
 import { SafeActions } from '../../../common/actions/SafeActions';
 
 // 1. Define the shape of your new JSON data
@@ -38,12 +45,19 @@ type JackpotCityFixtures = {
     loginPage: LoginPage;
     hamburgerMenuPage: HamburgerMenuPage;
     headerPage: HeaderPage;
-    limitsPage: LimitsPage;
     transactionHistoryPage: TransactionHistoryPage;
-    updatePasswordPage: UpdatePasswordPage;
+    promotionsPage: PromotionsPage;
+    searchPage: SearchPage;
+    winnersCirclePage: WinnersCirclePage;
+    gamePage: GamePage;
+    homePage: HomePage;
+    mwHomePage: MwHomePage;
+    loginModal: LoginModal;
+    signUpModal: SignUpModal;
     safeActions: SafeActions;
     testData: FullTestData;
     screenshotDir: string;
+    pageMonitor: void;
 };
 
 // 4. Extend the base test
@@ -83,20 +97,38 @@ const testBase = base.extend<JackpotCityFixtures>({
         await use(headerPage);
     },
 
-    limitsPage: async ({ page, safeActions }, use) => {
-        const limitsPage = new LimitsPage(page, safeActions);
-        await use(limitsPage);
-    },
-
     transactionHistoryPage: async ({ page, safeActions }, use) => {
         const transactionHistoryPage = new TransactionHistoryPage(page, safeActions);
         await use(transactionHistoryPage);
     },
 
-    updatePasswordPage: async ({ page, safeActions }: { page: Page, safeActions: SafeActions }, use: (r: UpdatePasswordPage) => Promise<void>) => {
-        const updatePasswordPage = new UpdatePasswordPage(page, safeActions);
-        await use(updatePasswordPage);
-    },
+    promotionsPage: async ({ page, safeActions }, use) => { await use(new PromotionsPage(page, safeActions)); },
+    searchPage: async ({ page, safeActions }, use) => { await use(new SearchPage(page, safeActions)); },
+    winnersCirclePage: async ({ page, safeActions }, use) => { await use(new WinnersCirclePage(page, safeActions)); },
+    gamePage: async ({ page, safeActions }, use) => { await use(new GamePage(page, safeActions)); },
+    homePage: async ({ page, safeActions }, use) => { await use(new HomePage(page, safeActions)); },
+    mwHomePage: async ({ page, safeActions }, use) => { await use(new MwHomePage(page, safeActions)); },
+    loginModal: async ({ page }, use) => { await use(new LoginModal(page)); },
+    signUpModal: async ({ page }, use) => { await use(new SignUpModal(page)); },
+
+    // Invariant monitor: records JS errors + failed first-party requests on every test.
+    pageMonitor: [async ({ page }, use, testInfo) => {
+        const consoleErrors: string[] = [];
+        const failedRequests: string[] = [];
+        page.on('pageerror', err => consoleErrors.push(`pageerror: ${String(err).slice(0, 500)}`));
+        page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(`console: ${msg.text().slice(0, 500)}`); });
+        page.on('response', resp => {
+            try {
+                const url = resp.url();
+                if (resp.status() >= 400 && /jackpotcitycasino\.com\.gh|jpc\.africa/i.test(url)) {
+                    failedRequests.push(`${resp.status()} ${url.slice(0, 300)}`);
+                }
+            } catch { /* response gone */ }
+        });
+        await use();
+        if (consoleErrors.length) await testInfo.attach('console-errors', { body: consoleErrors.join('\n'), contentType: 'text/plain' });
+        if (failedRequests.length) await testInfo.attach('failed-requests', { body: failedRequests.join('\n'), contentType: 'text/plain' });
+    }, { auto: true }],
 });
 
 export const test = process.env.ANDROID_DEVICE

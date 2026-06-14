@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "lib": ["ES2021", "DOM"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "strict": false,
+    "noImplicitAny": false
+  },
+  "include": ["src", "playwright.*.config.ts"],
+  "exclude": ["node_modules", "**/reports/**", "**/screenshots/**", "**/test-results/**"]
+}
