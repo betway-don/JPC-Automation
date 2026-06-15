@@ -321,6 +321,43 @@ export class HamburgerMenuPage extends BasePage {
     }
     async expectBankingOpen(): Promise<void> { await expect(this.locators.accountOptionsBankingFrame).toBeVisible({ timeout: 20000 }); }
 
+    // ── language switch (TZ): English / Swahili toggle in the menu ──────────────
+    get languageToggleGroup(): Locator { return this.page.locator("div:has(> button:text-is('English')):has(> button:text-is('Swahili'))").first(); }
+    get languageEnglishBtn(): Locator { return this.languageToggleGroup.getByRole('button', { name: 'English', exact: true }); }
+    get languageSwahiliBtn(): Locator { return this.languageToggleGroup.getByRole('button', { name: 'Swahili', exact: true }); }
+    /** Both languages offered, English active by default, and selecting Swahili actually changes the
+     *  site language (verified via <html lang> / URL — robust to the reload the switch triggers). */
+    async expectLanguageSwitch(): Promise<void> {
+        await expect(this.languageEnglishBtn).toBeVisible();
+        await expect(this.languageSwahiliBtn).toBeVisible();
+        await expect(this.languageEnglishBtn).toHaveClass(/bg-layer-secondary/);   // English active by default
+        const before = await this.page.evaluate(() => document.documentElement.lang + '|' + location.href);
+        await this.languageSwahiliBtn.click();
+        await this.page.waitForTimeout(3000);                                       // switch reloads/re-renders
+        const after = await this.page.evaluate(() => document.documentElement.lang + '|' + location.href);
+        expect(after, `selecting Swahili should change the site language (was "${before}")`).not.toBe(before);
+    }
+
+    /** City Rewards (ZA): My Points value with decimal precision, the monthly earnings chart,
+     *  and the "Find out how it works" expander. */
+    async expectCityRewardsDetails(): Promise<void> {
+        const dlg = this.locators.accountOptionsDialog;
+        await expect(dlg).toBeVisible();
+        // My Points balance — shown to a few decimals (e.g. "1.57")
+        const points = dlg.locator('span.text-5xl').first();
+        await expect(points).toBeVisible();
+        expect((await points.textContent())?.trim(), 'My Points should be a decimal value').toMatch(/^\d+\.\d{1,3}$/);
+        // Points-to-Cash converter + monthly earnings bar chart
+        await expect(dlg.getByText(/points to cash/i).first()).toBeVisible();
+        await expect(dlg.locator('.summary-graph')).toBeVisible();
+        expect(await dlg.locator('.barchart-single').count(), 'monthly chart should show month bars').toBeGreaterThanOrEqual(6);
+        // "Find out how it works" expander opens
+        const how = dlg.locator('details:has(summary:has-text("Find out how it works"))');
+        await expect(how).toBeVisible();
+        await how.locator('summary').click();
+        await expect(how).toHaveAttribute('open', '');
+    }
+
     async openWithdrawalShortcut(): Promise<void> { await this.withdrawalShortcut.first().click(); }
     async openTransactionSummaryShortcut(): Promise<void> { await this.clickTransactionSummaryShortcut(); }
     async openCityRewardsShortcut(): Promise<void> { await this.clickCityRewardsShortcut(); }

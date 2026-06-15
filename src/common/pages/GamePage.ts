@@ -484,6 +484,20 @@ export class GamePage extends BasePage {
         await expect(this.locators.trySimilarActiveBadge).toBeVisible();
         expect((await this.locators.trySimilarActiveBadge.textContent())?.trim().toLowerCase()).toBe('active');
     }
+    /** The "Don't show again" checkbox in the exit modal — once ticked, the modal must not reappear this session. */
+    get dontShowAgainToggle(): Locator {
+        return this.exitModal.locator("div:has(> span:text-is(\"Don't show again\")) [data-pc-name='checkbox']");
+    }
+    async expectDontShowAgainSuppressesModal(): Promise<void> {
+        await this.expectGameFrame();          // the exit modal only arms once the game has loaded
+        await this.openExitModal();
+        await this.dontShowAgainToggle.click();
+        await this.locators.trySimilarContinueBtn.click();      // back to the game
+        await expect(this.exitModal).toBeHidden();
+        // With "don't show again" ticked, the back arrow must NOT reopen the modal this session.
+        await this.locators.topBarBackBtn.click();
+        await expect(this.exitModal).toBeHidden();
+    }
     async expectExitModalSwitchesProvider(): Promise<void> {
         const url = this.page.url();
         await this.openExitModal();

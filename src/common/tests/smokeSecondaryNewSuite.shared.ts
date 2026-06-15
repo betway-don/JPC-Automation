@@ -264,8 +264,12 @@ export function runSmokeSecondaryNewSuiteTests(test: TestType<SmokeFixtures, any
             test.skip(process.env.JPC_ACCOUNT_RESTRICTED === '1', ACCOUNT_SKIP);
             await gamePage.expectExitModalCloseDismisses();
         });
-        test.fixme('SS-GP-012 "Don\'t show again" suppresses the exit modal for the session', async () => {
-            // No PO method for the "Don't show again" checkbox behaviour.
+        test('SS-GP-012 "Don\'t show again" suppresses the exit modal for the session', async ({ headerPage, gamePage, testData }: SmokeFixtures) => {
+            test.skip(process.env.JPC_ACCOUNT_RESTRICTED === '1', ACCOUNT_SKIP);
+            await gamePage.goto('/');
+            await headerPage.login(testData.loginValid.mobile, testData.loginValid.password);   // exit modal is logged-in only
+            await gamePage.navigate();
+            await gamePage.expectDontShowAgainSuppressesModal();
         });
     });
 
@@ -384,8 +388,9 @@ export function runSmokeSecondaryNewSuiteTests(test: TestType<SmokeFixtures, any
             await expect(hamburgerMenuPage.appleAppButton).toBeVisible();
             await expect(hamburgerMenuPage.androidAppButton).toBeVisible();
         });
-        test.fixme('SS-HM-008 Language switch works (TZ)', async () => {
-            // TZ language switcher is not modelled (no switcher found on TZ home during discovery).
+        test('SS-HM-008 Language switch works (TZ)', async ({ hamburgerMenuPage }: SmokeFixtures) => {
+            test.skip(notIn('TZ'), 'Language switch is TZ only');
+            await hamburgerMenuPage.expectLanguageSwitch();
         });
     });
 

@@ -119,8 +119,9 @@ export function runSmokePriorityNewSuiteTests(test: TestType<SmokeFixtures, any>
             await signUpModal.expectAgreeToAllChecksBoth();
         });
 
-        test.fixme('SP-REG-015 Preferred Language dropdown shows supported languages (TZ)', async () => {
-            // TZ-only. Locator exists on SignUpPage but the dropdown options are not modelled — needs a TZ intent method.
+        test('SP-REG-015 Preferred Language dropdown shows supported languages (TZ)', async ({ signUpModal }: SmokeFixtures) => {
+            test.skip(notIn('TZ'), 'Preferred Language is TZ only');
+            await signUpModal.expectPreferredLanguageOffered();
         });
         test('SP-REG-016 Terms & Conditions hyperlink opens the T&C page in a new tab', async ({ signUpModal }: SmokeFixtures) => {
             await signUpModal.expectConsentLinkOpensNewTab('terms');
@@ -419,9 +420,15 @@ export function runSmokePriorityNewSuiteTests(test: TestType<SmokeFixtures, any>
             await hamburgerMenuPage.openMyAccountOption('City Rewards');
             await hamburgerMenuPage.expectAccountOptionOpened('City Rewards');
         });
-        test.fixme('SP-CR-002 Points balance, decimal precision, month bars and "How It Works" (ZA)', async () => {
-            // City Rewards internals (balance, 3-dp precision, month selection, progress, "Find Out How It Works")
-            // need a dedicated CityRewardsPage object — not modelled yet.
+        test('SP-CR-002 Points balance (decimals), month earnings chart and "How It Works" (ZA)', async ({ loginPage, hamburgerMenuPage, testData }: SmokeFixtures) => {
+            test.skip(notIn('ZA'), 'City Rewards is ZA only');
+            test.skip(process.env.JPC_ACCOUNT_RESTRICTED === '1', ACCOUNT_SKIP);
+            await loginPage.goto();
+            await loginPage.clickLogin();
+            await loginPage.performLogin(testData.loginValid.mobile, testData.loginValid.password);
+            await hamburgerMenuPage.openMenu();
+            await hamburgerMenuPage.openMyAccountOption('City Rewards');
+            await hamburgerMenuPage.expectCityRewardsDetails();
         });
     });
 }

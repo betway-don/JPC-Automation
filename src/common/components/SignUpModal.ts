@@ -163,6 +163,15 @@ export class SignUpModal {
         const feedback = await this.errorFeedback.first().isVisible().catch(() => false);
         expect(proceedable === false || feedback, 'a 27-char password must be capped, flagged, or block Next').toBe(true);
     }
+    /** TZ signup: the Preferred Language control is shown and offers language options. */
+    async expectPreferredLanguageOffered(): Promise<void> {
+        const combo = this.page.locator('#preferredLanguage');
+        await expect(combo).toBeVisible({ timeout: 10000 });
+        await combo.click();
+        await expect(this.page.getByRole('option').first()).toBeVisible({ timeout: 8000 });
+        await this.page.keyboard.press('Escape').catch(() => { });
+    }
+
     /** A valid registered mobile-number format is accepted and lets the form advance. */
     async expectValidMobileAccepted(): Promise<void> {
         await this.fillValidStepOneExcept('none');
