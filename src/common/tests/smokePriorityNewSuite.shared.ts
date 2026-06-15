@@ -128,9 +128,15 @@ export function runSmokePriorityNewSuiteTests(test: TestType<SmokeFixtures, any>
         test('SP-REG-017 Privacy Policy hyperlink opens the Privacy page in a new tab', async ({ signUpModal }: SmokeFixtures) => {
             await signUpModal.expectConsentLinkOpensNewTab('privacy');
         });
-        test('SP-REG-018 Consent T&C / Privacy links are visually distinguishable from the text', async ({ signUpModal }: SmokeFixtures) => {
-            // UX defect catcher: links sharing the colour/weight/decoration of the surrounding sentence
-            // give no signal they're clickable. Expected RED until the site styles them distinctly.
+        test('SP-REG-018 Consent T&C / Privacy links are visually distinguishable from the text', async ({ signUpModal }: SmokeFixtures, testInfo) => {
+            // UX defect catcher: the links redirect fine (see SP-REG-016/017) but share the colour,
+            // weight, and decoration of the surrounding sentence, so users get no signal they're
+            // clickable. This is a DELIBERATE finding — expected RED on ZA & TZ until the site gives
+            // the links a visual affordance (underline / colour / weight); not a framework break.
+            testInfo.annotations.push({
+                type: 'known-ux-defect',
+                description: 'Consent T&C/Privacy links are styled identically to the surrounding text (white, weight 400, no underline) — functional but not discoverable as links.',
+            });
             await signUpModal.expectConsentLinkVisuallyDistinct('terms');
             await signUpModal.expectConsentLinkVisuallyDistinct('privacy');
         });
