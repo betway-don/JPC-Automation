@@ -128,13 +128,20 @@ export function runSmokePriorityNewSuiteTests(test: TestType<SmokeFixtures, any>
         test('SP-REG-017 Privacy Policy hyperlink opens the Privacy page in a new tab', async ({ signUpModal }: SmokeFixtures) => {
             await signUpModal.expectConsentLinkOpensNewTab('privacy');
         });
-        test.fixme('SP-REG-018 Successful registration with a valid SA ID (ZA)', async () => {
+        test('SP-REG-018 Consent T&C / Privacy links are visually distinguishable from the text', async ({ signUpModal }: SmokeFixtures) => {
+            // UX defect catcher: links sharing the colour/weight/decoration of the surrounding sentence
+            // give no signal they're clickable. Expected RED until the site styles them distinctly.
+            await signUpModal.expectConsentLinkVisuallyDistinct('terms');
+            await signUpModal.expectConsentLinkVisuallyDistinct('privacy');
+        });
+
+        test.fixme('SP-REG-019 Successful registration with a valid SA ID (ZA)', async () => {
             // Creates a REAL account on every run — kept in regression (RG-017), excluded from smoke to avoid account spam.
         });
-        test.fixme('SP-REG-019 Successful registration with a valid Passport (ZA)', async () => {
+        test.fixme('SP-REG-020 Successful registration with a valid Passport (ZA)', async () => {
             // Creates a REAL account on every run — kept in regression (RG-019), excluded from smoke.
         });
-        test.fixme('SP-REG-020 "Welcome to Jackpot City" prompt after successful registration', async () => {
+        test.fixme('SP-REG-021 "Welcome to Jackpot City" prompt after successful registration', async () => {
             // Requires a real registration submit — kept in regression (RG-027), excluded from smoke.
         });
     });

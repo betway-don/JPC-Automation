@@ -276,6 +276,36 @@ export class SignUpModal {
         await popup.close();
     }
 
+    /**
+     * UX check: a hyperlink must be visually distinguishable from the text around it — by colour,
+     * font-weight, or an underline. The consent T&C/Privacy links currently inherit the exact style
+     * of the sentence, so a user can't tell they're clickable; this assertion catches that.
+     */
+    async expectConsentLinkVisuallyDistinct(which: 'terms' | 'privacy'): Promise<void> {
+        await this.revealConsentStep();
+        const link = which === 'terms' ? this.termsConditionsLink : this.privacyPolicyLink;
+        await expect(link).toBeVisible({ timeout: 10000 });
+        const s = await link.evaluate((a: HTMLElement) => {
+            const cs = getComputedStyle(a);
+            const ps = getComputedStyle(a.parentElement as HTMLElement);
+            return {
+                linkColor: cs.color, textColor: ps.color,
+                linkWeight: cs.fontWeight, textWeight: ps.fontWeight,
+                decoration: cs.textDecorationLine,
+            };
+        });
+        const distinct =
+            s.decoration.includes('underline') ||
+            s.linkColor !== s.textColor ||
+            s.linkWeight !== s.textWeight;
+        expect(
+            distinct,
+            `The "${which}" link blends into the consent text — colour ${s.linkColor} vs ${s.textColor}, ` +
+            `weight ${s.linkWeight} vs ${s.textWeight}, decoration "${s.decoration}". ` +
+            `It has no visual affordance, so users can't tell it is a clickable link.`,
+        ).toBe(true);
+    }
+
     /** Fill step two but leave Terms unchecked — registration must stay blocked. */
     async expectRegisterBlockedWithoutTerms(): Promise<void> {
         await this.idNumber.fill('9001015009087');
