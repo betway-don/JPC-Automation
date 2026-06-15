@@ -140,8 +140,11 @@ export async function runLoginNewSuiteTests(
             await loginModal.expectSwitchedToReset();
         });
 
-        test('LOG-019 - only a valid account number is accepted on the reset prompt', async () => {
-            test.fixme(true, 'needs the Password Reset prompt HTML to assert its fields/validation');
+        test('LOG-019 - only a valid account number is accepted on the reset prompt', async ({ headerPage, loginModal }: LoginSuiteFixtures) => {
+            await openLogin(headerPage, loginModal);
+            await loginModal.openPasswordReset();
+            await loginModal.expectSwitchedToReset();
+            await loginModal.expectResetPromptValidatesMobile();   // stops before Continue → no OTP sent
         });
 
         test('LOG-020 - max attempts error on the reset prompt', async () => {

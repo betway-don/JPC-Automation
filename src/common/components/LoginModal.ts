@@ -77,6 +77,23 @@ export class LoginModal {
         await expect(this.dialog).toBeVisible();
     }
     async expectForgotPasswordVisible(): Promise<void> { await expect(this.forgotPasswordLink).toBeVisible(); }
+    // ── Password Reset prompt (asks for the mobile / account number) ────────────
+    get resetDialog(): Locator { return this.page.locator("[role='dialog'][aria-labelledby='Password Reset-modal-title']"); }
+    get resetMobileInput(): Locator { return this.resetDialog.locator('#username'); }
+    get resetContinueButton(): Locator { return this.resetDialog.getByRole('button', { name: /continue/i }); }
+
+    /** On the reset prompt, Continue stays disabled for an invalid mobile/account number and enables
+     *  only for a valid one. Deliberately stops before clicking Continue so no OTP SMS is sent. */
+    async expectResetPromptValidatesMobile(): Promise<void> {
+        await expect(this.resetMobileInput).toBeVisible({ timeout: 10000 });
+        await expect(this.resetContinueButton).toBeDisabled();              // empty → blocked
+        await this.resetMobileInput.fill('12');                             // too short → blocked
+        await expect(this.resetContinueButton).toBeDisabled();
+        await this.resetMobileInput.fill('');
+        await this.resetMobileInput.pressSequentially('712345678', { delay: 20 });   // valid 9-digit
+        await expect(this.resetContinueButton).toBeEnabled();
+    }
+
     /** After tapping Forgot Password, the login form gives way to the reset prompt. */
     async expectSwitchedToReset(): Promise<void> {
         await expect.poll(async () => {

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import { generatePassport } from '../actions/IdentityGenerator';
 
 export type SignUpOutcome = 'welcome' | 'verification' | 'partial' | 'error' | 'timeout';
 
@@ -226,9 +227,9 @@ export class SignUpModal {
         await expect(this.idNumberError).toBeVisible();
         expect(((await this.idNumberError.textContent()) ?? '').trim().length, 'ID error must have text').toBeGreaterThan(0);
     }
-    /** Synthetic passport may be rejected by real validation — returns whether it was flagged. */
+    /** Fill a generated, well-formed passport number; returns whether validation still flagged it. */
     async fillPassportNumber(): Promise<boolean> {
-        await this.fillStepTwo('A' + String(Math.floor(10000000 + Math.random() * 89999999)));
+        await this.fillStepTwo(generatePassport());
         return this.idNumberError.isVisible().catch(() => false);
     }
     async selectFirstDob(): Promise<void> {
