@@ -32,7 +32,15 @@ npm run report:regression                               # regression, all region
 node runner.js --suite=smoke      --region=za           # one region, smoke
 node runner.js --suite=regression --region=gh           # one region, regression
 node runner.js --suite=smoke      --region=za --grep="SP-LOG-001"   # narrow to one/few tests
+node runner.js --suite=smoke      --region=za --workers=4           # run in parallel (see note)
 ```
+
+Any flag the runner doesn't own (`--suite/--region/--grep/--spec/--mode`) is **passed through to
+Playwright** and overrides the region config — so `--workers=N`, `--retries=N`, `--headed`,
+`--timeout=N` all work. On **`--workers`**: raise it for **logged-out** suites
+(home/search/promotions/signup) for a big speed-up; keep it at **1** for **logged-in** suites (Tlog,
+Deposit, City Rewards, game hamburger) because they share one test account and parallel logins
+collide / get rate-limited.
 
 Output lands under `reports/` in exactly this shape, and run folders older than **7 days** are
 pruned automatically:

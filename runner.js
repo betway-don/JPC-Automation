@@ -14,10 +14,19 @@
  *   node runner.js --suite=smoke      --region=za
  *   node runner.js --suite=regression --region=za --grep="GS-LO-001"   (narrow to one/few)
  *   node runner.js --suite=smoke      --region=za --spec=<path>         (explicit spec path)
+ *   node runner.js --suite=smoke      --region=za --workers=4           (parallelism — see note)
  *   node runner.js --region=za --spec=<path>                            (ad-hoc, no report)
  *
  * Flags: --suite=regression|smoke  --region=za|gh|tz|mw|all  --grep=<regex>
- *        --spec=<path>  --mode=desktop|android  (+ any extra Playwright flags pass through)
+ *        --spec=<path>  --mode=desktop|android
+ *
+ * Any flag the runner doesn't own is passed straight through to `npx playwright test`, so all
+ * Playwright CLI flags work as-is and OVERRIDE the region config — e.g. --workers=N, --retries=N,
+ * --headed, --timeout=N.
+ *   --workers=N : run N tests in parallel (overrides the config's `workers`). Safe to raise for
+ *                 LOGGED-OUT suites (home/search/promotions/signup) for a big speed-up. Keep it at
+ *                 1 for LOGGED-IN suites (Tlog, Deposit, City Rewards, game-hamburger): they share
+ *                 one test account, and parallel logins collide / get rate-limited.
  */
 const { execSync } = require('child_process');
 const fs = require('fs');
