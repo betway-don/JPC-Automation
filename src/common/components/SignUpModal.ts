@@ -11,7 +11,9 @@ export class SignUpModal {
     constructor(private readonly page: Page) {}
 
     // ─── elements ──────────────────────────────────────────────────────────────
-    get dialog(): Locator { return this.page.locator("[role='dialog'][aria-labelledby='Sign Up-modal-title']"); }
+    // Identify the sign-up dialog by the registration form it contains — the modal title differs by
+    // region ("Sign Up-modal-title" on ZA, "Register-modal-title" on TZ), but the form id is shared.
+    get dialog(): Locator { return this.page.locator("[role='dialog']:has(#registration-form)"); }
     get form(): Locator { return this.page.locator('#registration-form'); }
     get progressBar(): Locator { return this.page.locator('#progressBar'); }
     get step0(): Locator { return this.page.locator("[data-element='step-0-container']"); }
@@ -39,6 +41,9 @@ export class SignUpModal {
     get termsCheckbox(): Locator { return this.page.locator('#terms'); }
     get promoCheckboxBox(): Locator { return this.page.locator("div[data-pc-name='checkbox']:has(#receivePromotionalInformation)"); }
     get termsCheckboxBox(): Locator { return this.page.locator("div[data-pc-name='checkbox']:has(#terms)"); }
+    // The consent text carries two inline links (visually un-highlighted) that open in a new tab.
+    get termsConditionsLink(): Locator { return this.page.locator("[data-element='input-terms-container'] a[href='/terms-and-conditions']"); }
+    get privacyPolicyLink(): Locator { return this.page.locator("[data-element='input-terms-container'] a[href='/privacy-policy']"); }
     get errorFeedback(): Locator { return this.page.locator("span[id$='-error'], .text-error-500"); }
     get agreeToAll(): Locator { return this.page.getByText(/agree to all/i).first(); }
     /** Field-level validation error, e.g. fieldError('email') → #email-error. */
@@ -248,6 +253,29 @@ export class SignUpModal {
         await expect(this.termsCheckboxBox).toHaveAttribute('data-p-checked', 'true');
         await expect(this.promoCheckboxBox).toHaveAttribute('data-p-checked', 'true');
     }
+    /** Make the consent step (Terms checkbox + T&C/Privacy links) visible. On ZA it lives on
+     *  step two; on TZ it is on the first view — so only advance if the links aren't already shown. */
+    private async revealConsentStep(): Promise<void> {
+        if (await this.termsConditionsLink.isVisible().catch(() => false)) return;
+        await this.fillStepOne();
+        await this.advanceToStepTwo();
+    }
+
+    /** The T&C / Privacy links blend into the consent text; verify each opens its page in a new tab. */
+    async expectConsentLinkOpensNewTab(which: 'terms' | 'privacy'): Promise<void> {
+        await this.revealConsentStep();
+        const link = which === 'terms' ? this.termsConditionsLink : this.privacyPolicyLink;
+        const urlPattern = which === 'terms' ? /\/terms-and-conditions/ : /\/privacy-policy/;
+        await expect(link).toBeVisible({ timeout: 10000 });
+        await expect(link).toHaveAttribute('target', '_blank');
+        const popupPromise = this.page.context().waitForEvent('page');
+        await link.click();
+        const popup = await popupPromise;
+        await popup.waitForLoadState('domcontentloaded').catch(() => { });
+        await expect(popup).toHaveURL(urlPattern, { timeout: 15000 });
+        await popup.close();
+    }
+
     /** Fill step two but leave Terms unchecked — registration must stay blocked. */
     async expectRegisterBlockedWithoutTerms(): Promise<void> {
         await this.idNumber.fill('9001015009087');

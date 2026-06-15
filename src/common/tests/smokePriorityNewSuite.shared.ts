@@ -122,11 +122,11 @@ export function runSmokePriorityNewSuiteTests(test: TestType<SmokeFixtures, any>
         test.fixme('SP-REG-015 Preferred Language dropdown shows supported languages (TZ)', async () => {
             // TZ-only. Locator exists on SignUpPage but the dropdown options are not modelled — needs a TZ intent method.
         });
-        test.fixme('SP-REG-016 Terms & Conditions hyperlink opens the T&C page in a new tab', async () => {
-            // No PO method for the in-modal T&C hyperlink / new-tab assertion yet.
+        test('SP-REG-016 Terms & Conditions hyperlink opens the T&C page in a new tab', async ({ signUpModal }: SmokeFixtures) => {
+            await signUpModal.expectConsentLinkOpensNewTab('terms');
         });
-        test.fixme('SP-REG-017 Privacy Policy hyperlink opens the Privacy page in a new tab', async () => {
-            // No PO method for the in-modal Privacy hyperlink / new-tab assertion yet.
+        test('SP-REG-017 Privacy Policy hyperlink opens the Privacy page in a new tab', async ({ signUpModal }: SmokeFixtures) => {
+            await signUpModal.expectConsentLinkOpensNewTab('privacy');
         });
         test.fixme('SP-REG-018 Successful registration with a valid SA ID (ZA)', async () => {
             // Creates a REAL account on every run — kept in regression (RG-017), excluded from smoke to avoid account spam.
