@@ -31,7 +31,7 @@ export async function runTransactionHistoryNewSuiteTests(
             await transactionHistoryPage.expectColumnHeaders();
         });
 
-        test('TH-003 - transaction type shows as Payout/Wager with provider', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
+        test('TH-003 - each row names the related game', async ({ transactionHistoryPage }: TransactionHistoryFixtures) => {
             await transactionHistoryPage.expectTypeFormat();
         });
 

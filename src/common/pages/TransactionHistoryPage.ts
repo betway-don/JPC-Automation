@@ -58,7 +58,7 @@ export class TransactionHistoryPage extends BasePage {
     // --- element accessors (selectors stay inside the Page Object) ---
     get table(): Locator { return this.page.locator('table.shaded-table'); }
     get allRowCells(): Locator { return this.page.locator('table.shaded-table tbody tr td'); }
-    get dateCellSpans(): Locator { return this.page.locator('table.shaded-table tbody tr td:nth-child(2) span'); }
+    get dateCellSpans(): Locator { return this.page.locator('table.shaded-table tbody tr td:nth-child(1) span'); }
     get summaryHeading(): Locator { return this.page.locator('div.font-bold.text-base-priority', { hasText: 'Transaction Summary' }); }
     get filterModal(): Locator { return this.page.locator('div[aria-labelledby="Filter Transaction Summary-modal-title"]'); }
     get filterModalTitle(): Locator { return this.page.getByText('Filter Transaction Summary', { exact: true }); }
@@ -139,12 +139,13 @@ export class TransactionHistoryPage extends BasePage {
         return this.page.locator('thead td.cell-width p.text-sm.font-bold', { hasText: name });
     }
 
-    getTransactionTypeCell(rowIndex: number) {
-        return this.locators.tableRows.nth(rowIndex).locator('td').nth(3);
+    // Table is now 3 columns: Date (td 0), Game Name (td 1), Amount (td 2); td 3 is the detail icon.
+    getGameNameCell(rowIndex: number) {
+        return this.locators.tableRows.nth(rowIndex).locator('td').nth(1);
     }
 
     getTransactionAmountCell(rowIndex: number) {
-        return this.locators.tableRows.nth(rowIndex).locator('td').nth(4);
+        return this.locators.tableRows.nth(rowIndex).locator('td').nth(2);
     }
 
     /** The gold "minus" indicator shown on Wager amounts (absent on Payouts) within an amount cell. */
@@ -170,7 +171,7 @@ export class TransactionHistoryPage extends BasePage {
     // ══════════════════════════════════════════════════════════════════════════
     private static readonly DATE_RE = /\d{2}\/\d{2}\/\d{2}-\d{2}:\d{2}:\d{2}/;
     private static readonly AMOUNT_RE = /[\d,]+\.\d{2}/;
-    private readonly headerNames = ['Transaction ID', 'Date', 'Game Name', 'Transaction Type', 'Amount'];
+    private readonly headerNames = ['Date', 'Game Name', 'Amount'];
 
     get firstRow(): Locator { return this.locators.tableRows.first(); }
     get noResultsMessage(): Locator { return this.locators.noResultsMessage; }
@@ -222,9 +223,9 @@ export class TransactionHistoryPage extends BasePage {
     async pickDateByTitle(title: string): Promise<void> { await this.calendarCellByTitle(title).click(); }
 
     // ── data helpers ────────────────────────────────────────────────────────────
-    private typeTexts(): Promise<string[]> {
+    private gameNameTexts(): Promise<string[]> {
         return this.locators.tableRows.evaluateAll((rows: Element[]) =>
-            rows.map(r => (r.querySelectorAll('td')[3]?.querySelector('span.truncate')?.textContent ?? '').trim()));
+            rows.map(r => (r.querySelectorAll('td')[1]?.querySelector('span.truncate')?.textContent ?? '').trim()));
     }
 
     // ── assertions ──────────────────────────────────────────────────────────────
@@ -232,27 +233,29 @@ export class TransactionHistoryPage extends BasePage {
     async expectColumnHeaders(): Promise<void> {
         for (const h of this.headerNames) await expect(this.getColumnHeader(h)).toBeVisible();
     }
-    /** Payout/Wager rows follow the "[Provider] [Type]" format. */
+    /** Every row names the game it relates to (the table's middle column). */
     async expectTypeFormat(): Promise<void> {
-        const texts = await this.typeTexts();
-        expect(texts.length).toBeGreaterThan(0);
-        for (const t of texts) if (t.endsWith('Payout') || t.endsWith('Wager')) expect(t).toMatch(/^.+\s(Payout|Wager)$/);
+        const names = await this.gameNameTexts();
+        expect(names.length, 'no rows in the transaction table').toBeGreaterThan(0);
+        for (const n of names) expect(n.length, 'a row is missing its game name').toBeGreaterThan(0);
     }
+    /** Credits (payouts/wins) carry NO minus indicator and show a well-formed amount. */
     async expectPayoutsPositive(): Promise<void> {
-        const texts = await this.typeTexts();
-        for (let i = 0; i < texts.length; i++) {
-            if (!texts[i].endsWith('Payout')) continue;
+        const count = await this.locators.tableRows.count();
+        expect(count, 'no rows in the transaction table').toBeGreaterThan(0);
+        for (let i = 0; i < count; i++) {
             const cell = this.getTransactionAmountCell(i);
-            await expect(this.minusIndicatorIn(cell)).toHaveCount(0);
+            if (await this.minusIndicatorIn(cell).count() > 0) continue;   // skip debits
             await expect(cell).toContainText(TransactionHistoryPage.AMOUNT_RE);
         }
     }
+    /** Debits (wagers) carry the gold minus indicator alongside a well-formed amount. */
     async expectWagersNegative(): Promise<void> {
-        const texts = await this.typeTexts();
-        for (let i = 0; i < texts.length; i++) {
-            if (!texts[i].endsWith('Wager')) continue;
+        const count = await this.locators.tableRows.count();
+        expect(count, 'no rows in the transaction table').toBeGreaterThan(0);
+        for (let i = 0; i < count; i++) {
             const cell = this.getTransactionAmountCell(i);
-            await expect(this.minusIndicatorIn(cell)).toHaveCount(1);
+            if (await this.minusIndicatorIn(cell).count() === 0) continue;  // skip credits
             await expect(cell).toContainText(TransactionHistoryPage.AMOUNT_RE);
         }
     }
