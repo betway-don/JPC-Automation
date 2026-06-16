@@ -390,28 +390,32 @@ export class GamePage extends BasePage {
         await expect(this.hamburgerGameTitle).toBeVisible();
         expect((await this.hamburgerGameTitle.textContent())?.trim()).toBe(top);
     }
+    // Active state scoped to THAT button's own heart — not "any favourited card on the page".
+    private favActive(btn: Locator): Locator { return btn.locator('svg.primary-pink-gradient-text'); }
     async expectHamburgerFavToggles(): Promise<void> {
         await this.openHamburger();
         await expect(this.locators.hamburgerFavBtn).toBeVisible();
-        if (await this.locators.hamburgerFavActiveBtn.isVisible().catch(() => false)) {
+        const active = this.favActive(this.locators.hamburgerFavBtn);
+        if (await active.count() > 0) {
             await this.locators.hamburgerFavBtn.click();
-            await expect(this.locators.hamburgerFavActiveBtn).not.toBeVisible();
+            await expect(active).toHaveCount(0);
         }
         await this.locators.hamburgerFavBtn.click();
-        await expect(this.locators.hamburgerFavActiveBtn).toBeVisible();
+        await expect(active).toHaveCount(1);
         await this.locators.hamburgerFavBtn.click();                   // cleanup
-        await expect(this.locators.hamburgerFavActiveBtn).not.toBeVisible();
+        await expect(active).toHaveCount(0);
     }
     async expectTopBarFavToggles(): Promise<void> {
         await expect(this.favButton).toBeVisible();
-        if (await this.locators.topBarFavActiveBtn.isVisible().catch(() => false)) {
+        const active = this.favActive(this.favButton);
+        if (await active.count() > 0) {
             await this.favButton.click();
-            await expect(this.locators.topBarFavActiveBtn).not.toBeVisible();
+            await expect(active).toHaveCount(0);
         }
         await this.favButton.click();
-        await expect(this.locators.topBarFavActiveBtn).toBeVisible();
+        await expect(active).toHaveCount(1);
         await this.favButton.click();                                  // cleanup
-        await expect(this.locators.topBarFavActiveBtn).not.toBeVisible();
+        await expect(active).toHaveCount(0);
     }
     async expectHamburgerSocialIcons(): Promise<void> {
         await this.openHamburger();
