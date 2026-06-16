@@ -352,7 +352,9 @@ export class GamePage extends BasePage {
         expect(target, 'no non-active category available to select').not.toBeNull();
         await target!.click();
         await expect(this.locators.categoryDropdownPanel).toBeHidden();
-        expect((await this.locators.categoryDropdownNameBtn.textContent())?.trim().toLowerCase()).toContain(targetText.toLowerCase());
+        // Poll: under load the label can lag a beat behind the click before it reflects the choice.
+        await expect.poll(async () => (await this.locators.categoryDropdownNameBtn.textContent())?.trim().toLowerCase() ?? '')
+            .toContain(targetText.toLowerCase());
     }
     async expectCategoryClosesAfterSelect(): Promise<void> {
         await this.locators.categoryDropdownToggle.click();
