@@ -238,11 +238,18 @@ export class HomePage extends BasePage {
     /** Active state of the FIRST trending card's OWN heart — scoped to that card, not "any
      *  favourited card in the carousel" (the account may already have other favourites). */
     private firstFavIcon(): Locator { return this.locators.trendingFavBtn.locator('svg.primary-pink-gradient-text'); }
+    /** Toggle the trending favourite and confirm it reached the wanted state. Vue can drop the first
+     *  click while the carousel is still hydrating, so retry the click once before asserting. */
+    private async setTrendingFavourite(on: boolean): Promise<void> {
+        await expect(this.locators.trendingFavBtn).toBeVisible();
+        await this.locators.trendingFavBtn.click();
+        const reached = await this.firstFavIcon().first()
+            .waitFor({ state: on ? 'visible' : 'detached', timeout: 5000 }).then(() => true).catch(() => false);
+        if (!reached) await this.locators.trendingFavBtn.click();
+        await expect(this.firstFavIcon()).toHaveCount(on ? 1 : 0);
+    }
     private async normaliseTrendingUnfavourited(): Promise<void> {
-        if (await this.firstFavIcon().count() > 0) {
-            await this.locators.trendingFavBtn.click();
-            await expect(this.firstFavIcon()).toHaveCount(0);
-        }
+        if (await this.firstFavIcon().count() > 0) await this.setTrendingFavourite(false);
     }
     async expectFavouritePromptsLogin(): Promise<void> {
         await expect(this.locators.trendingFavBtn).toBeVisible();
@@ -254,10 +261,8 @@ export class HomePage extends BasePage {
     async expectCanFavouriteTrending(): Promise<void> {
         await expect(this.locators.trendingSection).toBeVisible();
         await this.normaliseTrendingUnfavourited();
-        await this.locators.trendingFavBtn.click();
-        await expect(this.firstFavIcon()).toHaveCount(1);
-        await this.locators.trendingFavBtn.click();            // cleanup
-        await expect(this.firstFavIcon()).toHaveCount(0);
+        await this.setTrendingFavourite(true);
+        await this.setTrendingFavourite(false);                // cleanup
     }
     async expectCanFavouriteMultiple(): Promise<void> {
         await expect(this.locators.trendingSection).toBeVisible();
@@ -277,13 +282,15 @@ export class HomePage extends BasePage {
     async expectFavouritePersistsAfterRefresh(): Promise<void> {
         await expect(this.locators.trendingSection).toBeVisible();
         await this.normaliseTrendingUnfavourited();
-        await this.locators.trendingFavBtn.click();
-        await expect(this.firstFavIcon()).toHaveCount(1);
+        await this.setTrendingFavourite(true);
+        // The favourite is persisted by an async POST; let it land before reloading, otherwise the
+        // refresh can race the write and the favourite appears not to have persisted.
+        await this.page.waitForLoadState('networkidle').catch(() => { });
+        await this.page.waitForTimeout(1500);
         await this.refresh();
         await expect(this.locators.trendingSection).toBeVisible();
-        await expect(this.firstFavIcon()).toHaveCount(1);
-        await this.locators.trendingFavBtn.click();             // cleanup
-        await expect(this.firstFavIcon()).toHaveCount(0);
+        await expect(this.firstFavIcon()).toHaveCount(1);       // persisted across the refresh
+        await this.setTrendingFavourite(false);                 // cleanup
     }
 
     // ── recently played ──────────────────────────────────────────────────────
