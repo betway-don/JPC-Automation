@@ -337,12 +337,12 @@ export async function runGamePageNewSuiteTests(
             await gamePage.expectExitModalHighlightsActiveGame();
         });
 
-        test('GP-LI-036 - the wallet balance is shown on the game page', async ({ headerPage }: GamePageSuiteFixtures) => {
-            await headerPage.expectWalletShowsBalance();
+        test('GP-LI-036 - the wallet is reachable from within a game', async ({ gamePage }: GamePageSuiteFixtures) => {
+            await gamePage.expectWalletReachableInGame();
         });
 
-        test('GP-LI-037 - a refresh retains the logged-in session', async ({ gamePage, headerPage }: GamePageSuiteFixtures) => {
-            await gamePage.expectSessionRetainedAfterRefresh(headerPage.depositButton);
+        test('GP-LI-037 - a refresh retains the logged-in session', async ({ gamePage }: GamePageSuiteFixtures) => {
+            await gamePage.expectSessionRetainedAfterRefresh();
         });
 
         test('GP-LI-038 - Deposit opens the deposit banking section', async ({ gamePage }: GamePageSuiteFixtures) => {

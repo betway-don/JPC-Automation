@@ -539,13 +539,23 @@ export class GamePage extends BasePage {
         await this.openExitModal();
     }
 
+    // ── wallet (in-game) ─────────────────────────────────────────────────────────
+    /** The game page has no balance on its top bar — the wallet lives behind the hamburger.
+     *  Prove the logged-in player can reach their balance in-game by opening Bonus Wallet. */
+    async expectWalletReachableInGame(): Promise<void> {
+        await this.expectAccountOptionOpens('Bonus Wallet');
+    }
+
     // ── refresh ────────────────────────────────────────────────────────────────
-    async expectSessionRetainedAfterRefresh(headerDepositCta: Locator): Promise<void> {
+    async expectSessionRetainedAfterRefresh(): Promise<void> {
         const url = this.page.url();
         await this.refresh();
         await this.expectAt(new RegExp(url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-        await expect(headerDepositCta).toBeVisible();
         await this.expectGameFrame();
+        // Logged-in proof in-game: the hamburger shows the My Account section, not a Login button.
+        await this.openHamburger();
+        await expect(this.locators.hamburgerMyAccountTab).toBeVisible();
+        await expect(this.locators.hamburgerLoginBtn).toHaveCount(0);
     }
 
     // ── account options (logged in) ──────────────────────────────────────────────
