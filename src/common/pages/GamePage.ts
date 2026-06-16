@@ -420,6 +420,11 @@ export class GamePage extends BasePage {
     }
     async expectTopBarFavToggles(): Promise<void> {
         await expect(this.favButton).toBeVisible();
+        // The in-game favourite is only wired to the game once its data has loaded — until then the
+        // button's aria-label reads "favorite-game undefined" and favouriting it unmounts the top bar.
+        const favLabel = this.favButton.locator("div[aria-label^='favorite-game']");
+        await expect.poll(async () => (await favLabel.getAttribute('aria-label')) ?? '', { timeout: 20000 })
+            .not.toContain('undefined');
         const active = this.favActive(this.favButton);
         if (await active.count() > 0) {
             await this.favButton.click();
