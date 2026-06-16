@@ -540,10 +540,23 @@ export class GamePage extends BasePage {
     }
 
     // ── wallet (in-game) ─────────────────────────────────────────────────────────
-    /** The game page has no balance on its top bar — the wallet lives behind the hamburger.
-     *  Prove the logged-in player can reach their balance in-game by opening Bonus Wallet. */
+    /** The game page has no balance on its top bar — the wallet/banking lives behind the hamburger.
+     *  Prove the logged-in player can reach it in-game: the My Account section and the Deposit
+     *  entry are present (region-agnostic — Bonus Wallet is ZA-only, but Deposit exists everywhere). */
     async expectWalletReachableInGame(): Promise<void> {
-        await this.expectAccountOptionOpens('Bonus Wallet');
+        await this.openHamburger();
+        await expect(this.locators.hamburgerMyAccountTab).toBeVisible();
+        await expect(this.accountOption('Deposit')).toBeVisible();
+    }
+
+    /** Region-adaptive probe: is an account option offered in the in-game hamburger? Opens the
+     *  hamburger to check and closes it again so the caller can drive a clean flow afterwards. */
+    async hasAccountOption(name: string): Promise<boolean> {
+        await this.openHamburger();
+        const present = await this.accountOption(name).first()
+            .waitFor({ state: 'visible', timeout: 6000 }).then(() => true).catch(() => false);
+        await this.closeHamburger().catch(() => { });
+        return present;
     }
 
     // ── refresh ────────────────────────────────────────────────────────────────

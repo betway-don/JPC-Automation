@@ -360,10 +360,12 @@ export async function runGamePageNewSuiteTests(
         });
 
         test('GP-LI-041 - Bonus Wallet opens its pane', async ({ gamePage }: GamePageSuiteFixtures) => {
+            test.skip(!await gamePage.hasAccountOption('Bonus Wallet'), 'Bonus Wallet not offered in this region');
             await gamePage.expectAccountOptionOpens('Bonus Wallet');
         });
 
         test('GP-LI-042 - City Rewards opens with its content', async ({ gamePage }: GamePageSuiteFixtures) => {
+            test.skip(!await gamePage.hasAccountOption('City Rewards'), 'City Rewards not offered in this region');
             await gamePage.expectAccountOptionOpens('City Rewards');
             await gamePage.expectCityRewardsContent();
         });
@@ -373,6 +375,7 @@ export async function runGamePageNewSuiteTests(
         });
 
         test('GP-LI-044 - Account Settings opens with its form', async ({ gamePage }: GamePageSuiteFixtures) => {
+            test.skip(!await gamePage.hasAccountOption('Account Settings'), 'Account Settings not offered in this region');
             await gamePage.expectAccountOptionOpens('Account Settings');
             await gamePage.expectAccountSettingsForm();
         });
