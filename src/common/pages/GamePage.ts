@@ -129,6 +129,32 @@ export class GamePage extends BasePage {
         await this.locators.topBar.waitFor({ state: 'visible', timeout: 15000 });
     }
 
+    /**
+     * Reach a playable game via a vertical listing (used by regions whose home has no featured
+     * carousel, e.g. GH/TZ). Tries the first few game cards and stops at the first that actually
+     * opens the game shell — so a geo-blocked game in slot #1 is skipped instead of failing the
+     * whole suite. The launched URL is `<vertical>/featured/<slug>` or `/home/featured/<slug>`.
+     */
+    protected async navigateViaVertical(path: string): Promise<void> {
+        const cards = this.page.locator('a.game-card');
+        const reach = async (i: number): Promise<boolean> => {
+            await this.page.goto(path, { waitUntil: 'domcontentloaded' });
+            await cards.first().waitFor({ state: 'visible', timeout: 20000 });
+            await cards.nth(i).click();
+            const onGame = await this.page.waitForURL('**/featured/**', { timeout: 12000 }).then(() => true).catch(() => false);
+            if (!onGame) return false;
+            await this.page.waitForLoadState('domcontentloaded');
+            return this.locators.topBar.waitFor({ state: 'visible', timeout: 12000 }).then(() => true).catch(() => false);
+        };
+        const total = Math.min(await this.page.goto(path, { waitUntil: 'domcontentloaded' })
+            .then(() => cards.count()).catch(() => 1), 5);
+        for (let i = 0; i < Math.max(total, 1); i++) {
+            if (await reach(i)) return;
+        }
+        // none of the first cards opened a game — surface a clear failure on the last attempt
+        await this.locators.topBar.waitFor({ state: 'visible', timeout: 8000 });
+    }
+
     async openHamburger() {
         await this.locators.topBarHamburgerBtn.click();
         await this.locators.hamburgerPanel.waitFor({ state: 'visible', timeout: 10000 });
