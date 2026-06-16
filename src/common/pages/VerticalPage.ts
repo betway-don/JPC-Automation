@@ -174,7 +174,11 @@ export class VerticalPage {
         return this.launchGame(game);
     }
     async expectGameLaunched(href: string): Promise<void> {
-        await expect(this.page).toHaveURL(new RegExp(href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+        // Assert by game SLUG, not the full card href: some verticals (e.g. Crash) redirect a card
+        // like /crashgames/crashgames/aviator to the launch URL /home/featured/aviator. The slug
+        // (last path segment) is stable across that redirect, and slot/live URLs contain it too.
+        const slug = (href.split('/').filter(Boolean).pop() || href);
+        await expect(this.page).toHaveURL(new RegExp(slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
         await expect(this.gameFrame).toBeVisible({ timeout: 30000 });
     }
 
