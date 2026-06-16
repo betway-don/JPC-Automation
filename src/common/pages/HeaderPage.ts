@@ -173,6 +173,11 @@ export class HeaderPage extends BasePage {
     get firstSearchResult(): Locator { return this.getSearchResultCard(); }
     get completeAccountPrompt(): Locator { return this.getCompleteAccountPrompt(); }
     navTab(name: string): Locator { return this.getNavTab(name); }
+    /** True if a nav tab exists — waits briefly so a slow-rendering nav (esp. at high --workers) is
+     *  not mis-read as "absent" by an instant count() check. */
+    async hasNavTab(name: string): Promise<boolean> {
+        return this.getNavTab(name).first().waitFor({ state: 'attached', timeout: 8000 }).then(() => true).catch(() => false);
+    }
 
     // ── actions (absorb waits) ──────────────────────────────────────────────────
     async openMenu(): Promise<void> { await this.clickMenu(); }

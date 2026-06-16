@@ -19,7 +19,7 @@ export class GamePage extends BasePage {
             loginModal: first(css("div.login-container")),
             loginUsername: first(css("input[name='username'][type='tel']")),
             loginPassword: first(css("input[name='password'][type='password']")),
-            loginSubmitBtn: first(css("button[group='primary']")),
+            loginSubmitBtn: first(css("div.login-container button[group='primary']")),
             categoryDropdown: first(css("#in-game-category-dropdown")),
             categoryDropdownNameBtn: first(css("#in-game-category-dropdown button:first-child")),
             categoryDropdownToggle: first(css("#in-game-category-dropdown button:last-child")),
@@ -486,6 +486,7 @@ export class GamePage extends BasePage {
     }
     // Logged in: the back arrow opens a "try similar" exit modal.
     async openExitModal(): Promise<void> {
+        await this.expectGameFrame();          // the exit "try similar" modal only arms once the game has loaded
         await this.locators.topBarBackBtn.click();
         await expect(this.exitModal).toBeVisible();
     }

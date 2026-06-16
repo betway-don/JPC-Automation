@@ -81,7 +81,7 @@ export function runHeaderNewSuiteTests(
         ];
         for (const n of NAV) {
             test(`${n.id} - ${n.label} navigation redirects correctly`, async ({ headerPage }: HeaderNewSuiteFixtures) => {
-                test.skip(await headerPage.navTab(n.tab).count() === 0, `${n.label} tab not present in this region`);
+                test.skip(!await headerPage.hasNavTab(n.tab), `${n.label} tab not present in this region`);
                 await headerPage.openNavTab(n.tab);
                 await headerPage.expectAt(n.url);
             });
@@ -167,7 +167,7 @@ export function runHeaderNewSuiteTests(
         });
 
         test('H-LI-013 - Lucky Numbers navigation redirects correctly', async ({ headerPage }: HeaderNewSuiteFixtures) => {
-            test.skip(await headerPage.navTab('luckynumbers').count() === 0, 'Lucky Numbers tab not present in this region');
+            test.skip(!await headerPage.hasNavTab('luckynumbers'), 'Lucky Numbers tab not present in this region');
             await headerPage.openNavTab('luckynumbers');
             await headerPage.expectAt(/\/luckynumbers/);
         });

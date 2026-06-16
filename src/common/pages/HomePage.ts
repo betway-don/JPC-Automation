@@ -329,8 +329,8 @@ export class HomePage extends BasePage {
     async gotoProvidersPage(): Promise<void> { await this.goto('/home/providers'); await this.expectAt(/\/providers/); }
     async expectProvidersBreadcrumb(): Promise<void> { await expect(this.providersBreadcrumbHeading).toBeVisible(); }
     async expectBackLeavesProviders(): Promise<void> {
-        await this.locators.providersShowAllLink.scrollIntoViewIfNeeded();
-        await this.openProvidersShowAll();
+        // Reach the Providers page directly — the home "Show All" providers link was removed from the site.
+        await this.gotoProvidersPage();
         await expect(this.backButton).toBeVisible();
         await this.backButton.click();
         await expect(this.page).not.toHaveURL(/\/providers/);
