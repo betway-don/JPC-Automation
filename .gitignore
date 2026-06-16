@@ -32,3 +32,8 @@ Thumbs.db
 
 # Generated test reports (PDF + screenshots), pruned after 7 days
 reports/
+
+# Embedded sub-project (has its own git repo) — not part of this repo
+Automation-Dashboard/
+# Output from run-tests-*.ps1
+JPC Execution Results/
