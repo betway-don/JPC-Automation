@@ -92,7 +92,11 @@ export class HomePage extends BasePage {
     get backButton(): Locator { return this.page.locator('button[size="icon-lg"].aspect-square').first(); }
     // generic content-page elements (footer destinations)
     get genericPageHeading(): Locator { return this.page.locator('#generic-page-header h1'); }
-    get providersBreadcrumbHeading(): Locator { return this.page.locator('h1, [class*="breadcrumb"], div.font-bold').first(); }
+    get providersBreadcrumbHeading(): Locator {
+        // The breadcrumb bar is a bold container holding the "Home" link and the current page name.
+        // (Targeting it specifically — the old generic `div.font-bold` first()-match grabbed a hidden element.)
+        return this.page.locator('div.font-bold:has(a[href="/"])').filter({ hasText: 'Providers' });
+    }
     get accordionContainer(): Locator { return this.page.locator('div.kentico-accordion-container'); }
     get accordionItems(): Locator { return this.page.locator('details[id^="accordion-item"]'); }
     get howToContentWrapper(): Locator { return this.page.locator('div.accordions-content-wrapper'); }
@@ -334,7 +338,10 @@ export class HomePage extends BasePage {
         await this.expectAt(/\/providers/);
     }
     async gotoProvidersPage(): Promise<void> { await this.goto('/home/providers'); await this.expectAt(/\/providers/); }
-    async expectProvidersBreadcrumb(): Promise<void> { await expect(this.providersBreadcrumbHeading).toBeVisible(); }
+    async expectProvidersBreadcrumb(): Promise<void> {
+        await expect(this.providersBreadcrumbHeading).toBeVisible();
+        await expect(this.providersBreadcrumbHeading).toContainText('Providers');
+    }
     async expectBackLeavesProviders(): Promise<void> {
         // Reach the Providers page directly — the home "Show All" providers link was removed from the site.
         await this.gotoProvidersPage();
@@ -404,9 +411,19 @@ export class HomePage extends BasePage {
     private async expectSectionScrolls(section: Locator): Promise<void> {
         await expect(section).toBeVisible();
         await section.scrollIntoViewIfNeeded();
+        // Cards lazy-load: until the rail actually overflows, scrolling is a no-op. Wait for overflow.
+        await expect.poll(
+            async () => section.evaluate((el: Element) => (el as HTMLElement).scrollWidth - (el as HTMLElement).clientWidth),
+            { timeout: 15000 }
+        ).toBeGreaterThan(0);
         const before = await this.getSectionScrollLeft(section);
-        await this.scrollSectionRight(section, 300);
-        expect(await this.getSectionScrollLeft(section)).toBeGreaterThan(before);
+        // Reveal a later card rather than nudging scrollLeft by a fixed amount: these rails use
+        // scroll-snap, so a raw scrollLeft delta can snap back to a card boundary. scrollIntoViewIfNeeded
+        // moves the rail deterministically to bring a later card into view.
+        const cards = section.locator(':scope > *');
+        const idx = Math.min(Math.max(await cards.count() - 1, 0), 6);
+        await cards.nth(idx).scrollIntoViewIfNeeded();
+        await expect.poll(() => this.getSectionScrollLeft(section)).toBeGreaterThan(before);
     }
     async expectGameSectionScroll(): Promise<void> { await this.expectSectionScrolls(this.locators.gameSection); }
     async expectAllGamesLinkVisible(): Promise<void> { await expect(this.locators.gameSectionAllLink).toBeVisible(); }
