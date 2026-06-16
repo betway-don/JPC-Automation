@@ -126,6 +126,9 @@ const testBase = base.extend<JackpotCityFixtures>({
             } catch { /* response gone */ }
         });
         await use();
+        // Let the page settle before Playwright's automatic end-of-test screenshot (screenshot: 'on'),
+        // so evidence isn't captured mid-render / half-loaded.
+        await page.waitForTimeout(1500).catch(() => { });
         if (consoleErrors.length) await testInfo.attach('console-errors', { body: consoleErrors.join('\n'), contentType: 'text/plain' });
         if (failedRequests.length) await testInfo.attach('failed-requests', { body: failedRequests.join('\n'), contentType: 'text/plain' });
     }, { auto: true }],
