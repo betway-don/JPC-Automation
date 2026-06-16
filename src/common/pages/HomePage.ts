@@ -235,10 +235,13 @@ export class HomePage extends BasePage {
     }
 
     // ── favourites (logged in) ──────────────────────────────────────────────────
+    /** Active state of the FIRST trending card's OWN heart — scoped to that card, not "any
+     *  favourited card in the carousel" (the account may already have other favourites). */
+    private firstFavIcon(): Locator { return this.locators.trendingFavBtn.locator('svg.primary-pink-gradient-text'); }
     private async normaliseTrendingUnfavourited(): Promise<void> {
-        if (await this.locators.trendingFavActiveBtn.isVisible().catch(() => false)) {
+        if (await this.firstFavIcon().count() > 0) {
             await this.locators.trendingFavBtn.click();
-            await expect(this.locators.trendingFavActiveBtn).not.toBeVisible();
+            await expect(this.firstFavIcon()).toHaveCount(0);
         }
     }
     async expectFavouritePromptsLogin(): Promise<void> {
@@ -252,9 +255,9 @@ export class HomePage extends BasePage {
         await expect(this.locators.trendingSection).toBeVisible();
         await this.normaliseTrendingUnfavourited();
         await this.locators.trendingFavBtn.click();
-        await expect(this.locators.trendingFavActiveBtn).toBeVisible();
+        await expect(this.firstFavIcon()).toHaveCount(1);
         await this.locators.trendingFavBtn.click();            // cleanup
-        await expect(this.locators.trendingFavActiveBtn).not.toBeVisible();
+        await expect(this.firstFavIcon()).toHaveCount(0);
     }
     async expectCanFavouriteMultiple(): Promise<void> {
         await expect(this.locators.trendingSection).toBeVisible();
@@ -266,7 +269,8 @@ export class HomePage extends BasePage {
         }
         await favs.nth(0).click();
         await favs.nth(1).click();
-        await expect(this.featuredActiveFavourites).toHaveCount(2);
+        await expect(favs.nth(0).locator('svg.primary-pink-gradient-text')).toHaveCount(1);
+        await expect(favs.nth(1).locator('svg.primary-pink-gradient-text')).toHaveCount(1);
         await favs.nth(0).click();                              // cleanup
         await favs.nth(1).click();
     }
@@ -274,12 +278,12 @@ export class HomePage extends BasePage {
         await expect(this.locators.trendingSection).toBeVisible();
         await this.normaliseTrendingUnfavourited();
         await this.locators.trendingFavBtn.click();
-        await expect(this.locators.trendingFavActiveBtn).toBeVisible();
+        await expect(this.firstFavIcon()).toHaveCount(1);
         await this.refresh();
         await expect(this.locators.trendingSection).toBeVisible();
-        await expect(this.locators.trendingFavActiveBtn).toBeVisible();
+        await expect(this.firstFavIcon()).toHaveCount(1);
         await this.locators.trendingFavBtn.click();             // cleanup
-        await expect(this.locators.trendingFavActiveBtn).not.toBeVisible();
+        await expect(this.firstFavIcon()).toHaveCount(0);
     }
 
     // ── recently played ──────────────────────────────────────────────────────

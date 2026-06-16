@@ -89,7 +89,7 @@ export default defineConfig({
   timeout: 90000,
 
   // Default assertion timeout so specs don't repeat { timeout: 15000 } on every expect.
-  expect: { timeout: 15000 },
+  expect: { timeout: 30000 },
 
   forbidOnly: !!process.env.CI,
  

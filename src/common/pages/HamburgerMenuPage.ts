@@ -248,7 +248,7 @@ export class HamburgerMenuPage extends BasePage {
     async scrollToAppSection(): Promise<void> { await this.menuScrollContainer.evaluate((el: HTMLElement) => el.scrollTo(0, el.scrollHeight)); }
 
     /** Ensure we start in light theme (so a "switch to dark" test has somewhere to go). */
-    async ensureLightTheme(): Promise<void> { if (await this.isDarkTheme()) await this.clickDarkTheme(); }
+    async ensureLightTheme(): Promise<void> { if (await this.isDarkTheme()) await this.toggleTheme(); }
     /** Ensure we start in dark theme. */
     async ensureDarkTheme(): Promise<void> { if (!await this.isDarkTheme()) await this.clickDarkTheme(); }
     async switchToDarkTheme(): Promise<void> { await this.clickDarkTheme(); }

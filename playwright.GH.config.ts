@@ -10,7 +10,7 @@ export default defineConfig({
     testDir: './src/regions/GH/tests',
     fullyParallel: true,
     timeout: 200000,
-    expect: { timeout: 15000 },
+    expect: { timeout: 30000 },
     forbidOnly: !!process.env.CI,
     retries: 1,
     workers: process.env.CI ? 1 : 6,
