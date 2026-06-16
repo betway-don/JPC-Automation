@@ -336,12 +336,23 @@ export class GamePage extends BasePage {
         expect(await this.locators.categoryDropdownItem.count()).toBeGreaterThan(0);
     }
     async expectCategorySelectable(): Promise<void> {
+        const active = (await this.locators.categoryDropdownNameBtn.textContent())?.trim().toLowerCase() ?? '';
         await this.locators.categoryDropdownToggle.click();
         await expect(this.locators.categoryDropdownPanel).toBeVisible();
-        const selected = (await this.locators.categoryDropdownItem.textContent())?.trim().toLowerCase();
-        await this.locators.categoryDropdownItem.click();
+        // Select a category OTHER than the active one — re-selecting the active category just
+        // collapses the dropdown back to the default lobby, which isn't a meaningful selection.
+        const items = this.locators.categoryDropdownPanel.locator('div.truncate.cursor-pointer');
+        const count = await items.count();
+        let target: Locator | null = null;
+        let targetText = '';
+        for (let i = 0; i < count; i++) {
+            const t = (await items.nth(i).textContent())?.trim() ?? '';
+            if (t && t.toLowerCase() !== active) { target = items.nth(i); targetText = t; break; }
+        }
+        expect(target, 'no non-active category available to select').not.toBeNull();
+        await target!.click();
         await expect(this.locators.categoryDropdownPanel).toBeHidden();
-        expect((await this.locators.categoryDropdownNameBtn.textContent())?.trim().toLowerCase()).toContain(selected);
+        expect((await this.locators.categoryDropdownNameBtn.textContent())?.trim().toLowerCase()).toContain(targetText.toLowerCase());
     }
     async expectCategoryClosesAfterSelect(): Promise<void> {
         await this.locators.categoryDropdownToggle.click();
